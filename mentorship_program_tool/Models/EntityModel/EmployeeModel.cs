@@ -2,7 +2,16 @@
 {
     public class EmployeeModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int employeeid { get; set; }
+        public string outlookemployeeid { get; set; }
+
+        public string firstname { get; set; }
+
+        public string lastname { get; set; }
+
+        public string emailid { get; set; }
+
+        public DateTime createddate { get; set; }
+        
     }
 }
