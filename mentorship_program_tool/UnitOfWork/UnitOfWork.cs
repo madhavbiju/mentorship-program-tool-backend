@@ -12,11 +12,13 @@ namespace mentorship_program_tool.UnitOfWork
             _context = context;
 
             Status = new StatusRepository(_context);
+            Role = new RoleRepository(_context);
 
 
             // Initialize other repositories.
         }
 
+        public IRoleRepository Role { get; }
 
         public IStatusRepository Status { get; }
 
