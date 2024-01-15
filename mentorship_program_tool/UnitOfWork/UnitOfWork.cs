@@ -12,6 +12,8 @@ namespace mentorship_program_tool.UnitOfWork
             _context = context;
 
             Status = new StatusRepository(_context);
+            ReportType = new ReportTypeRepository(_context);
+
 
 
             // Initialize other repositories.
@@ -19,6 +21,8 @@ namespace mentorship_program_tool.UnitOfWork
 
 
         public IStatusRepository Status { get; }
+        public IReportTypeRepository ReportType { get; }
+
 
 
         public int Complete()
