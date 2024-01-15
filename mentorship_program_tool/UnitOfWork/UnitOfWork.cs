@@ -12,6 +12,7 @@ namespace mentorship_program_tool.UnitOfWork
             _context = context;
 
             Status = new StatusRepository(_context);
+            Role = new RoleRepository(_context);
             ReportType = new ReportTypeRepository(_context);
 
 
@@ -19,6 +20,7 @@ namespace mentorship_program_tool.UnitOfWork
             // Initialize other repositories.
         }
 
+        public IRoleRepository Role { get; }
 
         public IStatusRepository Status { get; }
         public IReportTypeRepository ReportType { get; }

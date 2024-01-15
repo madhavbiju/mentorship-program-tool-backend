@@ -8,6 +8,8 @@ namespace mentorship_program_tool.Data
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public DbSet<RoleModel> role { get; set; }
+
 
         public DbSet<StatusModel> status { get; set; }
         public DbSet<ReportTypeModel> reporttype { get; set; }
