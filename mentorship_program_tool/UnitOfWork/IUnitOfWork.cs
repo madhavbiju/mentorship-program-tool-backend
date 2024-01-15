@@ -8,6 +8,7 @@ namespace mentorship_program_tool.UnitOfWork
         IStatusRepository Status { get; }
         IReportTypeRepository ReportType { get; }
 
+        IEmployeeRepository Employee { get; }
 
         int Complete();
     }

@@ -15,5 +15,6 @@ namespace mentorship_program_tool.Data
         public DbSet<ReportTypeModel> reporttype { get; set; }
 
 
+        public DbSet<EmployeeModel> Employee { get; set; }
     }
 }

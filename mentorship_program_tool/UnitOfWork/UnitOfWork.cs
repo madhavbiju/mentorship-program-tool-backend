@@ -15,6 +15,8 @@ namespace mentorship_program_tool.UnitOfWork
             Role = new RoleRepository(_context);
             ReportType = new ReportTypeRepository(_context);
 
+            Employee = new EmployeeRepository(_context);
+
 
 
             // Initialize other repositories.
@@ -25,6 +27,7 @@ namespace mentorship_program_tool.UnitOfWork
         public IStatusRepository Status { get; }
         public IReportTypeRepository ReportType { get; }
 
+        public IEmployeeRepository Employee { get; }
 
 
         public int Complete()
