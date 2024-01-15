@@ -10,13 +10,13 @@ namespace mentorship_program_tool.UnitOfWork
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
-            Employees = new EmployeeRepository(_context);
+            Role = new RoleRepository(_context);
 
 
             // Initialize other repositories.
         }
 
-        public IEmployeeRepository Employees { get; }
+        public IRoleRepository Role { get; }
 
 
         public int Complete()
