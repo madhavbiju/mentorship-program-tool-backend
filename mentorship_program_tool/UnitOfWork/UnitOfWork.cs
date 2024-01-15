@@ -10,6 +10,8 @@ namespace mentorship_program_tool.UnitOfWork
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
+
+            Status = new StatusRepository(_context);
             Role = new RoleRepository(_context);
 
 
@@ -17,6 +19,8 @@ namespace mentorship_program_tool.UnitOfWork
         }
 
         public IRoleRepository Role { get; }
+
+        public IStatusRepository Status { get; }
 
 
         public int Complete()
