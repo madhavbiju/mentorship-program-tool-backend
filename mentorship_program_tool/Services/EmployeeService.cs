@@ -15,26 +15,26 @@ namespace mentorship_program_tool.Services
         public IEnumerable<EmployeeModel> GetEmployee()
         {
  
-            var employee = _unitOfWork.Employees.GetAll();
+            var employee = _unitOfWork.Employee.GetAll();
             return (employee);
         }
  
         public EmployeeModel GetEmployeeById(int id)
         {
-            var employee = _unitOfWork.Employees.GetById(id);
+            var employee = _unitOfWork.Employee.GetById(id);
             return (employee);
         }
  
         public void CreateEmployee(EmployeeModel employeeDto)
         {
  
-            _unitOfWork.Employees.Add(employeeDto);
+            _unitOfWork.Employee.Add(employeeDto);
             _unitOfWork.Complete();
         }
  
         public void DeleteEmployee(int id)
         {
-            var employee = _unitOfWork.Employees.GetById(id);
+            var employee = _unitOfWork.Employee.GetById(id);
  
             if (employee == null)
             {
@@ -42,7 +42,7 @@ namespace mentorship_program_tool.Services
                 return;
             }
  
-            _unitOfWork.Employees.Delete(employee);
+            _unitOfWork.Employee.Delete(employee);
             _unitOfWork.Complete();
         }
  

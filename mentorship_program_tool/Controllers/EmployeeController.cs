@@ -17,7 +17,7 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEmployeess()
+        public IActionResult GetEmployees()
         {
             var employee = _employeeService.GetEmployee();
             return Ok(employee);

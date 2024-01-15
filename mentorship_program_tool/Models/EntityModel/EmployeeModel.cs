@@ -1,7 +1,10 @@
-﻿namespace mentorship_program_tool.Models.EntityModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace mentorship_program_tool.Models.EntityModel
 {
     public class EmployeeModel
     {
+        [Key]
         public int employeeid { get; set; }
         public string outlookemployeeid { get; set; }
 

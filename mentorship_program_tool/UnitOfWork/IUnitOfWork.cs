@@ -4,7 +4,8 @@ namespace mentorship_program_tool.UnitOfWork
 {
     public interface IUnitOfWork
     {
-        IEmployeeRepository Employees { get; }
+        IStatusRepository Status { get; }
+        IEmployeeRepository Employee { get; }
 
         int Complete();
     }
