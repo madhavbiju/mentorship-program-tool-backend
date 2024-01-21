@@ -15,6 +15,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+builder.Services.AddScoped<IMentorRequestRepository, MentorRequestRepository>();
+builder.Services.AddScoped<IMentorRequestService, MentorRequestService>();
+
+builder.Services.AddScoped<IAdminApprovalRequestRepository, AdminApprovalRequestRepository>();
+builder.Services.AddScoped<IAdminApprovalRequestService, AdminApprovalRequestService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -26,6 +32,7 @@ builder.Services.AddScoped<IStatusService, StatusService>();
 
 builder.Services.AddScoped<IReportTypeRepository, ReportTypeRepository>();
 builder.Services.AddScoped<IReportTypeService, ReportTypeService>();
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
