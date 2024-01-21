@@ -11,6 +11,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 
+builder.Services.AddControllers();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
@@ -21,10 +23,8 @@ builder.Services.AddScoped<IMentorRequestService, MentorRequestService>();
 builder.Services.AddScoped<IAdminApprovalRequestRepository, AdminApprovalRequestRepository>();
 builder.Services.AddScoped<IAdminApprovalRequestService, AdminApprovalRequestService>();
 
-
-builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IAdminDashboardCountRepository, AdminDashboardCountRepository>();
+builder.Services.AddScoped<IAdminDashboardCountService, AdminDashboardCountService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
