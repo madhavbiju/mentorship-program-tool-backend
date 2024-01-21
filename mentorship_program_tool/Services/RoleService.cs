@@ -46,7 +46,6 @@ namespace mentorship_program_tool.Services
                 return;
             }
 
-            // Update properties based on employeeDto
             existingRole.roles = rolemodel.roles;
 
 
