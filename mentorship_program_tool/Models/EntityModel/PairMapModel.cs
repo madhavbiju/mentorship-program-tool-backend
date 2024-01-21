@@ -6,7 +6,7 @@ namespace mentorship_program_tool.Models.EntityModel
     public class PairMapModel
     {
         [Key]
-        public int PairMapId { get; set; }
+        public int ProgramPairId { get; set; }
 
         public int MentorId { get; set; }
         public int MenteeId { get; set; }

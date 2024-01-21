@@ -24,6 +24,8 @@ namespace mentorship_program_tool.Models.EntityModel
         public DateTime enddate { get; set; }
 
         public string programname { get; set; }
+        public string programstatus { get; set; }
 
-        
+
     }
+}
