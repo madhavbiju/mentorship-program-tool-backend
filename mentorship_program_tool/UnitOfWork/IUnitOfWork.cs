@@ -12,6 +12,9 @@ namespace mentorship_program_tool.UnitOfWork
         IMentorRequestRepository mentorRequestRepository { get; }
         IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
 
+        IGetAllProgramsRepository getAllProgramsRepository { get; }
+
+
         int Complete();
     }
 
