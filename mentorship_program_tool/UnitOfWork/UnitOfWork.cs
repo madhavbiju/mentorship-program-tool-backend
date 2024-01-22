@@ -21,6 +21,8 @@ namespace mentorship_program_tool.UnitOfWork
 
             adminApprovalRequestRepository = new AdminApprovalRequestRepository(_context);
 
+            getAllProgramsRepository = new GetAllProgramsRepository(_context);
+
             // Initialize other repositories.
         }
 
@@ -32,6 +34,8 @@ namespace mentorship_program_tool.UnitOfWork
         public IEmployeeRepository Employee { get; }
         public IMentorRequestRepository mentorRequestRepository { get; }
         public IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
+        public IGetAllProgramsRepository getAllProgramsRepository { get; }
+
 
 
         public int Complete()
