@@ -15,7 +15,9 @@ namespace mentorship_program_tool.UnitOfWork
 
         IGetAllProgramsRepository getAllProgramsRepository { get; }
         IGetMenteeDetailsByIdRepository getMenteeDetailsByIdRepository { get; }
+        IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
 
+        IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
 
         int Complete();
     }

@@ -26,6 +26,8 @@ namespace mentorship_program_tool.UnitOfWork
 
             getMenteeDetailsByIdRepository = new GetMenteeDetailsByIdRepository(_context);
 
+            getAllActiveUnpairedMenteesRepository = new GetAllActiveUnpairedMenteesRepository(_context);
+
             // Initialize other repositories.
         }
 
@@ -40,6 +42,11 @@ namespace mentorship_program_tool.UnitOfWork
         public IGetAllProgramsRepository getAllProgramsRepository { get; }
 
         public IGetMenteeDetailsByIdRepository getMenteeDetailsByIdRepository { get; }
+        public IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
+
+        public IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
+
+
 
         public int Complete()
         {
