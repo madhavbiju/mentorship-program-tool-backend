@@ -9,8 +9,12 @@ namespace mentorship_program_tool.UnitOfWork
         IReportTypeRepository ReportType { get; }
 
         IEmployeeRepository Employee { get; }
+        IRegisterRepository Register { get; }
+        ILoginRepository Login { get; }
+        IEmployeeRoleMapRepository EmployeeRoleMap { get; }
 
         int Complete();
+        Task<int> SaveChangesAsync();
     }
 
 }

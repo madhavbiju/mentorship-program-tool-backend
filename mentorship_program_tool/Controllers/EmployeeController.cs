@@ -22,6 +22,19 @@ namespace mentorship_program_tool.Controllers
             var employee = _employeeService.GetEmployee();
             return Ok(employee);
         }
+        [HttpGet("Offset/Limit")]
+        public async Task<IActionResult> GetEmployees([FromQuery] int offset, [FromQuery] int limit)
+        {
+            try
+            {
+                var employees = await _employeeService.GetEmployeesWithOffsetLimitAsync(offset, limit);
+                return Ok(employees);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
         [HttpGet("{id}")]
         public IActionResult GetEmployeesById(int id)

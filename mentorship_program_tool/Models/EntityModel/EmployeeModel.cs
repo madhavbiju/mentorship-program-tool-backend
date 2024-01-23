@@ -15,6 +15,7 @@ namespace mentorship_program_tool.Models.EntityModel
         public string emailid { get; set; }
 
         public DateTime createddate { get; set; }
-        
+        public string accountstatus { get; set; }
+
     }
 }

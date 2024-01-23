@@ -10,5 +10,7 @@ namespace mentorship_program_tool.Services
         EmployeeModel GetEmployeeById(int id);
         void CreateEmployee(EmployeeModel employee);
         void DeleteEmployee(int id);
+        Task<IEnumerable<EmployeeModel>> GetEmployeesWithOffsetLimitAsync(int offset, int limit);
+
     }
 }

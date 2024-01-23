@@ -16,6 +16,9 @@ namespace mentorship_program_tool.UnitOfWork
             ReportType = new ReportTypeRepository(_context);
 
             Employee = new EmployeeRepository(_context);
+            Register = new RegisterRepository(_context);
+            Login = new LoginRepository(_context);
+            EmployeeRoleMap = new EmployeeRoleMapRepository(_context);
 
 
 
@@ -28,6 +31,9 @@ namespace mentorship_program_tool.UnitOfWork
         public IReportTypeRepository ReportType { get; }
 
         public IEmployeeRepository Employee { get; }
+        public IRegisterRepository Register { get; }
+        public ILoginRepository Login { get; }
+        public IEmployeeRoleMapRepository EmployeeRoleMap { get; }
 
 
         public int Complete()
@@ -38,6 +44,10 @@ namespace mentorship_program_tool.UnitOfWork
         public void Dispose()
         {
             _context.Dispose();
+        }
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
 
     }

@@ -37,5 +37,10 @@ namespace mentorship_program_tool.Repository
         {
             Context.Set<T>().Remove(entity);
         }
+
+        public async Task<IEnumerable<T>> GetWithOffsetLimitAsync(int offset, int limit)
+        {
+            return await Context.Set<T>().Skip(offset).Take(limit).ToListAsync();
+        }
     }
 }
