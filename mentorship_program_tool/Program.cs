@@ -15,6 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 
+builder.Services.AddControllers();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
@@ -22,10 +24,14 @@ builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 
+builder.Services.AddScoped<IMentorRequestRepository, MentorRequestRepository>();
+builder.Services.AddScoped<IMentorRequestService, MentorRequestService>();
 
-builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IAdminApprovalRequestRepository, AdminApprovalRequestRepository>();
+builder.Services.AddScoped<IAdminApprovalRequestService, AdminApprovalRequestService>();
+
+builder.Services.AddScoped<IAdminDashboardCountRepository, AdminDashboardCountRepository>();
+builder.Services.AddScoped<IAdminDashboardCountService, AdminDashboardCountService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
@@ -33,8 +39,12 @@ builder.Services.AddScoped<IStatusService, StatusService>();
 
 builder.Services.AddScoped<IReportTypeRepository, ReportTypeRepository>();
 builder.Services.AddScoped<IReportTypeService, ReportTypeService>();
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+builder.Services.AddScoped<IGetAllProgramsRepository, GetAllProgramsRepository>();
+builder.Services.AddScoped<IGetAllProgramsService, GetAllProgramsService>();
 builder.Services.AddScoped<IEmployeeRoleMapRepository, EmployeeRoleMapRepository>();
 builder.Services.AddScoped<IEmployeeRoleMapService, EmployeeRoleMapService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
