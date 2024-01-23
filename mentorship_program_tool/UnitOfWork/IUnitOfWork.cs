@@ -13,7 +13,9 @@ namespace mentorship_program_tool.UnitOfWork
         IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
 
         IGetAllProgramsRepository getAllProgramsRepository { get; }
+        IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
 
+        IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
 
         int Complete();
     }

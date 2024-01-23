@@ -38,6 +38,13 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 builder.Services.AddScoped<IGetAllProgramsRepository, GetAllProgramsRepository>();
 builder.Services.AddScoped<IGetAllProgramsService, GetAllProgramsService>();
+
+builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
+builder.Services.AddScoped< IGetAllActiveUnpairedMenteesService, GetAllActiveUnpairedMenteesService>();
+
+builder.Services.AddScoped<IGetAllActiveMentorRepository, GetAllActiveMentorRepository>();
+builder.Services.AddScoped<IGetAllActiveMentorService, GetAllActiveMentorService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();

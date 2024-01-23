@@ -23,6 +23,8 @@ namespace mentorship_program_tool.UnitOfWork
 
             getAllProgramsRepository = new GetAllProgramsRepository(_context);
 
+            getAllActiveUnpairedMenteesRepository = new GetAllActiveUnpairedMenteesRepository(_context);
+
             // Initialize other repositories.
         }
 
@@ -35,6 +37,10 @@ namespace mentorship_program_tool.UnitOfWork
         public IMentorRequestRepository mentorRequestRepository { get; }
         public IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
         public IGetAllProgramsRepository getAllProgramsRepository { get; }
+
+        public IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
+
+        public IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
 
 
 
