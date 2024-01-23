@@ -22,12 +22,12 @@ namespace mentorship_program_tool.Services
         public int GetAdminDashboardMenteeCount()
         {
             int MenteeCount = _context.Employee
-         .Join(_context.employeerolemapping, e => e.employeeid, erm => erm.EmployeeId, (e, erm) => new { e, erm })
-         .Join(_context.role, x => x.erm.RoleId, r => r.roleid, (x, r) => new { x, r })
+         .Join(_context.employeerolemapping, e => e.employeeid, erm => erm.employeeid, (e, erm) => new { e, erm })
+         .Join(_context.role, x => x.erm.roleid, r => r.roleid, (x, r) => new { x, r })
          .Where(x => x.r.roles == "Mentee" && x.x.e.accountstatus == "active")
-         .Count(); 
+         .Count();
 
-      return MenteeCount;
+            return MenteeCount;
 
         }
 
@@ -42,8 +42,8 @@ namespace mentorship_program_tool.Services
         public int GetAdminDashboardMentorCount()
         {
             int MentorCount = _context.Employee
-         .Join(_context.employeerolemapping, e => e.employeeid, erm => erm.EmployeeId, (e, erm) => new { e, erm })
-         .Join(_context.role, x => x.erm.RoleId, r => r.roleid, (x, r) => new { x, r })
+         .Join(_context.employeerolemapping, e => e.employeeid, erm => erm.employeeid, (e, erm) => new { e, erm })
+         .Join(_context.role, x => x.erm.roleid, r => r.roleid, (x, r) => new { x, r })
          .Where(x => x.r.roles == "Mentor" && x.x.e.accountstatus == "active")
          .Count();
             return MentorCount;

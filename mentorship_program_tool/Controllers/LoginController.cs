@@ -1,6 +1,7 @@
-﻿using mentorship_program_tool.Data;
-using mentorship_program_tool.Models.EntityModel;
+﻿using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services;
+using mentorship_program_tool.Data;
+
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
