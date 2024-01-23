@@ -1,5 +1,6 @@
 ﻿using mentorship_program_tool.Data;
 using mentorship_program_tool.Repository;
+using mentorship_program_tool.Repository.GetAllMenteeDetailsByIdRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -23,6 +24,8 @@ namespace mentorship_program_tool.UnitOfWork
 
             getAllProgramsRepository = new GetAllProgramsRepository(_context);
 
+            getMenteeDetailsByIdRepository = new GetMenteeDetailsByIdRepository(_context);
+
             getAllActiveUnpairedMenteesRepository = new GetAllActiveUnpairedMenteesRepository(_context);
 
             // Initialize other repositories.
@@ -38,6 +41,7 @@ namespace mentorship_program_tool.UnitOfWork
         public IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
         public IGetAllProgramsRepository getAllProgramsRepository { get; }
 
+        public IGetMenteeDetailsByIdRepository getMenteeDetailsByIdRepository { get; }
         public IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
 
         public IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }

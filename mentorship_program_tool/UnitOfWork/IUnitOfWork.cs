@@ -1,4 +1,5 @@
 ﻿using mentorship_program_tool.Repository;
+using mentorship_program_tool.Repository.GetAllMenteeDetailsByIdRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -13,6 +14,7 @@ namespace mentorship_program_tool.UnitOfWork
         IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
 
         IGetAllProgramsRepository getAllProgramsRepository { get; }
+        IGetMenteeDetailsByIdRepository getMenteeDetailsByIdRepository { get; }
         IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
 
         IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
