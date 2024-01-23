@@ -9,7 +9,8 @@ namespace mentorship_program_tool.Models.EntityModel
         [Key]
         public int programid { get; set; }
 
-        public int programpairid { get; set; }
+        public int MentorId { get; set; }
+        public int MenteeId { get; set; }
 
         public int createdby { get; set; }
 
@@ -24,7 +25,7 @@ namespace mentorship_program_tool.Models.EntityModel
         public DateTime enddate { get; set; }
 
         public string programname { get; set; }
-        public string programstatus { get; set; }
+        public int programstatus { get; set; }
 
 
     }

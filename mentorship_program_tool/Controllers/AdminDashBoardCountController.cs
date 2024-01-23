@@ -1,11 +1,11 @@
 ﻿using mentorship_program_tool.Models.APIModel;
-using mentorship_program_tool.Services;
+using mentorship_program_tool.Services.AdminDashboardCountService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mentorship_program_tool.Controllers
 {
-    
-        [ApiController]
+
+    [ApiController]
         [Route("api/[controller]")]
     public class AdminDashBoardCountController : ControllerBase
         {
@@ -23,7 +23,7 @@ namespace mentorship_program_tool.Controllers
             AdminDashboardCountAPIModel admin=new AdminDashboardCountAPIModel();
             admin.MenteeCount = _adminDashboardCountService.GetAdminDashboardMenteeCount();
             admin.MentorCount = _adminDashboardCountService.GetAdminDashboardMentorCount();
-            admin.ActivePairCount = _adminDashboardCountService.GetAdminDashboardProgramPairCount();
+            admin.ActivePairCount = _adminDashboardCountService.GetAdminDashboardProgramCount();
                 return Ok(admin);
             }
         }

@@ -12,6 +12,6 @@ namespace mentorship_program_tool.Models.APIModel
         public string MenteeLastName { get; set; }
         public string ProgramName { get; set; }
         public DateTime EndDate { get; set; }
-        public string ProgramStatus {  get; set; }
+        public int ProgramStatus {  get; set; }
     }
 }

@@ -14,8 +14,6 @@ namespace mentorship_program_tool.Data
         public DbSet<EmployeeModel> Employee { get; set; }
         public DbSet<MentorRequestModel> programextension { get; set; }
         public DbSet<EmployeeRoleMappingModel> employeerolemapping { get; set; }
-        public DbSet<PairMapModel> programpair { get; set; }
-       
         public DbSet<ProgramModel> Program { get; set; }
 
     }
