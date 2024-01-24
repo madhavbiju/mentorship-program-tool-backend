@@ -32,7 +32,7 @@ namespace mentorship_program_tool.Services.MentorRequestService
                 newenddate = mentorrequestapimodel.newenddate,
                 reason = mentorrequestapimodel.reason,
                 requeststatusid = 2,
-                modifiedby = null,
+                modifiedby = mentorrequestapimodel.modifiedby,
                 createdtime = DateTime.Now
 
             };
