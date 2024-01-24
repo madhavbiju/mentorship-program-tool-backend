@@ -7,6 +7,8 @@ using mentorship_program_tool.Repository.MentorRequestRepository;
 using mentorship_program_tool.Repository.ReportTypeRepository;
 using mentorship_program_tool.Repository.RoleRepository;
 using mentorship_program_tool.Repository.StatusRepository;
+using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
+using mentorship_program_tool.Repository.MentorTaskRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -23,6 +25,8 @@ namespace mentorship_program_tool.UnitOfWork
         IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
         IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
 
+        IMentorTaskRepository mentorTaskRepository { get; }
+        IMenteeTaskSubmissionRepository menteeTaskSubmissionRepository { get; }
         int Complete();
     }
 

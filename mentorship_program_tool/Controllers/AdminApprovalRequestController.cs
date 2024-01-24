@@ -15,8 +15,10 @@ namespace mentorship_program_tool.Controllers
         {
             _adminapprovalrequestService = adminapprovalrequestService;
         }
+
+        //approving program extension request from mentor
         [HttpPut("{id}")]
-        public IActionResult UpdateRole(int id, AdminApprovalAPIModel adminapprovalapimodel)
+        public IActionResult UpdateRequest(int id, AdminApprovalAPIModel adminapprovalapimodel)
         {
             if (id != adminapprovalapimodel.programextensionid)
             {

@@ -12,6 +12,8 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
         {
             _unitOfWork = unitOfWork;
         }
+
+        //admin updating request
         public void UpdateRequest(int id, AdminApprovalAPIModel adminapprovalapimodel)
         {
             var existingRequest = _unitOfWork.adminApprovalRequestRepository.GetById(id);
@@ -21,7 +23,7 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
                 return;
             }
 
-            // Update properties based on employeeDto
+            // Update properties based on adminapi model
             existingRequest.requeststatusid = adminapprovalapimodel.requeststatusid;
             existingRequest.modifiedby = adminapprovalapimodel.modifiedby;
 

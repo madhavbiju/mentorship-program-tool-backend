@@ -9,6 +9,8 @@ using mentorship_program_tool.Repository.MentorRequestRepository;
 using mentorship_program_tool.Repository.ReportTypeRepository;
 using mentorship_program_tool.Repository.RoleRepository;
 using mentorship_program_tool.Repository.StatusRepository;
+using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
+using mentorship_program_tool.Repository.MentorTaskRepository;
 using mentorship_program_tool.Services;
 using mentorship_program_tool.Services.AdminApprovalRequestService;
 using mentorship_program_tool.Services.AdminDashboardCountService;
@@ -19,6 +21,8 @@ using mentorship_program_tool.Services.MentorRequestService;
 using mentorship_program_tool.Services.ReportTypeService;
 using mentorship_program_tool.Services.RoleService;
 using mentorship_program_tool.Services.StatusService;
+using mentorship_program_tool.Services.MenteeTaskSubmissionService;
+using mentorship_program_tool.Services.MentorTaskRepository;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,6 +49,12 @@ builder.Services.AddScoped<IAdminApprovalRequestService, AdminApprovalRequestSer
 builder.Services.AddScoped<IAdminDashboardCountRepository, AdminDashboardCountRepository>();
 builder.Services.AddScoped<IAdminDashboardCountService, AdminDashboardCountService>();
 
+builder.Services.AddScoped<IMentorTaskRepository, MentorTaskRepository>();
+builder.Services.AddScoped<IMentorTaskService, MentorTaskService>();
+
+builder.Services.AddScoped<IMenteeTaskSubmissionRepository, MenteeTaskSubmissionRepository>();
+builder.Services.AddScoped<IMenteeTaskSubmissionService, MenteeTaskSubmissionService>();
+
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<IStatusService, StatusService>();
 
@@ -61,7 +71,7 @@ builder.Services.AddScoped<IGetAllProgramsRepository, GetAllProgramsRepository>(
 builder.Services.AddScoped<IGetAllProgramsService, GetAllProgramsService>();
 
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
-builder.Services.AddScoped< IGetAllActiveUnpairedMenteesService, GetAllActiveUnpairedMenteesService>();
+builder.Services.AddScoped<IGetAllActiveUnpairedMenteesService, GetAllActiveUnpairedMenteesService>();
 
 builder.Services.AddScoped<IGetAllActiveMentorRepository, GetAllActiveMentorRepository>();
 builder.Services.AddScoped<IGetAllActiveMentorService, GetAllActiveMentorService>();
