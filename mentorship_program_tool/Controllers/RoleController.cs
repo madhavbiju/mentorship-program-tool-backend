@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mentorship_program_tool.Data;
 using mentorship_program_tool.Models.EntityModel;
-using mentorship_program_tool.Services;
+using mentorship_program_tool.Services.RoleService;
 
 namespace mentorship_program_tool.Controllers
 {

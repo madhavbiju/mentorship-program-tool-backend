@@ -1,6 +1,6 @@
 ﻿using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
-using mentorship_program_tool.Services;
+using mentorship_program_tool.Services.MentorRequestService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mentorship_program_tool.Controllers
