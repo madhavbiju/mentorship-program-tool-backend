@@ -1,6 +1,10 @@
 using mentorship_program_tool.Data;
 using mentorship_program_tool.Repository;
+using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
+using mentorship_program_tool.Repository.MentorTaskRepository;
 using mentorship_program_tool.Services;
+using mentorship_program_tool.Services.MenteeTaskSubmissionService;
+using mentorship_program_tool.Services.MentorTaskRepository;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +25,11 @@ builder.Services.AddScoped<IMentorRequestService, MentorRequestService>();
 builder.Services.AddScoped<IAdminApprovalRequestRepository, AdminApprovalRequestRepository>();
 builder.Services.AddScoped<IAdminApprovalRequestService, AdminApprovalRequestService>();
 
+builder.Services.AddScoped<IMentorTaskRepository, MentorTaskRepository>();
+builder.Services.AddScoped<IMentorTaskService, MentorTaskService>();
+
+builder.Services.AddScoped<IMenteeTaskSubmissionRepository, MenteeTaskSubmissionRepository>();
+builder.Services.AddScoped<IMenteeTaskSubmissionService, MenteeTaskSubmissionService>();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>

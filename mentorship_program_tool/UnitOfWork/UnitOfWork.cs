@@ -1,5 +1,7 @@
 ﻿using mentorship_program_tool.Data;
 using mentorship_program_tool.Repository;
+using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
+using mentorship_program_tool.Repository.MentorTaskRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -21,6 +23,10 @@ namespace mentorship_program_tool.UnitOfWork
 
             adminApprovalRequestRepository = new AdminApprovalRequestRepository(_context);
 
+            mentorTaskRepository = new MentorTaskRepository(_context);
+
+            menteeTaskSubmissionRepository = new MenteeTaskSubmissionRepository(_context);
+
             // Initialize other repositories.
         }
 
@@ -32,7 +38,8 @@ namespace mentorship_program_tool.UnitOfWork
         public IEmployeeRepository Employee { get; }
         public IMentorRequestRepository mentorRequestRepository { get; }
         public IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
-
+        public IMentorTaskRepository mentorTaskRepository { get; }
+        public IMenteeTaskSubmissionRepository menteeTaskSubmissionRepository { get; }
 
         public int Complete()
         {

@@ -17,7 +17,7 @@ namespace mentorship_program_tool.Services
         }
 
 
-        //Mentoring adding a request(status id will be 2 and modifiedby will be null)
+        //Mentor adding a request(status id will be 2 and modifiedby will be null)
         public void CreateRequest(MentorRequestAPIModel mentorrequestapimodel)
         {
             var request = MapToProgramExtension(mentorrequestapimodel);
