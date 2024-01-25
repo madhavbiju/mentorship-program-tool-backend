@@ -25,6 +25,9 @@ using mentorship_program_tool.Services.MenteeTaskSubmissionService;
 using mentorship_program_tool.Services.MentorTaskRepository;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
+using mentorship_program_tool.Repository.GetActiveTasksRepository;
+using mentorship_program_tool.Services.GetActiveTasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +72,9 @@ builder.Services.AddScoped<IGetMenteeDetailsByIdService, GetMenteeDetailsByIdSer
 
 builder.Services.AddScoped<IGetAllProgramsRepository, GetAllProgramsRepository>();
 builder.Services.AddScoped<IGetAllProgramsService, GetAllProgramsService>();
+
+builder.Services.AddScoped<IGetActiveTasksRepository, GetActiveTasksRepository>();
+builder.Services.AddScoped<IGetActiveTasksService, GetActiveTasksService>();
 
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesService, GetAllActiveUnpairedMenteesService>();
