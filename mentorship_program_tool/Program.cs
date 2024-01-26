@@ -25,6 +25,7 @@ using mentorship_program_tool.Services.MenteeTaskSubmissionService;
 using mentorship_program_tool.Services.MentorTaskRepository;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +76,8 @@ builder.Services.AddScoped<IGetAllActiveUnpairedMenteesService, GetAllActiveUnpa
 
 builder.Services.AddScoped<IGetAllActiveMentorRepository, GetAllActiveMentorRepository>();
 builder.Services.AddScoped<IGetAllActiveMentorService, GetAllActiveMentorService>();
+
+builder.Services.AddScoped<IGetAllMenteesOfMentorService, GetAllMenteesOfMentorService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
