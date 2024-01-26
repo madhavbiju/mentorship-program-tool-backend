@@ -17,7 +17,7 @@ namespace mentorship_program_tool.Services.MentorRequestService
         }
 
 
-        //Mentor adding a request(status id will be 2 and modifiedby will be null)
+        //Mentor adding a request(status id will be 4 and modifiedby will be null)
         public void CreateRequest(MentorRequestAPIModel mentorrequestapimodel)
         {
             var request = MapToProgramExtension(mentorrequestapimodel);
@@ -31,7 +31,7 @@ namespace mentorship_program_tool.Services.MentorRequestService
                 programid = mentorrequestapimodel.programid,
                 newenddate = mentorrequestapimodel.newenddate,
                 reason = mentorrequestapimodel.reason,
-                requeststatusid = 2,
+                requeststatusid = 4,
                 modifiedby = mentorrequestapimodel.modifiedby,
                 createdtime = DateTime.Now
 
