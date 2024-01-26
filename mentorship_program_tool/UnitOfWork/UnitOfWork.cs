@@ -10,6 +10,7 @@ using mentorship_program_tool.Repository.RoleRepository;
 using mentorship_program_tool.Repository.StatusRepository;
 using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
 using mentorship_program_tool.Repository.MentorTaskRepository;
+using mentorship_program_tool.Repository.GetUserDetailsRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -34,6 +35,7 @@ namespace mentorship_program_tool.UnitOfWork
             mentorTaskRepository = new MentorTaskRepository(_context);
 
             menteeTaskSubmissionRepository = new MenteeTaskSubmissionRepository(_context);
+            getUserDetailsRepository = new GetUserDetailsRepository(_context);
 
             // Initialize other repositories.
         }
@@ -48,7 +50,7 @@ namespace mentorship_program_tool.UnitOfWork
         public IGetMenteeDetailsByIdRepository getMenteeDetailsByIdRepository { get; }
         public IGetAllActiveUnpairedMenteesRepository getAllActiveUnpairedMenteesRepository { get; }
         public IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
-
+        public IGetUserDetailsRepository getUserDetailsRepository { get; }
 
         public IMentorTaskRepository mentorTaskRepository { get; }
         public IMenteeTaskSubmissionRepository menteeTaskSubmissionRepository { get; }

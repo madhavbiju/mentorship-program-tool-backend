@@ -43,7 +43,7 @@ namespace mentorship_program_tool.Services.StatusService
             }
 
             // Update properties based on statusDto
-            existingStatus.currentstatus = statusDto.currentstatus;
+            existingStatus.statusvalue = statusDto.statusvalue;
 
 
             _unitOfWork.Complete();

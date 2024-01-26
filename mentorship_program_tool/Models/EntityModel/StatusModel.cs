@@ -6,6 +6,6 @@ namespace mentorship_program_tool.Models.EntityModel
     {
         [Key]
         public int statusid { get; set; }
-        public string currentstatus { get; set; }
+        public string statusvalue { get; set; }
     }
 }
