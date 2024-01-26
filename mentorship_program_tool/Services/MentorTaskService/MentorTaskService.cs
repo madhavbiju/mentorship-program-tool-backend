@@ -34,7 +34,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
                 referencematerialfilepath = mentortaskapimodel.referencematerialfilepath,
                 filepath = null,
                 submissiontime = null,
-                taskstatus = 2,
+                taskstatus = 4,
                 createdby = mentortaskapimodel.createdby
             };
         }
@@ -50,7 +50,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             }
 
             // Update properties based on adminapi model
-            existingTask.taskstatus = 1;
+            existingTask.taskstatus = 3;
 
             _unitOfWork.Complete();
         }
