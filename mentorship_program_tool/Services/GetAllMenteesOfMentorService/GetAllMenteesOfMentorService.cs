@@ -14,7 +14,10 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
             _context = context;
         }
 
-        public GetAllMenteesOfMentorAPIModel GetAllMenteesById(int id)
+
+        //(check mentrid in pgm table == coming id)
+        //then retrieve the corresponding mentee id of that mentor, and look at emp table using that mentee id.
+        public List<GetAllMenteesOfMentorAPIModel> GetAllMenteesById(int id)
         {
             var menteesList = from p in _context.Program
                               join mentee in _context.Employee on p.MenteeId equals mentee.employeeid
@@ -31,7 +34,7 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
 
 
 
-            return menteesList.SingleOrDefault();
+            return menteesList.ToList();
         }
     }
 }
