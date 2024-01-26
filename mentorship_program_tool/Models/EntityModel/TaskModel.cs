@@ -14,7 +14,7 @@ namespace mentorship_program_tool.Models.EntityModel
         public string referencematerialfilepath { get; set; }
         public string? filepath { get; set; }
         public DateTime? submissiontime { get; set; }
-        public string taskstatus { get; set; }
+        public int taskstatus { get; set; }
         public int createdby { get; set; }
         public DateTime? modifiedtime { get; set; }
     }

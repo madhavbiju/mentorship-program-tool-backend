@@ -5,9 +5,9 @@ namespace mentorship_program_tool.Services.GetActiveTasksService
 {
     namespace mentorship_program_tool.Services
     {
-        public interface IGetActiveTasksService
+        public interface IGetTasksByProgramIdService
         {
-            IEnumerable<GetActiveTasksAPIModel> GetAllActiveTasks();
+            IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int id,int status);
         }
     }
 }

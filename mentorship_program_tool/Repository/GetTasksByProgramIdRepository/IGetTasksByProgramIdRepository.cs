@@ -2,7 +2,7 @@
 
 namespace mentorship_program_tool.Repository.GetActiveTasksRepository
 {
-    public interface IGetActiveTasksRepository:IRepository<GetActiveTasksAPIModel>
+    public interface IGetTasksByProgramIdRepository:IRepository<GetTasksByProgramIdAPIModel>
     {
     }
 }

@@ -28,6 +28,8 @@ using Microsoft.EntityFrameworkCore;
 using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
 using mentorship_program_tool.Repository.GetActiveTasksRepository;
 using mentorship_program_tool.Services.GetActiveTasks;
+using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
+using mentorship_program_tool.Services.GetTasksbyEmployeeIdService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,8 +75,12 @@ builder.Services.AddScoped<IGetMenteeDetailsByIdService, GetMenteeDetailsByIdSer
 builder.Services.AddScoped<IGetAllProgramsRepository, GetAllProgramsRepository>();
 builder.Services.AddScoped<IGetAllProgramsService, GetAllProgramsService>();
 
-builder.Services.AddScoped<IGetActiveTasksRepository, GetActiveTasksRepository>();
-builder.Services.AddScoped<IGetActiveTasksService, GetActiveTasksService>();
+builder.Services.AddScoped<IGetTasksByProgramIdRepository, GetTasksByProgramIdRepository>();
+builder.Services.AddScoped<IGetTasksByProgramIdService, GetTasksByProgramIdService>();
+
+builder.Services.AddScoped<IGetTasksbyEmployeeIdRepository, GetTasksbyEmployeeIdRepository>();
+builder.Services.AddScoped<IGetTasksbyEmployeeIdService, GetTasksByEmployeeIdService>();
+
 
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesService, GetAllActiveUnpairedMenteesService>();
