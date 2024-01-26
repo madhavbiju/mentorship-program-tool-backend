@@ -42,6 +42,18 @@ public class ProgramController : ControllerBase
             return CreatedAtAction(nameof(GetProgramsById), new { id = program.programid }, program);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdatePrograms(int id, ProgramModel program)
+        {
+            if (id != program.programid)
+            {
+                return BadRequest();
+            }
+
+            _programService.UpdateProgram(id, program);
+            return NoContent();
+        }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeletePrograms(int id)

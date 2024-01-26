@@ -33,6 +33,25 @@ namespace mentorship_program_tool.Services.ProgramService
             _unitOfWork.Complete();
         }
 
+        public void UpdateProgram(int id, ProgramModel programDto)
+        {
+            var existingProgram = _unitOfWork.Program.GetById(id);
+
+            if (existingProgram == null)
+            {
+                // Handle not found scenario
+                return;
+            }
+
+            existingProgram.MentorId = programDto.MentorId;
+            existingProgram.modifiedby = programDto.modifiedby;
+            existingProgram.modifiedtime = programDto.modifiedtime;
+            existingProgram.enddate = programDto.enddate;
+
+
+            _unitOfWork.Complete();
+        }
+
         public void DeleteProgram(int id)
         {
             var program = _unitOfWork.Program.GetById(id);

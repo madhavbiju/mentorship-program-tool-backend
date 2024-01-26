@@ -7,6 +7,7 @@ namespace mentorship_program_tool.Services.ProgramService
         IEnumerable<ProgramModel> GetProgram();
         ProgramModel GetProgramById(int id);
         void CreateProgram(ProgramModel program);
+        void UpdateProgram(int id, ProgramModel program);
         void DeleteProgram(int id);
     }
 }
