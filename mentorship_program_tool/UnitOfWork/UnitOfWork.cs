@@ -10,6 +10,7 @@ using mentorship_program_tool.Repository.RoleRepository;
 using mentorship_program_tool.Repository.StatusRepository;
 using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
 using mentorship_program_tool.Repository.MentorTaskRepository;
+using mentorship_program_tool.Repository.ProgramRepository;
 using mentorship_program_tool.Repository.GetActiveTasksRepository;
 using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
 
@@ -27,6 +28,7 @@ namespace mentorship_program_tool.UnitOfWork
             Role = new RoleRepository(_context);
             ReportType = new ReportTypeRepository(_context);
             Employee = new EmployeeRepository(_context);
+            Program = new ProgramRepository(_context);
             mentorRequestRepository = new MentorRequestRepository(_context);
             adminApprovalRequestRepository = new AdminApprovalRequestRepository(_context);
             getAllProgramsRepository = new GetAllProgramsRepository(_context);
@@ -37,7 +39,6 @@ namespace mentorship_program_tool.UnitOfWork
 
 
             mentorTaskRepository = new MentorTaskRepository(_context);
-
             menteeTaskSubmissionRepository = new MenteeTaskSubmissionRepository(_context);
 
             // Initialize other repositories.
@@ -47,6 +48,7 @@ namespace mentorship_program_tool.UnitOfWork
         public IStatusRepository Status { get; }
         public IReportTypeRepository ReportType { get; }
         public IEmployeeRepository Employee { get; }
+        public IProgramRepository Program { get; }
         public IMentorRequestRepository mentorRequestRepository { get; }
         public IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
         public IGetAllProgramsRepository getAllProgramsRepository { get; }

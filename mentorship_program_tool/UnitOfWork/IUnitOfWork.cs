@@ -11,6 +11,7 @@ using mentorship_program_tool.Repository.MenteeTaskSubmissionRepository;
 
 using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
 using mentorship_program_tool.Repository.MentorTaskRepository;
+using mentorship_program_tool.Repository.ProgramRepository;
 using mentorship_program_tool.Repository.GetActiveTasksRepository;
 
 namespace mentorship_program_tool.UnitOfWork
@@ -21,6 +22,7 @@ namespace mentorship_program_tool.UnitOfWork
         IStatusRepository Status { get; }
         IReportTypeRepository ReportType { get; }
         IEmployeeRepository Employee { get; }
+        IProgramRepository Program { get; }
         IMentorRequestRepository mentorRequestRepository { get; }
         IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
         IGetAllProgramsRepository getAllProgramsRepository { get; }
