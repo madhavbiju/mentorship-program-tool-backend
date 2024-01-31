@@ -4,10 +4,10 @@ namespace mentorship_program_tool.Services.RoleService
 {
     public interface IRoleService
     {
-        IEnumerable<RoleModel> GetRoles();
-        RoleModel GetRoleById(int id);
-        void CreateRole(RoleModel rolemodel);
-        void UpdateRole(int id, RoleModel rolemodel);
+        IEnumerable<Role> GetRoles();
+        Role GetRoleById(int id);
+        void CreateRole(Role rolemodel);
+        void UpdateRole(int id, Role rolemodel);
         void DeleteRole(int id);
     }
 }

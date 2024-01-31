@@ -2,7 +2,7 @@
 
 namespace mentorship_program_tool.Repository.ProgramRepository
 {
-    public interface IProgramRepository : IRepository<ProgramModel>
+    public interface IProgramRepository : IRepository<Models.EntityModel.Program>
     {
     }
 }

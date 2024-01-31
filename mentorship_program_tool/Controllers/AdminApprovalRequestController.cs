@@ -20,7 +20,7 @@ namespace mentorship_program_tool.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateRequest(int id, AdminApprovalAPIModel adminapprovalapimodel)
         {
-            if (id != adminapprovalapimodel.programextensionid)
+            if (id != adminapprovalapimodel.ProgramExtensionID)
             {
                 return BadRequest();
             }

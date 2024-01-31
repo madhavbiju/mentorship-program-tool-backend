@@ -1,9 +1,8 @@
-﻿using mentorship_program_tool.Models.APIModel;
+﻿using mentorship_program_tool.Models.ApiModel;
+using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Repository;
 using mentorship_program_tool.UnitOfWork;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using System.Drawing;
 
 namespace mentorship_program_tool.Services.MentorRequestService
 {
@@ -17,34 +16,33 @@ namespace mentorship_program_tool.Services.MentorRequestService
         }
 
 
-        //Mentor adding a request(status id will be 4 and modifiedby will be null)
-        public void CreateRequest(MentorRequestAPIModel mentorrequestapimodel)
+        // Mentor adding a request (status ID will be 4 and modified by will be null)
+        public void CreateRequest(MentorRequestAPIModel mentorRequestAPIModel)
         {
-            var request = MapToProgramExtension(mentorrequestapimodel);
+            var request = MapToProgramExtension(mentorRequestAPIModel);
             _unitOfWork.mentorRequestRepository.Add(request);
             _unitOfWork.Complete();
         }
-        private MentorRequestModel MapToProgramExtension(MentorRequestAPIModel mentorrequestapimodel)
+
+        private ProgramExtension MapToProgramExtension(MentorRequestAPIModel mentorRequestAPIModel)
         {
-            return new MentorRequestModel
+            return new ProgramExtension
             {
-                programid = mentorrequestapimodel.programid,
-                newenddate = mentorrequestapimodel.newenddate,
-                reason = mentorrequestapimodel.reason,
-                requeststatusid = 4,
-                modifiedby = mentorrequestapimodel.modifiedby,
-                createdtime = DateTime.Now
+                ProgramID = mentorRequestAPIModel.ProgramID,
+                NewEndDate = mentorRequestAPIModel.NewEndDate,
+                Reason = mentorRequestAPIModel.Reason,
+                RequestStatusID = 4,
+                ModifiedBy = mentorRequestAPIModel.ModifiedBy,
+                CreatedTime = DateTime.Now
 
             };
         }
 
-        //getall pending request
-        public IEnumerable<MentorRequestModel> GetPendingRequest()
+        // Get all pending requests
+        public IEnumerable<ProgramExtension> GetPendingRequests()
         {
-            var pendingRequest = _unitOfWork.mentorRequestRepository.GetAll().Where(n => n.requeststatusid == 2);
-            return pendingRequest;
+            var pendingRequests = _unitOfWork.mentorRequestRepository.GetAll().Where(n => n.RequestStatusID == 2);
+            return pendingRequests;
         }
-
-
     }
 }

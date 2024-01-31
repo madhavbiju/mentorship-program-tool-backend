@@ -1,14 +1,11 @@
 ﻿using Humanizer;
 using mentorship_program_tool.Data;
-using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Threading.Tasks;
-using mentorship_program_tool.Models.APIModel;
+using System.Collections.Generic;
+using System.Linq;
 using mentorship_program_tool.Models.ApiModel;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Microsoft.Build.Framework;
+using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
 
 namespace mentorship_program_tool.Services.GetActiveTasks
 {
@@ -23,58 +20,27 @@ namespace mentorship_program_tool.Services.GetActiveTasks
             _context = context;
         }
 
-
-        public IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int id, int status)
+        public IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int ID, int status)
         {
-            if (status >= 1)
-            {
+            var tasksQuery = from task in _context.Tasks
+                             join program in _context.Programs on task.ProgramID equals program.ProgramID
+                             join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
+                             join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
+                             where task.TaskStatus == status && task.ProgramID == ID
+                             select new GetTasksByProgramIdAPIModel
+                             {
+                                 TaskID = task.TaskID,
+                                 MentorFirstName = mentor.FirstName,
+                                 MentorLastName = mentor.LastName,
+                                 MenteeFirstName = mentee.FirstName,
+                                 MenteeLastName = mentee.LastName,
+                                 StartDate = program.StartDate,
+                                 EndDate = program.EndDate,
+                                 TaskName = task.Title,
+                                 TaskStatus = task.TaskStatus
+                             };
 
-                var tasks = from task in _context.task
-                            join program in _context.Program on task.programid equals program.programid
-                            join mentor in _context.Employee on program.MentorId equals mentor.employeeid
-                            join mentee in _context.Employee on program.MenteeId equals mentee.employeeid
-                            where task.taskstatus == status && task.programid == id
-                            select new GetTasksByProgramIdAPIModel
-                            {
-                                taskid = task.taskid,
-                                mentorfirstname = mentor.firstname,
-                                mentorlastname = mentor.lastname,
-                                menteefirstname = mentee.firstname,
-                                menteelastname = mentee.lastname,
-                                startdate = program.startdate,
-                                enddate = program.enddate,
-                                taskname = task.title,
-                                taskstatus = task.taskstatus
-                            };
-
-                return tasks;
-            }
-            else
-            {
-                var tasks = from task in _context.task
-                            join program in _context.Program on task.programid equals program.programid
-                            join mentor in _context.Employee on program.MentorId equals mentor.employeeid
-                            join mentee in _context.Employee on program.MenteeId equals mentee.employeeid
-                            where task.taskstatus == status && task.programid == id
-                            select new GetTasksByProgramIdAPIModel
-                            {
-                                taskid = task.taskid,
-                                mentorfirstname = mentor.firstname,
-                                mentorlastname = mentor.lastname,
-                                menteefirstname = mentee.firstname,
-                                menteelastname = mentee.lastname,
-                                startdate = program.startdate,
-                                enddate = program.enddate,
-                                taskname = task.title,
-                                taskstatus = task.taskstatus
-                            };
-
-                return tasks;
-            }
-                
-
+            return tasksQuery.ToList();
         }
-
-
     }
 }

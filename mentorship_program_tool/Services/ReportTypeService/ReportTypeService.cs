@@ -12,27 +12,27 @@ namespace mentorship_program_tool.Services.ReportTypeService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<ReportTypeModel> GetReportType()
+        public IEnumerable<ReportType> GetReportType()
         {
 
             var ReportType = _unitOfWork.ReportType.GetAll();
             return ReportType;
         }
 
-        public ReportTypeModel GetReportTypeById(int id)
+        public ReportType GetReportTypeById(int id)
         {
             var ReportType = _unitOfWork.ReportType.GetById(id);
             return ReportType;
         }
 
-        public void CreateReportType(ReportTypeModel ReportTypeDto)
+        public void CreateReportType(ReportType ReportTypeDto)
         {
 
             _unitOfWork.ReportType.Add(ReportTypeDto);
             _unitOfWork.Complete();
         }
 
-        public void UpdateReportType(int id, ReportTypeModel ReportTypeDto)
+        public void UpdateReportType(int id, ReportType ReportTypeDto)
         {
             var existingReportType = _unitOfWork.ReportType.GetById(id);
 
@@ -43,7 +43,7 @@ namespace mentorship_program_tool.Services.ReportTypeService
             }
 
             // Update properties based on ReportTypeDto
-            existingReportType.reporttype = ReportTypeDto.reporttype;
+            existingReportType.ReportName = ReportTypeDto.ReportName;
 
 
             _unitOfWork.Complete();

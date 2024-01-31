@@ -28,7 +28,7 @@ namespace mentorship_program_tool.Controllers
         [HttpPut("{id} Updating Completed task Status")]
         public IActionResult UpdateStatus(int id, MentorTaskStatusUpdationAPIModel taskstatusupdationmodel)
         {
-            if (id != taskstatusupdationmodel.taskid)
+            if (id != taskstatusupdationmodel.TaskID)
             {
                 return BadRequest();
             }
@@ -41,7 +41,7 @@ namespace mentorship_program_tool.Controllers
         [HttpPut("{id} Updating due date of task")]
         public IActionResult UpdateDueDate(int id, MentorTaskEndDateUpdationModel taskenddateupdationmodel)
         {
-            if (id != taskenddateupdationmodel.taskid)
+            if (id != taskenddateupdationmodel.TaskID)
             {
                 return BadRequest();
             }

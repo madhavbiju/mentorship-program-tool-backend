@@ -36,16 +36,16 @@ public class ProgramController : ControllerBase
         }
 
         [HttpPost]
-        public IActionResult AddPrograms(ProgramModel program)
+        public IActionResult AddPrograms(Models.EntityModel.Program program)
         {
             _programService.CreateProgram(program);
-            return CreatedAtAction(nameof(GetProgramsById), new { id = program.programid }, program);
+            return CreatedAtAction(nameof(GetProgramsById), new { id = program.ProgramID }, program);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePrograms(int id, ProgramModel program)
+        public IActionResult UpdatePrograms(int id, Models.EntityModel.Program program)
         {
-            if (id != program.programid)
+            if (id != program.ProgramID)
             {
                 return BadRequest();
             }

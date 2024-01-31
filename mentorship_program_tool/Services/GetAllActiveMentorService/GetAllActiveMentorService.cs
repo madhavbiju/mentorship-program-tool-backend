@@ -22,20 +22,19 @@ namespace mentorship_program_tool.Services
 
         public IEnumerable<GetAllActiveMentorAPIModel> GetAllActiveMentors()
         {
-                var mentorList = _context.Employee
-        .Join(_context.employeerolemapping, e => e.employeeid, erm => erm.EmployeeId, (e, erm) => new { Employee = e, EmployeeRoleMapping = erm })
-        .Where(x => x.EmployeeRoleMapping.RoleId == 2 && x.Employee.accountstatus == "active")
-        .Select(x => new GetAllActiveMentorAPIModel
-                    {
-                        EmployeeId = x.Employee.employeeid,
-                        FirstName = x.Employee.firstname,
-                        LastName = x.Employee.lastname,
+            var mentorList = _context.Employees
+    .Join(_context.EmployeeRoleMappings, e => e.EmployeeID, erm => erm.EmployeeID, (e, erm) => new { Employee = e, EmployeeRoleMapping = erm })
+    .Where(x => x.EmployeeRoleMapping.RoleID == 2 && x.Employee.AccountStatus == "active")
+    .Select(x => new GetAllActiveMentorAPIModel
+    {
+        EmployeeID = x.Employee.EmployeeID,
+        FirstName = x.Employee.FirstName,
+        LastName = x.Employee.LastName,
 
-                        // Add any additional properties specific to GetAllActiveMentorAPIModel
-                    })
-                    .ToList();
+    })
+                .ToList();
 
-                return mentorList;
+            return mentorList;
         }
     }
 }
