@@ -2,7 +2,7 @@
 
 namespace mentorship_program_tool.Repository.StatusRepository
 {
-    public interface IStatusRepository : IRepository<StatusModel>
+    public interface IStatusRepository : IRepository<Status>
     {
 
 

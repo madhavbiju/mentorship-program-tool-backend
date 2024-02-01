@@ -28,7 +28,7 @@ namespace mentorship_program_tool.Controllers
         [HttpGet("GetAll Pending Request")]
         public IActionResult GetPendingRequest()
         {
-            var pendingRequest = _mentorRequestService.GetPendingRequest();
+            var pendingRequest = _mentorRequestService.GetPendingRequests();
             return Ok(pendingRequest);
         }
     }

@@ -4,7 +4,7 @@ namespace mentorship_program_tool.Models.APIModel
 {
     public class GetAllProgramsAPIModel
     {
-        public int ProgramId { get; set; }
+        public int ProgramID { get; set; }
         public string MentorFirstName { get; set; }
 
         public string MentorLastName { get; set; }

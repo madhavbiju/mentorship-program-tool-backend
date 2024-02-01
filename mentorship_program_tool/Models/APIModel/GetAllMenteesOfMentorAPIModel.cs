@@ -2,14 +2,14 @@
 {
     public class GetAllMenteesOfMentorAPIModel
     {
-        public int EmployeeId { get; set; }
+        public int EmployeeID { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
         public string ProgramName { get; set; }
-        public DateTime Startdate { get; set; }
+        public DateTime StartDate { get; set; }
 
-        public DateTime Enddate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

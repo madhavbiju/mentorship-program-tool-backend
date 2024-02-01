@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace mentorship_program_tool.Repository.ReportTypeRepository
 {
 
-    public interface IReportTypeRepository : IRepository<ReportTypeModel>
+    public interface IReportTypeRepository : IRepository<ReportType>
     {
 
 

@@ -1,16 +1,18 @@
-﻿namespace mentorship_program_tool.Models.ApiModel
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace mentorship_program_tool.Models.ApiModel
 {
     public class GetTasksByProgramIdAPIModel
     {
-        public int taskid { get; set; }
-        public string taskname { get; set; }
-        public string menteefirstname { get; set; }
-        public string menteelastname { get; set; }
-        public string mentorfirstname { get; set; }
-        public string mentorlastname { get; set; }
-
-        public DateTime startdate { get; set; }
-        public DateTime enddate { get; set; }
-        public int taskstatus { get; set; }
+        public int TaskID { get; set; }
+        public string TaskName { get; set; }
+        public string MenteeFirstName { get; set; }
+        public string MenteeLastName { get; set; }
+        public string MentorFirstName { get; set; }
+        public string MentorLastName { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int TaskStatus { get; set; }
     }
 }

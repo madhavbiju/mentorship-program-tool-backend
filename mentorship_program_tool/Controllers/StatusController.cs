@@ -34,16 +34,16 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddStatus(StatusModel status)
+        public IActionResult AddStatus(Status status)
         {
             _statusService.CreateStatus(status);
-            return CreatedAtAction(nameof(GetStatusById), new { id = status.statusid }, status);
+            return CreatedAtAction(nameof(GetStatusById), new { id = status.StatusID }, status);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateStatus(int id, StatusModel status)
+        public IActionResult UpdateStatus(int id, Status status)
         {
-            if (id != status.statusid)
+            if (id != status.StatusID)
             {
                 return BadRequest();
             }

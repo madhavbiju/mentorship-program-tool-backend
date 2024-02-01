@@ -2,6 +2,8 @@
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
 {
@@ -14,25 +16,20 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
             _context = context;
         }
 
-
-        //(check mentrid in pgm table == coming id)
-        //then retrieve the corresponding mentee id of that mentor, and look at emp table using that mentee id.
-        public List<GetAllMenteesOfMentorAPIModel> GetAllMenteesById(int id)
+        public List<GetAllMenteesOfMentorAPIModel> GetAllMenteesById(int ID)
         {
-            var menteesList = from p in _context.Program
-                              join mentee in _context.Employee on p.MenteeId equals mentee.employeeid
-                              where p.MentorId == id
+            var menteesList = from p in _context.Programs
+                              join mentee in _context.Employees on p.MenteeID equals mentee.EmployeeID
+                              where p.MentorID == ID
                               select new GetAllMenteesOfMentorAPIModel
                               {
-                                  EmployeeId = p.MenteeId,
-                                  FirstName = mentee.firstname,
-                                  LastName = mentee.lastname,
-                                  ProgramName = p.programname,
-                                  Startdate = p.startdate,
-                                  Enddate = p.enddate
+                                  EmployeeID = p.MenteeID,
+                                  FirstName = mentee.FirstName,
+                                  LastName = mentee.LastName,
+                                  ProgramName = p.ProgramName,
+                                  StartDate = p.StartDate,
+                                  EndDate = p.EndDate
                               };
-
-
 
             return menteesList.ToList();
         }

@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+
 namespace mentorship_program_tool.Models.EntityModel
 {
-    public class StatusModel
+    public class Status
     {
         [Key]
-        public int statusid { get; set; }
-        public string currentstatus { get; set; }
+        public int StatusID { get; set; }
+
+        public string StatusValue { get; set; }
     }
 }

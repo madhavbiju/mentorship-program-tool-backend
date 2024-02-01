@@ -13,27 +13,27 @@ namespace mentorship_program_tool.Services.ProgramService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<ProgramModel> GetProgram()
+        public IEnumerable<Models.EntityModel.Program> GetProgram()
         {
 
             var program = _unitOfWork.Program.GetAll();
             return program;
         }
 
-        public ProgramModel GetProgramById(int id)
+        public Models.EntityModel.Program GetProgramById(int id)
         {
             var program = _unitOfWork.Program.GetById(id);
             return program;
         }
 
-        public void CreateProgram(ProgramModel programDto)
+        public void CreateProgram(Models.EntityModel.Program programDto)
         {
 
             _unitOfWork.Program.Add(programDto);
             _unitOfWork.Complete();
         }
 
-        public void UpdateProgram(int id, ProgramModel programDto)
+        public void UpdateProgram(int id, Models.EntityModel.Program programDto)
         {
             var existingProgram = _unitOfWork.Program.GetById(id);
 
@@ -43,10 +43,10 @@ namespace mentorship_program_tool.Services.ProgramService
                 return;
             }
 
-            existingProgram.MentorId = programDto.MentorId;
-            existingProgram.modifiedby = programDto.modifiedby;
-            existingProgram.modifiedtime = programDto.modifiedtime;
-            existingProgram.enddate = programDto.enddate;
+            existingProgram.MentorID = programDto.MentorID;
+            existingProgram.ModifiedBy = programDto.ModifiedBy;
+            existingProgram.ModifiedTime = programDto.ModifiedTime;
+            existingProgram.EndDate = programDto.EndDate;
 
 
             _unitOfWork.Complete();

@@ -41,16 +41,16 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddRole(RoleModel role)
+        public IActionResult AddRole(Role role)
         {
             _roleService.CreateRole(role);
-            return CreatedAtAction(nameof(GetRoleById), new { id = role.roleid }, role);
+            return CreatedAtAction(nameof(GetRoleById), new { id = role.RoleID }, role);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateRole(int id, RoleModel role)
+        public IActionResult UpdateRole(int id, Role role)
         {
-            if (id != role.roleid)
+            if (id != role.RoleID)
             {
                 return BadRequest();
             }

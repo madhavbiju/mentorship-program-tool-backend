@@ -20,7 +20,7 @@ namespace mentorship_program_tool.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateTask(int id, MenteeTaskSubmissionAPIModel menteetasksubmissionapimodel)
         {
-            if (id != menteetasksubmissionapimodel.taskid)
+            if (id != menteetasksubmissionapimodel.TaskID)
             {
                 return BadRequest();
             }
