@@ -33,6 +33,8 @@ using mentorship_program_tool.Repository.GetActiveTasksRepository;
 using mentorship_program_tool.Services.GetActiveTasks;
 using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
 using mentorship_program_tool.Services.GetTasksbyEmployeeIdService;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,7 +101,17 @@ builder.Services.AddScoped<IGetAllMenteesOfMentorService, GetAllMenteesOfMentorS
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Mentorship Program Tool",
+        Description = "An ASP.NET Core Web API for managing Mentee-Mentor Pairing"
+    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddCors(options =>
 {
 
