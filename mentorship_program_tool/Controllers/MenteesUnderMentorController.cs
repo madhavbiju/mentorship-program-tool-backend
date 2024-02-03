@@ -7,18 +7,20 @@ using static Azure.Core.HttpHeader;
 namespace mentorship_program_tool.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class GetAllMenteesOfMentorController : ControllerBase
+    [Route("api/MenteesUnderMentor")]
+    public class MenteesUnderMentorController : ControllerBase
     {
         private readonly IGetAllMenteesOfMentorService _getAllMenteesOfMentorService;
 
-        public GetAllMenteesOfMentorController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService)
+        public MenteesUnderMentorController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService)
         {
             _getAllMenteesOfMentorService = getAllMenteesOfMentorService;
         }
 
-
-        [HttpGet("using/{id}")]
+        /// <summary>
+        /// Deletes a specific TodoItem.
+        /// </summary>
+        [HttpGet("{id}")]
         public ActionResult<GetAllMenteesOfMentorAPIModel> GetAllMenteesById(int id)
         {
             var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id);
