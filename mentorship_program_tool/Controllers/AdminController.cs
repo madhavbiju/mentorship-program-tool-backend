@@ -33,6 +33,10 @@ namespace mentorship_program_tool.Controllers
             return Ok(admin);
         }
 
+
+        /// <summary>
+        /// To get details of Users based on their role
+        /// </summary>
         // Get users by role with pagination
         [HttpGet("ByRole/{role}")]
         public IActionResult GetUsersByRole(string role, [FromQuery] int pageNumber, [FromQuery] int pageSize)
