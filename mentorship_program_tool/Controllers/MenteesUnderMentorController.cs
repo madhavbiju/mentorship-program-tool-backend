@@ -18,7 +18,7 @@ namespace mentorship_program_tool.Controllers
         }
 
         /// <summary>
-        /// Deletes a specific TodoItem.
+        /// To get all mentees under a mentor.
         /// </summary>
         [HttpGet("{id}")]
         public ActionResult<GetAllMenteesOfMentorAPIModel> GetAllMenteesById(int id)
