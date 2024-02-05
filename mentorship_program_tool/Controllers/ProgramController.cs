@@ -7,7 +7,7 @@ namespace mentorship_program_tool.Controllers
     
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/program")]
 public class ProgramController : ControllerBase
     {
         private readonly IProgramService _programService;
@@ -17,6 +17,9 @@ public class ProgramController : ControllerBase
             _programService = programService;
         }
 
+        /// <summary>
+        /// To get details of all programs
+        /// </summary>
         [HttpGet]
         public IActionResult GetPrograms()
         {
@@ -24,6 +27,9 @@ public class ProgramController : ControllerBase
             return Ok(program);
         }
 
+        /// <summary>
+        /// To get details of a particular program
+        /// </summary>
         [HttpGet("{id}")]
         public IActionResult GetProgramsById(int id)
         {
@@ -35,6 +41,9 @@ public class ProgramController : ControllerBase
             return Ok(program);
         }
 
+        /// <summary>
+        /// To create a new program
+        /// </summary>
         [HttpPost]
         public IActionResult AddPrograms(Models.EntityModel.Program program)
         {
@@ -42,6 +51,9 @@ public class ProgramController : ControllerBase
             return CreatedAtAction(nameof(GetProgramsById), new { id = program.ProgramID }, program);
         }
 
+        /// <summary>
+        /// To edit a program
+        /// </summary>
         [HttpPut("{id}")]
         public IActionResult UpdatePrograms(int id, Models.EntityModel.Program program)
         {
@@ -54,7 +66,9 @@ public class ProgramController : ControllerBase
             return NoContent();
         }
 
-
+        /// <summary>
+        /// To delete a program
+        /// </summary>
         [HttpDelete("{id}")]
         public IActionResult DeletePrograms(int id)
         {

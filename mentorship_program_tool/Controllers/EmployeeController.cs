@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace mentorship_program_tool.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/employee")]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -16,6 +16,9 @@ namespace mentorship_program_tool.Controllers
             _employeeService = employeeService;
         }
 
+        /// <summary>
+        /// To get details of all Employees
+        /// </summary>
         [HttpGet]
         public IActionResult GetEmployees()
         {
@@ -23,6 +26,9 @@ namespace mentorship_program_tool.Controllers
             return Ok(employee);
         }
 
+        /// <summary>
+        /// To get details of a particular Employee
+        /// </summary>
         [HttpGet("{id}")]
         public IActionResult GetEmployeesById(int id)
         {
@@ -34,6 +40,9 @@ namespace mentorship_program_tool.Controllers
             return Ok(employee);
         }
 
+        /// <summary>
+        /// To create a new Employee
+        /// </summary>
         [HttpPost]
         public IActionResult AddEmployees(Employee employee)
         {
@@ -41,7 +50,9 @@ namespace mentorship_program_tool.Controllers
             return CreatedAtAction(nameof(GetEmployeesById), new { id = employee.EmployeeID }, employee);
         }
 
-
+        /// <summary>
+        /// To delete an Employee
+        /// </summary>
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployees(int id)
         {
