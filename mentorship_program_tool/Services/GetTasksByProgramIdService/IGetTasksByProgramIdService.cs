@@ -7,7 +7,7 @@ namespace mentorship_program_tool.Services.GetActiveTasksService
     {
         public interface IGetTasksByProgramIdService
         {
-            IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int id,int status);
+            IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int id,int status, int page);
         }
     }
 }
