@@ -25,6 +25,7 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
             // Update properties based on adminapi model
             existingTask.filepath = menteetasksubmissionapimodel.filepath;
             existingTask.submissiontime = DateTime.Now;
+            existingTask.taskstatus = 6;
 
 
             _unitOfWork.Complete();
