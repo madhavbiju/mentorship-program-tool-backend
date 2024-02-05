@@ -4,6 +4,6 @@ namespace mentorship_program_tool.Services.GetUserDetailsService
 {
     public interface IGetUserDetailsService
     {
-        IEnumerable<GetUserDetailsAPIModel> GetUserDetails(string role);
+        UserDetailsResponseAPIModel GetUserDetails(string role, int pageNumber, int pageSize);
     }
 }
