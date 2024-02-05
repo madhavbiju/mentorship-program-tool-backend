@@ -1,21 +1,44 @@
 ﻿using mentorship_program_tool.Models.APIModel;
-using mentorship_program_tool.Models.EntityModel;
-using mentorship_program_tool.Services;
+using mentorship_program_tool.Services.MenteeTaskSubmissionService;
 using mentorship_program_tool.Services.MentorTaskRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mentorship_program_tool.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class MentorTaskController : ControllerBase
+    [Route("api/Task")]
+    public class TaskController : ControllerBase
     {
+        private readonly IMenteeTaskSubmissionService _menteetaskSubmissionService;
         private readonly IMentorTaskService _mentorTaskService;
 
-        public MentorTaskController(IMentorTaskService mentorTaskService)
+        public TaskController(IMenteeTaskSubmissionService menteetaskSubmissionService, IMentorTaskService mentorTaskService)
         {
+            _menteetaskSubmissionService = menteetaskSubmissionService;
             _mentorTaskService = mentorTaskService;
         }
+
+
+        /// <summary>
+        /// To update Task status to submitted
+        /// </summary>
+        //task completion uploading my mentee, task table get updated.
+        [HttpPut("Submit/{id}")]
+        public IActionResult UpdateTask(int id, MenteeTaskSubmissionAPIModel menteetasksubmissionapimodel)
+        {
+            if (id != menteetasksubmissionapimodel.TaskID)
+            {
+                return BadRequest();
+            }
+
+            _menteetaskSubmissionService.SubmitTask(id, menteetasksubmissionapimodel);
+            return NoContent();
+        }
+
+
+        /// <summary>
+        /// To post a task
+        /// </summary>
         //put task
         [HttpPost]
         public IActionResult AddTask(MentorTaskAPIModel mentortaskapimodel)
@@ -24,8 +47,12 @@ namespace mentorship_program_tool.Controllers
             return Ok();
         }
 
+
+        /// <summary>
+        /// To update Task status to appproved.
+        /// </summary>
         //update status of task completed by mentee
-        [HttpPut("{id} Updating Completed task Status")]
+        [HttpPut("Approve/{id}")]
         public IActionResult UpdateStatus(int id, MentorTaskStatusUpdationAPIModel taskstatusupdationmodel)
         {
             if (id != taskstatusupdationmodel.TaskID)
@@ -37,8 +64,12 @@ namespace mentorship_program_tool.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// To Updating due date of task.
+        /// </summary>
         //update due date of task 
-        [HttpPut("{id} Updating due date of task")]
+        [HttpPut("UpdateDueDate/{id}")]
         public IActionResult UpdateDueDate(int id, MentorTaskEndDateUpdationModel taskenddateupdationmodel)
         {
             if (id != taskenddateupdationmodel.TaskID)
@@ -49,6 +80,7 @@ namespace mentorship_program_tool.Controllers
             _mentorTaskService.UpdateEndDateOfTask(id, taskenddateupdationmodel);
             return NoContent();
         }
+
 
     }
 }
