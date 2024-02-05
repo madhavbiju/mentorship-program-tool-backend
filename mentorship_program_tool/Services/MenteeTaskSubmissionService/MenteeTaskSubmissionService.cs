@@ -1,5 +1,5 @@
-﻿using mentorship_program_tool.Models.APIModel;
-using mentorship_program_tool.Services.MentorTaskRepository;
+﻿using mentorship_program_tool.Models.ApiModel;
+using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.UnitOfWork;
 
 namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
@@ -13,9 +13,9 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
             _unitOfWork = unitOfWork;
         }
 
-        public void SubmitTask(int id, MenteeTaskSubmissionAPIModel menteetasksubmissionapimodel)
+        public void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
         {
-            var existingTask = _unitOfWork.menteeTaskSubmissionRepository.GetById(id);
+            var existingTask = _unitOfWork.menteeTaskSubmissionRepository.GetById(ID);
 
             if (existingTask == null)
             {

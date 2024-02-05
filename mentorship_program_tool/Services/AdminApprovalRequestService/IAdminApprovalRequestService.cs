@@ -5,6 +5,6 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
 {
     public interface IAdminApprovalRequestService
     {
-        void UpdateRequest(int id, AdminApprovalAPIModel adminapprovalapimodel);
+        void UpdateRequest(int id, AdminApprovalAPIModel adminApprovalApiModel);
     }
 }

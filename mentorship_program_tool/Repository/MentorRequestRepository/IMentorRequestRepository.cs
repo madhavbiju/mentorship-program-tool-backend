@@ -2,7 +2,7 @@
 
 namespace mentorship_program_tool.Repository.MentorRequestRepository
 {
-    public interface IMentorRequestRepository : IRepository<MentorRequestModel>
+    public interface IMentorRequestRepository : IRepository<ProgramExtension>
     {
     }
 }

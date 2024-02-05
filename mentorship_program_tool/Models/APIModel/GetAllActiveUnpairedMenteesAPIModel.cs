@@ -2,7 +2,7 @@
 {
     public class GetAllActiveUnpairedMenteesAPIModel
     {
-        public int EmployeeId { get; set; }
+        public int EmployeeID { get; set; }
 
         public string FirstName { get; set; }
 

@@ -14,7 +14,7 @@ namespace mentorship_program_tool.Services.RoleService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<RoleModel> GetRoles()
+        public IEnumerable<Role> GetRoles()
         {
 
             var roles = _unitOfWork.Role.GetAll();
@@ -22,7 +22,7 @@ namespace mentorship_program_tool.Services.RoleService
             return roles;
         }
 
-        public RoleModel GetRoleById(int id)
+        public Role GetRoleById(int id)
         {
             var roles = _unitOfWork.Role.GetById(id);
 
@@ -30,13 +30,13 @@ namespace mentorship_program_tool.Services.RoleService
             return roles;
         }
 
-        public void CreateRole(RoleModel rolemodel)
+        public void CreateRole(Role rolemodel)
         {
             _unitOfWork.Role.Add(rolemodel);
             _unitOfWork.Complete();
         }
 
-        public void UpdateRole(int id, RoleModel rolemodel)
+        public void UpdateRole(int id, Role rolemodel)
         {
             var existingRole = _unitOfWork.Role.GetById(id);
 
@@ -46,7 +46,7 @@ namespace mentorship_program_tool.Services.RoleService
                 return;
             }
 
-            existingRole.roles = rolemodel.roles;
+            existingRole.RoleName = rolemodel.RoleName;
 
 
             _unitOfWork.Complete();

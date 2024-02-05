@@ -4,10 +4,10 @@ namespace mentorship_program_tool.Services.ReportTypeService
 {
     public interface IReportTypeService
     {
-        IEnumerable<ReportTypeModel> GetReportType();
-        ReportTypeModel GetReportTypeById(int id);
-        void CreateReportType(ReportTypeModel ReportType);
-        void UpdateReportType(int id, ReportTypeModel ReportType);
+        IEnumerable<ReportType> GetReportType();
+        ReportType GetReportTypeById(int id);
+        void CreateReportType(ReportType ReportType);
+        void UpdateReportType(int id, ReportType ReportType);
         void DeleteReport(int id);
     }
 

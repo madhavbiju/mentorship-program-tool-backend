@@ -3,11 +3,11 @@ using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
+using System.Linq;
 
 namespace mentorship_program_tool.Services.GetMenteeDetailsById
 {
-    public class GetMenteeDetailsByIdService: IGetMenteeDetailsByIdService
+    public class GetMenteeDetailsByIdService : IGetMenteeDetailsByIdService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _context;
@@ -18,21 +18,21 @@ namespace mentorship_program_tool.Services.GetMenteeDetailsById
             _context = context;
         }
 
-        public GetMenteeDetailsByIdAPIModel GetDetailsById(int id)
+        public GetMenteeDetailsByIdAPIModel GetDetailsById(int ID)
         {
-            var result = from p in _context.Program
-                         join m in _context.Employee on p.MentorId equals m.employeeid
-                         join e in _context.Employee on p.MenteeId equals e.employeeid
-                         where e.employeeid == id
+            var result = from p in _context.Programs
+                         join m in _context.Employees on p.MentorID equals m.EmployeeID
+                         join e in _context.Employees on p.MenteeID equals e.EmployeeID
+                         where e.EmployeeID == ID
                          select new GetMenteeDetailsByIdAPIModel
                          {
-                             programid=p.programid,
-                             ProgramName = p.programname,
-                             MentorFirstName = m.firstname,
-                             MenteeFirstName = e.firstname,
-                             MenteeLastName = e.lastname,
-                             startdate = p.enddate,
-                             EndDate = p.enddate
+                             ProgramID = p.ProgramID,
+                             ProgramName = p.ProgramName,
+                             MentorFirstName = m.FirstName,
+                             MenteeFirstName = e.FirstName,
+                             MenteeLastName = e.LastName,
+                             StartDate = p.StartDate,
+                             EndDate = p.EndDate
                          };
 
             return result.SingleOrDefault();

@@ -4,10 +4,10 @@ namespace mentorship_program_tool.Services.StatusService
 {
     public interface IStatusService
     {
-        IEnumerable<StatusModel> GetStatus();
-        StatusModel GetStatusById(int id);
-        void CreateStatus(StatusModel status);
-        void UpdateStatus(int id, StatusModel status);
+        IEnumerable<Status> GetStatus();
+        Status GetStatusById(int id);
+        void CreateStatus(Status status);
+        void UpdateStatus(int id, Status status);
         void DeleteStatus(int id);
     }
 }

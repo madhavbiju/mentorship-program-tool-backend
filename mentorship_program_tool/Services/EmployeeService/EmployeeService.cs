@@ -1,5 +1,6 @@
 ﻿using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
+using System.Collections.Generic;
 
 namespace mentorship_program_tool.Services.EmployeeService
 {
@@ -12,23 +13,19 @@ namespace mentorship_program_tool.Services.EmployeeService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<EmployeeModel> GetEmployee()
+        public IEnumerable<Employee> GetEmployees()
         {
-
-            var employee = _unitOfWork.Employee.GetAll();
-            return employee;
+            return _unitOfWork.Employee.GetAll();
         }
 
-        public EmployeeModel GetEmployeeById(int id)
+        public Employee GetEmployeeById(int id)
         {
-            var employee = _unitOfWork.Employee.GetById(id);
-            return employee;
+            return _unitOfWork.Employee.GetById(id);
         }
 
-        public void CreateEmployee(EmployeeModel employeeDto)
+        public void CreateEmployee(Employee employee)
         {
-
-            _unitOfWork.Employee.Add(employeeDto);
+            _unitOfWork.Employee.Add(employee);
             _unitOfWork.Complete();
         }
 
@@ -38,14 +35,11 @@ namespace mentorship_program_tool.Services.EmployeeService
 
             if (employee == null)
             {
-                // Handle not found scenario
                 return;
             }
 
             _unitOfWork.Employee.Delete(employee);
             _unitOfWork.Complete();
         }
-
-
     }
 }

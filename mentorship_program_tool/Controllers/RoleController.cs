@@ -22,6 +22,9 @@ namespace mentorship_program_tool.Controllers
             _roleService = roleService;
         }
 
+        /// <summary>
+        /// To get all roles
+        /// </summary>
         [HttpGet]
         public IActionResult GetRoles()
         {
@@ -29,6 +32,9 @@ namespace mentorship_program_tool.Controllers
             return Ok(roles);
         }
 
+        /// <summary>
+        /// To get a role by id.
+        /// </summary>
         [HttpGet("{id}")]
         public IActionResult GetRoleById(int id)
         {
@@ -40,17 +46,23 @@ namespace mentorship_program_tool.Controllers
             return Ok(role);
         }
 
+        /// <summary>
+        /// To add a role
+        /// </summary>
         [HttpPost]
-        public IActionResult AddRole(RoleModel role)
+        public IActionResult AddRole(Role role)
         {
             _roleService.CreateRole(role);
-            return CreatedAtAction(nameof(GetRoleById), new { id = role.roleid }, role);
+            return CreatedAtAction(nameof(GetRoleById), new { id = role.RoleID }, role);
         }
 
+        /// <summary>
+        /// To update a role
+        /// </summary>
         [HttpPut("{id}")]
-        public IActionResult UpdateRole(int id, RoleModel role)
+        public IActionResult UpdateRole(int id, Role role)
         {
-            if (id != role.roleid)
+            if (id != role.RoleID)
             {
                 return BadRequest();
             }
@@ -59,6 +71,10 @@ namespace mentorship_program_tool.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// To delete a role.
+        /// </summary>
         [HttpDelete("{id}")]
         public IActionResult DeleteRole(int id)
         {

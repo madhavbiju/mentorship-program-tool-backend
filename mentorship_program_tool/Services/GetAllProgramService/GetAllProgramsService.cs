@@ -3,8 +3,8 @@ using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using Sprache;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace mentorship_program_tool.Services.GetAllProgramService
 {
@@ -18,26 +18,25 @@ namespace mentorship_program_tool.Services.GetAllProgramService
             _unitOfWork = unitOfWork;
             _context = context;
         }
+
         public IEnumerable<GetAllProgramsAPIModel> GetAllPrograms()
         {
-            var programList = from program in _context.Program
-                              join mentor in _context.Employee on program.MentorId equals mentor.employeeid
-                              join mentee in _context.Employee on program.MenteeId equals mentee.employeeid
+            var programList = from program in _context.Programs
+                              join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
+                              join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
                               select new GetAllProgramsAPIModel
                               {
-                                  ProgramId = program.programid,
-                                  ProgramName = program.programname,
-                                  MentorFirstName = mentor.firstname,
-                                  MentorLastName = mentor.lastname,
-                                  MenteeFirstName = mentee.firstname,
-                                  MenteeLastName = mentee.lastname,
-                                  EndDate = program.enddate,
-                                  ProgramStatus = program.programstatus
+                                  ProgramID = program.ProgramID,
+                                  ProgramName = program.ProgramName,
+                                  MentorFirstName = mentor.FirstName,
+                                  MentorLastName = mentor.LastName,
+                                  MenteeFirstName = mentee.FirstName,
+                                  MenteeLastName = mentee.LastName,
+                                  EndDate = program.EndDate,
+                                  ProgramStatus = program.ProgramStatus
                               };
 
-
-            return programList;
+            return programList.ToList();
         }
-
     }
 }
