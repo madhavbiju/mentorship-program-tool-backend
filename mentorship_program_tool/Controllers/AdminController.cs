@@ -6,18 +6,21 @@ namespace mentorship_program_tool.Controllers
 {
 
     [ApiController]
-        [Route("api/[controller]")]
-    public class AdminDashBoardCountController : ControllerBase
+        [Route("api/admin")]
+    public class AdminController : ControllerBase
         {
             private readonly IAdminDashboardCountService _adminDashboardCountService;
 
-            public AdminDashBoardCountController(IAdminDashboardCountService adminDashboardCountService)
+            public AdminController(IAdminDashboardCountService adminDashboardCountService)
             {
             _adminDashboardCountService = adminDashboardCountService;
             }
 
-            //getall Pending request
-            [HttpGet("Get Admin Dashboard Count")]
+        /// <summary>
+        /// To get count of Active Mentors,Mentees and Pairs
+        /// </summary>
+        //getall Pending request
+        [HttpGet("active-count")]
             public IActionResult GetDashboardCount()
             {
             AdminDashboardCountAPIModel admin=new AdminDashboardCountAPIModel();

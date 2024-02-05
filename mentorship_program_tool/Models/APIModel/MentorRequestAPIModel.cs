@@ -11,6 +11,6 @@ namespace mentorship_program_tool.Models.APIModel
         public DateTime NewEndDate { get; set; }
         public string Reason { get; set; }
         public int? ModifiedBy { get; set; }
-        public int RequestStatusID { get; set; } = 2;
+        public int RequestStatusID { get; set; } = 4;
     }
 }
