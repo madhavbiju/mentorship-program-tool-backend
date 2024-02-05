@@ -7,7 +7,7 @@ using static Azure.Core.HttpHeader;
 namespace mentorship_program_tool.Controllers
 {
     [ApiController]
-    [Route("api/MenteesUnderMentor")]
+    [Route("api/menteesundermentor")]
     public class MenteesUnderMentorController : ControllerBase
     {
         private readonly IGetAllMenteesOfMentorService _getAllMenteesOfMentorService;
