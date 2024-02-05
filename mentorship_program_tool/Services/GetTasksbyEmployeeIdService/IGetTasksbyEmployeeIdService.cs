@@ -4,6 +4,6 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
 {
     public interface IGetTasksbyEmployeeIdService
     {
-        IEnumerable<GetTasksByEmployeeIdAPIModel> GetTasksByEmployeeId(int id, int status);
+        IEnumerable<GetTasksByEmployeeIdAPIModel> GetTasksByEmployeeId(int id, int status, int page);
     }
 }
