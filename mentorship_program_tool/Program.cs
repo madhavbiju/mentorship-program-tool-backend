@@ -35,6 +35,8 @@ using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
 using mentorship_program_tool.Services.GetTasksbyEmployeeIdService;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using mentorship_program_tool.Repository.GetUserDetailsRepository;
+using mentorship_program_tool.Services.GetUserDetailsService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +99,9 @@ builder.Services.AddScoped<IGetAllActiveMentorRepository, GetAllActiveMentorRepo
 builder.Services.AddScoped<IGetAllActiveMentorService, GetAllActiveMentorService>();
 
 builder.Services.AddScoped<IGetAllMenteesOfMentorService, GetAllMenteesOfMentorService>();
+
+builder.Services.AddScoped<IGetUserDetailsRepository, GetUserDetailsRepository>();
+builder.Services.AddScoped<IGetUserDetailsService, GetUserDetailsService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
