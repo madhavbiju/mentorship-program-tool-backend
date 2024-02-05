@@ -41,7 +41,7 @@ namespace mentorship_program_tool.Services.MentorRequestService
         // Get all pending requests
         public IEnumerable<ProgramExtension> GetPendingRequests()
         {
-            var pendingRequests = _unitOfWork.mentorRequestRepository.GetAll().Where(n => n.RequestStatusID == 2);
+            var pendingRequests = _unitOfWork.mentorRequestRepository.GetAll().Where(n => n.RequestStatusID == 4);
             return pendingRequests;
         }
     }
