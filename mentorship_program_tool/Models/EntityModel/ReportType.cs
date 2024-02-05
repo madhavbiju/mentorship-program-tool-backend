@@ -2,10 +2,11 @@
 
 namespace mentorship_program_tool.Models.EntityModel
 {
-    public class ReportTypeModel
+    public class ReportType
     {
         [Key]
-        public int reporttypeid { get; set; }
-        public string reporttype { get; set; }
+        public int ReportTypeID { get; set; }
+
+        public string ReportName { get; set; }
     }
 }

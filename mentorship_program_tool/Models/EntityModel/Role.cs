@@ -2,10 +2,11 @@
 
 namespace mentorship_program_tool.Models.EntityModel
 {
-    public class RoleModel
+    public class Role
     {
         [Key]
-        public int roleid { get; set; }
-        public string roles { get; set; }
+        public int RoleID { get; set; }
+
+        public string RoleName { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace mentorship_program_tool.Repository.MentorTaskRepository
 {
-    public interface IMentorTaskRepository : IRepository<TaskModel>
+    public interface IMentorTaskRepository : IRepository<Models.EntityModel.Task>
     {
     }
 }

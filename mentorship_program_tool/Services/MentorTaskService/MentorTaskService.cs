@@ -22,20 +22,20 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             _unitOfWork.mentorTaskRepository.Add(request);
             _unitOfWork.Complete();
         }
-        private TaskModel MapToProgramExtension(MentorTaskAPIModel mentortaskapimodel)
+        private Models.EntityModel.Task MapToProgramExtension(MentorTaskAPIModel mentortaskapimodel)
         {
-            return new TaskModel
+            return new Models.EntityModel.Task
             {
-                programid = mentortaskapimodel.programid,
-                title = mentortaskapimodel.title,
-                taskdescription = mentortaskapimodel.taskdescription,
-                startdate = mentortaskapimodel.startdate,
-                enddate = mentortaskapimodel.enddate,
-                referencematerialfilepath = mentortaskapimodel.referencematerialfilepath,
-                filepath = null,
-                submissiontime = null,
-                taskstatus = 2,
-                createdby = mentortaskapimodel.createdby
+                ProgramID = mentortaskapimodel.ProgramID,
+                Title = mentortaskapimodel.Title,
+                TaskDescription = mentortaskapimodel.TaskDescription,
+                StartDate = mentortaskapimodel.StartDate,
+                EndDate = mentortaskapimodel.EndDate,
+                ReferenceMaterialFilePath = mentortaskapimodel.ReferenceMaterialFilePath,
+                FilePath = null,
+                SubmissionTime = null,
+                TaskStatus = 4,
+                CreatedBy = mentortaskapimodel.CreatedBy
             };
         }
 
@@ -50,7 +50,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             }
 
             // Update properties based on adminapi model
-            existingTask.taskstatus = 1;
+            existingTask.TaskStatus = 3;
 
             _unitOfWork.Complete();
         }
@@ -65,7 +65,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             }
 
             // Update properties based on adminapi model
-            existingTask.modifiedtime = taskenddateupdationmodel.modifiedtime;
+            existingTask.ModifiedTime = taskenddateupdationmodel.ModifiedTime;
 
             _unitOfWork.Complete();
 

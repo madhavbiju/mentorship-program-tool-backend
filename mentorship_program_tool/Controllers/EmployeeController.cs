@@ -19,7 +19,7 @@ namespace mentorship_program_tool.Controllers
         [HttpGet]
         public IActionResult GetEmployees()
         {
-            var employee = _employeeService.GetEmployee();
+            var employee = _employeeService.GetEmployees();
             return Ok(employee);
         }
 
@@ -35,10 +35,10 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEmployees(EmployeeModel employee)
+        public IActionResult AddEmployees(Employee employee)
         {
             _employeeService.CreateEmployee(employee);
-            return CreatedAtAction(nameof(GetEmployeesById), new { id = employee.employeeid }, employee);
+            return CreatedAtAction(nameof(GetEmployeesById), new { id = employee.EmployeeID }, employee);
         }
 
 

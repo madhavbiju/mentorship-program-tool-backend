@@ -34,16 +34,16 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddReportType(ReportTypeModel ReportType)
+        public IActionResult AddReportType(ReportType ReportType)
         {
             _ReportTypeService.CreateReportType(ReportType);
-            return CreatedAtAction(nameof(GetReportTypeById), new { id = ReportType.reporttypeid }, ReportType);
+            return CreatedAtAction(nameof(GetReportTypeById), new { id = ReportType.ReportTypeID }, ReportType);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateReportType(int id, ReportTypeModel ReportType)
+        public IActionResult UpdateReportType(int id, ReportType ReportType)
         {
-            if (id != ReportType.reporttypeid)
+            if (id != ReportType.ReportTypeID)
             {
                 return BadRequest();
             }

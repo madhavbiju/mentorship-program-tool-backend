@@ -5,7 +5,7 @@ namespace mentorship_program_tool.Models.APIModel
     public class MentorTaskStatusUpdationAPIModel
     {
         [Key]
-        public int taskid { get; set; }
-        public int taskstatus { get; set; }
+        public int TaskID { get; set; }
+        public int TaskStatus { get; set; }
     }
 }

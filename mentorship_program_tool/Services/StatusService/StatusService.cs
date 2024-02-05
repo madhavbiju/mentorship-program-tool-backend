@@ -12,27 +12,27 @@ namespace mentorship_program_tool.Services.StatusService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<StatusModel> GetStatus()
+        public IEnumerable<Status> GetStatus()
         {
 
             var status = _unitOfWork.Status.GetAll();
             return status;
         }
 
-        public StatusModel GetStatusById(int id)
+        public Status GetStatusById(int id)
         {
             var status = _unitOfWork.Status.GetById(id);
             return status;
         }
 
-        public void CreateStatus(StatusModel statusDto)
+        public void CreateStatus(Status statusDto)
         {
 
             _unitOfWork.Status.Add(statusDto);
             _unitOfWork.Complete();
         }
 
-        public void UpdateStatus(int id, StatusModel statusDto)
+        public void UpdateStatus(int id, Status statusDto)
         {
             var existingStatus = _unitOfWork.Status.GetById(id);
 
@@ -43,7 +43,7 @@ namespace mentorship_program_tool.Services.StatusService
             }
 
             // Update properties based on statusDto
-            existingStatus.statusvalue = statusDto.statusvalue;
+            existingStatus.StatusValue = statusDto.StatusValue;
 
 
             _unitOfWork.Complete();
