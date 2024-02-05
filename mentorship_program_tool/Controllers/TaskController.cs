@@ -1,4 +1,6 @@
 ﻿using mentorship_program_tool.Models.APIModel;
+using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
+using mentorship_program_tool.Services.GetTasksbyEmployeeIdService;
 using mentorship_program_tool.Services.MenteeTaskSubmissionService;
 using mentorship_program_tool.Services.MentorTaskRepository;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +13,19 @@ namespace mentorship_program_tool.Controllers
     {
         private readonly IMenteeTaskSubmissionService _menteetaskSubmissionService;
         private readonly IMentorTaskService _mentorTaskService;
+        private readonly IGetTasksbyEmployeeIdService _getTasksByEmployeeIdService;
+        private readonly IGetTasksByProgramIdService _getTasksByProgramIdService;
 
-        public TaskController(IMenteeTaskSubmissionService menteetaskSubmissionService, IMentorTaskService mentorTaskService)
+
+
+        public TaskController(IMenteeTaskSubmissionService menteetaskSubmissionService, IMentorTaskService mentorTaskService, IGetTasksbyEmployeeIdService GetTasksByEmployeeIdService, IGetTasksByProgramIdService GetTasksByProgramIdService)
         {
             _menteetaskSubmissionService = menteetaskSubmissionService;
             _mentorTaskService = mentorTaskService;
+            _getTasksByEmployeeIdService = GetTasksByEmployeeIdService;
+            _getTasksByProgramIdService = GetTasksByProgramIdService;
+
+
         }
 
 
@@ -79,6 +89,29 @@ namespace mentorship_program_tool.Controllers
 
             _mentorTaskService.UpdateEndDateOfTask(id, taskenddateupdationmodel);
             return NoContent();
+        }
+
+
+        /// <summary>
+        /// To get the tasks of an Employee Based on the mentor id and status.
+        /// </summary>
+        [HttpGet("Mentor/{id},{status}")]
+        public IActionResult GetTasksByEmployeeId(int id, int status)
+        {
+            var tasks = _getTasksByEmployeeIdService.GetTasksByEmployeeId(id, status);
+            return Ok(tasks);
+
+        }
+
+        /// <summary>
+        /// To get the tasks of an Employee Based on the program id and status.
+        /// </summary>
+        [HttpGet("Program/{id},{status}")]
+        public IActionResult GetTasksByProgramId(int id, int status)
+        {
+            var tasks = _getTasksByProgramIdService.GetTasksByProgramId(id, status);
+            return Ok(tasks);
+
         }
 
 
