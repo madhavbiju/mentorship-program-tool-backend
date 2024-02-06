@@ -35,6 +35,7 @@ using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
 using mentorship_program_tool.Services.GetTasksbyEmployeeIdService;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using mentorship_program_tool.Services.NotificationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +100,8 @@ builder.Services.AddScoped<IGetAllActiveMentorService, GetAllActiveMentorService
 
 builder.Services.AddScoped<IGetAllMenteesOfMentorService, GetAllMenteesOfMentorService>();
 
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
@@ -134,7 +137,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<NotificationHub>("/notificationHub"); // Map the NotificationHub
-}
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
