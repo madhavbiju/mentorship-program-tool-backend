@@ -6,8 +6,9 @@ namespace mentorship_program_tool.Models.APIModel
     public class MenteeTaskSubmissionAPIModel
     {
         [Key]
-        public int TaskID { get; set; }
-        public string FilePath { get; set; }
-        public DateTime SubmissionTime { get; set; }
+        public int taskid { get; set; }
+        public string filepath { get; set; }
+        public DateTime submissiontime { get; set; }
+        public int? taskstatus { get; set; }
     }
 }
