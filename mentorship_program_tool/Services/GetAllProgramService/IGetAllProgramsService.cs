@@ -5,6 +5,7 @@ namespace mentorship_program_tool.Services.GetAllProgramService
 {
     public interface IGetAllProgramsService
     {
-        IEnumerable<GetAllProgramsAPIModel> GetAllPrograms();
+        GetAllProgramsResponseAPIModel GetAllPrograms( int page);
+
     }
 }
