@@ -7,6 +7,7 @@ namespace mentorship_program_tool.Models.APIModel
     {
         [Key]
         public int TaskID { get; set; }
+        public DateTime EndDate { get; set; }
         public DateTime ModifiedTime { get; set; }
     }
 }

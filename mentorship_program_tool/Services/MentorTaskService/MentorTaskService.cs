@@ -95,11 +95,38 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
                 return;
             }
 
-            // Update properties based on adminapi model
-            existingTask.ModifiedTime = taskenddateupdationmodel.ModifiedTime;
+            // Get the existing end date for comparison
+            DateTime existingEndDate = existingTask.EndDate;
+
+            // Update properties based on the provided model
+            existingTask.EndDate = taskenddateupdationmodel.EndDate;
+            existingTask.ModifiedTime = DateTime.Now;
 
             _unitOfWork.Complete();
 
+            // Check if the end date has been changed
+            if (existingEndDate != taskenddateupdationmodel.EndDate)
+            {
+                // Get the program associated with the task
+                var program = _dbContext.Programs.FirstOrDefault(p => p.ProgramID == existingTask.ProgramID);
+
+                // Create a new notification entry for the end date update
+                var notification = new Notifications
+                {
+                    NotifiedEmployeeID = program.MenteeID, // Assuming MenteeID is the ID of the user who should receive the notification
+                    Notification = "Task end date updated notification",
+                    CreatedBy = program.MentorID, // Assuming MentorID is the ID of the mentor associated with the program
+                    CreatedTime = DateTime.UtcNow
+                };
+
+                // Add notification to the database
+                _dbContext.Notifications.Add(notification);
+                _dbContext.SaveChanges();
+
+                // Trigger notification service to send the notification
+                _notificationService.SendTaskDueDateUpdatedNotificationAsync(program.MenteeID.ToString()).Wait();
+            }
         }
+
     }
 }

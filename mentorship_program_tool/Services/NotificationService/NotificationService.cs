@@ -65,22 +65,22 @@ public class NotificationService : INotificationService
         await _hubContext.Clients.All.SendAsync("ExtensionRequestNotification", adminUser);
     }
 
-    /* public async Task SendExtensionApprovalNotificationAsync(string mentorUser)
-     {
-         await _hubContext.Clients.All.SendAsync("ExtensionApprovalNotification", mentorUser);
-     }*/
+    public async System.Threading.Tasks.Task SendExtensionApprovalNotificationAsync(string mentorUser)
+    {
+        await _hubContext.Clients.All.SendAsync("ExtensionApprovalNotification", mentorUser);
+    }
 
     public async System.Threading.Tasks.Task SendTaskPostedNotificationAsync(string menteeUser)
     {
         await _hubContext.Clients.All.SendAsync("TaskPostedNotification", menteeUser);
     }
-    /*public async Task SendTaskSubmittedNotificationAsync(string mentorUser)
+    public async System.Threading.Tasks.Task SendTaskSubmittedNotificationAsync(string mentorUser)
     {
         await _hubContext.Clients.All.SendAsync("TaskSubmittedNotification", mentorUser);
     }
 
-    public async Task SendTaskDueDateUpdatedNotificationAsync(string menteeUser)
+    public async System.Threading.Tasks.Task SendTaskDueDateUpdatedNotificationAsync(string menteeUser)
     {
         await _hubContext.Clients.All.SendAsync("TaskDueDateUpdatedNotification", menteeUser);
-    }*/
+    }
 }
