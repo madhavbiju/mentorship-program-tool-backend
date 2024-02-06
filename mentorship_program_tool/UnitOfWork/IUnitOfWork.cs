@@ -13,6 +13,7 @@ using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
 using mentorship_program_tool.Repository.MentorTaskRepository;
 using mentorship_program_tool.Repository.ProgramRepository;
 using mentorship_program_tool.Repository.GetActiveTasksRepository;
+using mentorship_program_tool.Repository.GetUserDetailsRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -31,6 +32,8 @@ namespace mentorship_program_tool.UnitOfWork
         IGetAllActiveMentorRepository getAllActiveMentorRepository { get; }
         IGetTasksByProgramIdRepository getTasksByProgramIdRepository { get; }
         IGetTasksbyEmployeeIdRepository getTasksByEmployeeIdRepository { get; }
+
+        IGetUserDetailsRepository getUserDetailsRepository { get; }
 
 
         IMentorTaskRepository mentorTaskRepository { get; }
