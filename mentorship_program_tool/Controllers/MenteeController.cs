@@ -2,6 +2,7 @@
 using mentorship_program_tool.Services;
 using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
 using mentorship_program_tool.Services.GetMenteeDetailsById;
+using mentorship_program_tool.Services.MentorDashboardCountService;
 using Microsoft.AspNetCore.Mvc;
 using static Azure.Core.HttpHeader;
 
@@ -14,12 +15,14 @@ namespace mentorship_program_tool.Controllers
         private readonly IGetAllMenteesOfMentorService _getAllMenteesOfMentorService;
         private readonly IGetAllActiveUnpairedMenteesService _getAllActiveUnpairedMenteesService;
         private readonly IGetMenteeDetailsByIdService _getMenteeDetailsByIdService;
+        private readonly IMentorDashboardCountService _mentorDashboardCountService;
 
-        public MenteeController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService)
+        public MenteeController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService)
         {
             _getAllMenteesOfMentorService = getAllMenteesOfMentorService;
             _getAllActiveUnpairedMenteesService = GetAllActiveUnpairedMenteesService;
             _getMenteeDetailsByIdService = GetMenteeDetailsByIdService;
+            _mentorDashboardCountService = mentorDashboardCountService;
         }
 
         /// <summary>
@@ -32,6 +35,17 @@ namespace mentorship_program_tool.Controllers
             if (menteesList == null)
                 return NotFound();
             return Ok(menteesList);
+        }
+
+        /// <summary>
+        /// To get count of mentees under a mentor.
+        /// </summary>
+        [HttpGet("mentees-count-under-mentor/{id}")]
+        public IActionResult GetDashboardCount(int id)
+        {
+            MentorDashboardCountAPIModel mentees = new MentorDashboardCountAPIModel();
+            mentees.MenteeCount = _mentorDashboardCountService.GetMentorDashboardMenteeCount(id);
+            return Ok(mentees);
         }
 
         /// <summary>
