@@ -38,6 +38,8 @@ using System.Reflection;
 using mentorship_program_tool.Repository.GetUserDetailsRepository;
 using mentorship_program_tool.Services.GetUserDetailsService;
 using mentorship_program_tool.Services.MentorDashboardCountService;
+using mentorship_program_tool.Middleware;
+using mentorship_program_tool.Services.GraphAPIService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +107,7 @@ builder.Services.AddScoped<IGetUserDetailsRepository, GetUserDetailsRepository>(
 builder.Services.AddScoped<IGetUserDetailsService, GetUserDetailsService>();
 
 builder.Services.AddScoped<IMentorDashboardCountService, MentorDashboardCountService>();
+builder.Services.AddHttpClient<GraphApiService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
@@ -126,14 +129,14 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
 });
 
 var app = builder.Build();
-
+app.UseTokenDecodingMiddleware();
 app.UseCors();
 
 // Configure the HTTP request pipeline.
