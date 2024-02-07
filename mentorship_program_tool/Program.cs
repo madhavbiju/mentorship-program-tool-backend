@@ -45,7 +45,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -124,9 +123,12 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
