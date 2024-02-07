@@ -2,6 +2,7 @@
 using mentorship_program_tool.Services.GetAllProgramService;
 using mentorship_program_tool.Services.ProgramService;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -32,9 +33,9 @@ public class ProgramController : ControllerBase
         }
 
         [HttpGet("All")]
-        public IActionResult GetAllPrograms()
+        public IActionResult GetAllPrograms( int page)
         {
-            var programs = _getAllProgramsService.GetAllPrograms();
+            var programs = _getAllProgramsService.GetAllPrograms(  page);
             return Ok(programs);
 
         }

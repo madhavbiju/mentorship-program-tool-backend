@@ -37,6 +37,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using mentorship_program_tool.Repository.GetUserDetailsRepository;
 using mentorship_program_tool.Services.GetUserDetailsService;
+using mentorship_program_tool.Services.MentorDashboardCountService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,8 @@ builder.Services.AddScoped<IGetAllMenteesOfMentorService, GetAllMenteesOfMentorS
 builder.Services.AddScoped<IGetUserDetailsRepository, GetUserDetailsRepository>();
 builder.Services.AddScoped<IGetUserDetailsService, GetUserDetailsService>();
 
+builder.Services.AddScoped<IMentorDashboardCountService, MentorDashboardCountService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
@@ -123,7 +126,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000")
+            policy.WithOrigins("http://localhost:5173")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });

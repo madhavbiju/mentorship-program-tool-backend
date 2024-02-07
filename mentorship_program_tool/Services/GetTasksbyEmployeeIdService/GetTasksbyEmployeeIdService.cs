@@ -1,5 +1,7 @@
 ﻿using mentorship_program_tool.Data;
 using mentorship_program_tool.Models.ApiModel;
+using mentorship_program_tool.Models.APIModel;
+using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +19,12 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
             _context = context;
         }
 
-        public IEnumerable<GetTasksByEmployeeIdAPIModel> GetTasksByEmployeeId(int ID, int status, int page)
-        {
+            public GetTasksByEmployeeIdResponseAPIModel GetTasksByEmployeeId(int ID, int status, int page)
+            {
+            if (ID == null)
+            {
+                return new GetTasksByEmployeeIdResponseAPIModel { Tasks = Enumerable.Empty<GetTasksByEmployeeIdAPIModel>(), TotalCount = 0 };
+            }
             int pageSize = 5;
             int offset = (page - 1) * pageSize;
 
@@ -44,13 +50,14 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
             {
                 query = query.Where(task => task.TaskStatus == status);
             }
+            int totalCount = query.Count();
 
             // Apply pagination
             query = query.Skip(offset).Take(pageSize);
 
-            return query.ToList();
+            return new GetTasksByEmployeeIdResponseAPIModel { Tasks = query, TotalCount = totalCount };
         }
 
-        
+
     }
 }

@@ -18,7 +18,7 @@ namespace mentorship_program_tool.Models.EntityModel
 
         public DateTime EndDate { get; set; }
 
-        public string ReferenceMaterialFilePath { get; set; }
+        public string? ReferenceMaterialFilePath { get; set; }
 
         public string? FilePath { get; set; }
 
