@@ -45,5 +45,13 @@ namespace mentorship_program_tool.Services.AdminDashboardCountService
 
             return MentorCount;
         }
+
+       
+            public int GetAdminDashboardTotalCount()
+            {
+                int totalCount = _context.Employees.Count();
+                return totalCount;
+            }
+        
     }
 }

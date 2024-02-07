@@ -30,6 +30,8 @@ namespace mentorship_program_tool.Controllers
             admin.MenteeCount = _adminDashboardCountService.GetAdminDashboardMenteeCount();
             admin.MentorCount = _adminDashboardCountService.GetAdminDashboardMentorCount();
             admin.ActivePairCount = _adminDashboardCountService.GetAdminDashboardProgramCount();
+            admin.TotalEmployees = _adminDashboardCountService.GetAdminDashboardTotalCount();
+
             return Ok(admin);
         }
 
