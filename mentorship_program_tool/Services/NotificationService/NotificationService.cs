@@ -62,25 +62,25 @@ public class NotificationService : INotificationService
 
     public async System.Threading.Tasks.Task SendExtensionRequestNotificationAsync(string adminUser)
     {
-        await _hubContext.Clients.All.SendAsync("ExtensionRequestNotification", adminUser);
+        await _hubContext.Clients.User(adminUser).SendAsync("ExtensionRequestNotification", adminUser);
     }
 
     public async System.Threading.Tasks.Task SendExtensionApprovalNotificationAsync(string mentorUser)
     {
-        await _hubContext.Clients.All.SendAsync("ExtensionApprovalNotification", mentorUser);
+        await _hubContext.Clients.User(mentorUser).SendAsync("ExtensionApprovalNotification", mentorUser);
     }
 
     public async System.Threading.Tasks.Task SendTaskPostedNotificationAsync(string menteeUser)
     {
-        await _hubContext.Clients.All.SendAsync("TaskPostedNotification", menteeUser);
+        await _hubContext.Clients.User(menteeUser).SendAsync("TaskPostedNotification", menteeUser);
     }
     public async System.Threading.Tasks.Task SendTaskSubmittedNotificationAsync(string mentorUser)
     {
-        await _hubContext.Clients.All.SendAsync("TaskSubmittedNotification", mentorUser);
+        await _hubContext.Clients.User(mentorUser).SendAsync("TaskSubmittedNotification", mentorUser);
     }
 
     public async System.Threading.Tasks.Task SendTaskDueDateUpdatedNotificationAsync(string menteeUser)
     {
-        await _hubContext.Clients.All.SendAsync("TaskDueDateUpdatedNotification", menteeUser);
+        await _hubContext.Clients.User(menteeUser).SendAsync("TaskDueDateUpdatedNotification", menteeUser);
     }
 }
