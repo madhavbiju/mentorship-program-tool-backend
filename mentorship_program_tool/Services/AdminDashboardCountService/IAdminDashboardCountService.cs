@@ -8,5 +8,7 @@ namespace mentorship_program_tool.Services.AdminDashboardCountService
         int GetAdminDashboardMenteeCount();
         int GetAdminDashboardMentorCount();
         int GetAdminDashboardProgramCount();
+        int GetAdminDashboardTotalCount();
+
     }
 }

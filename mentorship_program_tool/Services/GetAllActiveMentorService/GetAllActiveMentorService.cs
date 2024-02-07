@@ -24,7 +24,7 @@ namespace mentorship_program_tool.Services
         {
             var mentorList = _context.Employees
     .Join(_context.EmployeeRoleMappings, e => e.EmployeeID, erm => erm.EmployeeID, (e, erm) => new { Employee = e, EmployeeRoleMapping = erm })
-    .Where(x => x.EmployeeRoleMapping.RoleID == 2 && x.Employee.AccountStatus == "active")
+    .Where(x => x.EmployeeRoleMapping.RoleID == 2)// && x.Employee.AccountStatus == "active"
     .Select(x => new GetAllActiveMentorAPIModel
     {
         EmployeeID = x.Employee.EmployeeID,
