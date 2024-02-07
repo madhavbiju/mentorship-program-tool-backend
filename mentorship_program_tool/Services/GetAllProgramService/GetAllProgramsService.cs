@@ -19,8 +19,11 @@ namespace mentorship_program_tool.Services.GetAllProgramService
             _context = context;
         }
 
-        public IEnumerable<GetAllProgramsAPIModel> GetAllPrograms()
+        public GetAllProgramsResponseAPIModel GetAllPrograms(int page)
         {
+            int pageSize = 5;
+            int offset = (page - 1) * pageSize;
+
             var programList = from program in _context.Programs
                               join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
                               join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
@@ -33,10 +36,17 @@ namespace mentorship_program_tool.Services.GetAllProgramService
                                   MenteeFirstName = mentee.FirstName,
                                   MenteeLastName = mentee.LastName,
                                   EndDate = program.EndDate,
+                                  StartDate = program.StartDate,
+
                                   ProgramStatus = program.ProgramStatus
                               };
 
-            return programList.ToList();
+            int totalCount = programList.Count();
+
+            // Apply pagination
+            programList = programList.Skip(offset).Take(pageSize);
+
+            return new GetAllProgramsResponseAPIModel { Programs = programList.ToList(), TotalCount = totalCount };
         }
     }
 }
