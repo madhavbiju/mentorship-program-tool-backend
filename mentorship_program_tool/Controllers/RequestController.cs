@@ -22,7 +22,7 @@ namespace mentorship_program_tool.Controllers
         /// To approve mentor's program extension request.
         /// </summary>
         //approving program extension request from mentor
-        [HttpPut("/approve{id}")]
+        [HttpPut("approve{id}")]
         public IActionResult UpdateRequest(int id, AdminApprovalAPIModel adminapprovalapimodel)
         {
             if (id != adminapprovalapimodel.ProgramExtensionID)
@@ -39,7 +39,7 @@ namespace mentorship_program_tool.Controllers
         /// To post a program duration extension request by mentor
         /// </summary>
         //put request
-        [HttpPost("/create/program-extension")]
+        [HttpPost("create/program-extension")]
         public IActionResult AddRequest(MentorRequestAPIModel mentorrequestapimodel)
         {
             _mentorRequestService.CreateRequest(mentorrequestapimodel);
@@ -50,7 +50,7 @@ namespace mentorship_program_tool.Controllers
         /// To get all pending request
         /// </summary>
         //getall Pending request
-        [HttpGet("/all")]
+        [HttpGet("all")]
         public IActionResult GetPendingRequest()
         {
             var pendingRequest = _mentorRequestService.GetPendingRequests();
