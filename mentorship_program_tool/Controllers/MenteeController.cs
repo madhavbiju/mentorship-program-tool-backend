@@ -4,6 +4,7 @@ using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
 using mentorship_program_tool.Services.GetMenteeDetailsById;
 using mentorship_program_tool.Services.MentorDashboardCountService;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 using static Azure.Core.HttpHeader;
 
 namespace mentorship_program_tool.Controllers
@@ -29,13 +30,23 @@ namespace mentorship_program_tool.Controllers
         /// To get all mentees under a mentor.
         /// </summary>
         [HttpGet("mentor/{id}")]
-        public ActionResult<GetAllMenteesOfMentorAPIModel> GetAllMenteesById(int id)
+        public ActionResult<GetAllMenteesOfMentorResponseAPIModel> GetAllMenteesById(int id, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id);
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+
+            var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id, pageNumber, pageSize);
+
             if (menteesList == null)
+            {
                 return NotFound();
+            }
+
             return Ok(menteesList);
         }
+
 
         /// <summary>
         /// To get count of mentees under a mentor.
