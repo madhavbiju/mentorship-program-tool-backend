@@ -1,4 +1,5 @@
-﻿using mentorship_program_tool.Models.EntityModel;
+﻿using mentorship_program_tool.Models.APIModel;
+using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.ProgramService;
 using mentorship_program_tool.UnitOfWork;
 
@@ -13,12 +14,31 @@ namespace mentorship_program_tool.Services.ProgramService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Models.EntityModel.Program> GetProgram()
+        public ProgramDetailsResponseAPIModel GetProgram(int status, int pageNumber, int pageSize)
         {
+            var programs = _unitOfWork.Program
+                             .GetAll()
+                             .Where(p => p.ProgramStatus == status);
 
-            var program = _unitOfWork.Program.GetAll();
-            return program;
+            // Get total count of programs
+            int totalCount = programs.Count();
+
+            // Implement pagination
+            var paginatedPrograms = programs
+                                         .Skip((pageNumber - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .ToList();
+
+            // Create result object
+            var result = new ProgramDetailsResponseAPIModel
+            {
+                Programs = paginatedPrograms,
+                TotalCount = totalCount
+            };
+
+            return result;
         }
+
 
         public Models.EntityModel.Program GetProgramById(int id)
         {
