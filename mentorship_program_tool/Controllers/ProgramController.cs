@@ -2,6 +2,9 @@
 using mentorship_program_tool.Services.GetAllProgramService;
 using mentorship_program_tool.Services.ProgramService;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -25,9 +28,15 @@ public class ProgramController : ControllerBase
         /// To get details of all programs
         /// </summary>
         [HttpGet]
-        public IActionResult GetPrograms()
+        public IActionResult GetPrograms([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var program = _programService.GetProgram();
+
+            // Validate pageNumber and pageSize
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+            var program = _programService.GetProgram(status, pageNumber, pageSize);
             return Ok(program);
         }
 
