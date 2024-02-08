@@ -1,18 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace mentorship_program_tool.Models.APIModel
 {
     public class MentorRequestAPIModel
     {
         [Key]
-        public int programextensionid { get; set; }
-        public int programid { get; set; }
-        public DateTime newenddate { get; set; }
-        public string reason { get; set; }
-        public int modifiedby { get; set; }
-        public int RequestStatusId { get; set; } = 2;
-
-
-        //created time 
+        public int ProgramExtensionID { get; set; }
+        public int ProgramID { get; set; }
+        public DateTime NewEndDate { get; set; }
+        public string Reason { get; set; }
+        public int? ModifiedBy { get; set; }
+        public int RequestStatusID { get; set; } = 4;
     }
 }

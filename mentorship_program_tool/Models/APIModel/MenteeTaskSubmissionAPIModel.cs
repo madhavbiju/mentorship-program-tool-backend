@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace mentorship_program_tool.Models.APIModel
 {
@@ -8,5 +9,6 @@ namespace mentorship_program_tool.Models.APIModel
         public int taskid { get; set; }
         public string filepath { get; set; }
         public DateTime submissiontime { get; set; }
+        public int? taskstatus { get; set; }
     }
 }

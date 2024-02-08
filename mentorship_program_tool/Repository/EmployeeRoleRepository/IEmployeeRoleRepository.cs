@@ -2,7 +2,7 @@
 
 namespace mentorship_program_tool.Repository.EmployeeRoleRepository
 {
-    public interface IEmployeeRoleRepository : IRepository<EmployeeRoleMappingModel>
+    public interface IEmployeeRoleRepository : IRepository<EmployeeRoleMapping>
     {
     }
 }

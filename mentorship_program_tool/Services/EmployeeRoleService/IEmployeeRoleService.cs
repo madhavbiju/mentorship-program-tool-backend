@@ -4,9 +4,9 @@ namespace mentorship_program_tool.Services.EmployeeRoleService
 {
     public interface IEmployeeRoleService
     {
-        IEnumerable<EmployeeRoleMappingModel> GetEmployeeRoles();
-        EmployeeRoleMappingModel GetEmployeeRoleById(int id);
-        void CreateEmployeeRole(EmployeeRoleMappingModel rolemodel);
-        void UpdateEmployeeRole(int id, EmployeeRoleMappingModel rolemodel);
+        IEnumerable<EmployeeRoleMapping> GetEmployeeRoles();
+        EmployeeRoleMapping GetEmployeeRoleById(int id);
+        void CreateEmployeeRole(EmployeeRoleMapping rolemodel);
+        void UpdateEmployeeRole(int id, EmployeeRoleMapping rolemodel);
     }
 }

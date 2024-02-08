@@ -3,8 +3,8 @@
     public class CreateProgramPair
     {
         public string ProgramName { get; set; }
-        public int MentorId { get; set; }
-        public int MenteeId { get; set; }
+        public int MentorID { get; set; }
+        public int MenteeID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }

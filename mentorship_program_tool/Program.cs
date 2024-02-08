@@ -25,6 +25,21 @@ using mentorship_program_tool.Services.MenteeTaskSubmissionService;
 using mentorship_program_tool.Services.MentorTaskRepository;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using mentorship_program_tool.Repository.ProgramRepository;
+using mentorship_program_tool.Services.ProgramService;
+using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
+using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
+using mentorship_program_tool.Repository.GetActiveTasksRepository;
+using mentorship_program_tool.Services.GetActiveTasks;
+using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
+using mentorship_program_tool.Services.GetTasksbyEmployeeIdService;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using mentorship_program_tool.Repository.GetUserDetailsRepository;
+using mentorship_program_tool.Services.GetUserDetailsService;
+using mentorship_program_tool.Services.MentorDashboardCountService;
+using mentorship_program_tool.Middleware;
+using mentorship_program_tool.Services.GraphAPIService;
 using mentorship_program_tool.Repository.EmployeeRoleRepository;
 using mentorship_program_tool.Services.EmployeeRoleService;
 
@@ -66,11 +81,21 @@ builder.Services.AddScoped<IReportTypeService, ReportTypeService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
+builder.Services.AddScoped<IProgramService, ProgramService>();
+
 builder.Services.AddScoped<IGetMenteeDetailsByIdRepository, GetMenteeDetailsByIdRepository>();
 builder.Services.AddScoped<IGetMenteeDetailsByIdService, GetMenteeDetailsByIdService>();
 
 builder.Services.AddScoped<IGetAllProgramsRepository, GetAllProgramsRepository>();
 builder.Services.AddScoped<IGetAllProgramsService, GetAllProgramsService>();
+
+builder.Services.AddScoped<IGetTasksByProgramIdRepository, GetTasksByProgramIdRepository>();
+builder.Services.AddScoped<IGetTasksByProgramIdService, GetTasksByProgramIdService>();
+
+builder.Services.AddScoped<IGetTasksbyEmployeeIdRepository, GetTasksbyEmployeeIdRepository>();
+builder.Services.AddScoped<IGetTasksbyEmployeeIdService, GetTasksByEmployeeIdService>();
+
 
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesService, GetAllActiveUnpairedMenteesService>();
@@ -78,15 +103,46 @@ builder.Services.AddScoped<IGetAllActiveUnpairedMenteesService, GetAllActiveUnpa
 builder.Services.AddScoped<IGetAllActiveMentorRepository, GetAllActiveMentorRepository>();
 builder.Services.AddScoped<IGetAllActiveMentorService, GetAllActiveMentorService>();
 
+builder.Services.AddScoped<IGetAllMenteesOfMentorService, GetAllMenteesOfMentorService>();
+
+builder.Services.AddScoped<IGetUserDetailsRepository, GetUserDetailsRepository>();
+builder.Services.AddScoped<IGetUserDetailsService, GetUserDetailsService>();
+
+builder.Services.AddScoped<IMentorDashboardCountService, MentorDashboardCountService>();
+builder.Services.AddHttpClient<GraphApiService>();
+
 builder.Services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
 builder.Services.AddScoped<IEmployeeRoleService, EmployeeRoleService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Mentorship Program Tool",
+        Description = "An ASP.NET Core Web API for managing Mentee-Mentor Pairing"
+    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+builder.Services.AddCors(options =>
+{
+
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
+app.UseTokenDecodingMiddleware();
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

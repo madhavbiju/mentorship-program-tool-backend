@@ -13,8 +13,8 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
             _unitOfWork = unitOfWork;
         }
 
-        //admin updating request
-        public void UpdateRequest(int id, AdminApprovalAPIModel adminapprovalapimodel)
+        // Admin updating request
+        public void UpdateRequest(int id, AdminApprovalAPIModel adminApprovalApiModel)
         {
             var existingRequest = _unitOfWork.adminApprovalRequestRepository.GetById(id);
 
@@ -23,10 +23,9 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
                 return;
             }
 
-            // Update properties based on adminapi model
-            existingRequest.requeststatusid = adminapprovalapimodel.requeststatusid;
-            existingRequest.modifiedby = adminapprovalapimodel.modifiedby;
-
+            // Update properties based on admin api model
+            existingRequest.RequestStatusID = adminApprovalApiModel.RequestStatusID;
+            existingRequest.ModifiedBy = adminApprovalApiModel.ModifiedBy;
 
             _unitOfWork.Complete();
         }
