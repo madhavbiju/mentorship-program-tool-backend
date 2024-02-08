@@ -1,8 +1,10 @@
 ﻿using mentorship_program_tool.Models.APIModel;
+using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.AdminApprovalRequestService;
 using mentorship_program_tool.Services.MentorRequestService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing.Printing;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -52,9 +54,14 @@ namespace mentorship_program_tool.Controllers
         /// </summary>
         //getall Pending request
         [HttpGet("all")]
-        public IActionResult GetPendingRequest()
+        public IActionResult GetPendingRequest([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var pendingRequest = _mentorRequestService.GetPendingRequests();
+            // Validate pageNumber and pageSize
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+            var pendingRequest = _mentorRequestService.GetPendingRequests(status, pageNumber, pageSize);
             return Ok(pendingRequest);
         }
 
