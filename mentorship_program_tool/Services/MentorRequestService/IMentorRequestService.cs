@@ -8,6 +8,6 @@ namespace mentorship_program_tool.Services.MentorRequestService
     public interface IMentorRequestService
     {
         void CreateRequest(MentorRequestAPIModel mentorRequestAPIModel);
-        IEnumerable<ProgramExtension> GetPendingRequests();
+        MentorRequestResponseAPIModel GetPendingRequests(int status, int pageNumber, int pageSize);
     }
 }
