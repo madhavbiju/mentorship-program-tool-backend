@@ -40,6 +40,8 @@ using mentorship_program_tool.Services.GetUserDetailsService;
 using mentorship_program_tool.Services.MentorDashboardCountService;
 using mentorship_program_tool.Middleware;
 using mentorship_program_tool.Services.GraphAPIService;
+using mentorship_program_tool.Repository.EmployeeRoleRepository;
+using mentorship_program_tool.Services.EmployeeRoleService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,6 +110,9 @@ builder.Services.AddScoped<IGetUserDetailsService, GetUserDetailsService>();
 
 builder.Services.AddScoped<IMentorDashboardCountService, MentorDashboardCountService>();
 builder.Services.AddHttpClient<GraphApiService>();
+
+builder.Services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
+builder.Services.AddScoped<IEmployeeRoleService, EmployeeRoleService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
