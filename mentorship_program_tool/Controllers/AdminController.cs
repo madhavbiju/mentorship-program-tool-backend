@@ -1,5 +1,8 @@
 ﻿using mentorship_program_tool.Models.APIModel;
+using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.AdminDashboardCountService;
+using mentorship_program_tool.Services.EmployeeRoleService;
+using mentorship_program_tool.Services.EmployeeService;
 using mentorship_program_tool.Services.GetUserDetailsService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +15,14 @@ namespace mentorship_program_tool.Controllers
     {
         private readonly IAdminDashboardCountService _adminDashboardCountService;
         private readonly IGetUserDetailsService _getUserDetailsService;
+        private readonly IEmployeeRoleService _employeeRoleService;
 
-        public AdminController(IAdminDashboardCountService adminDashboardCountService, IGetUserDetailsService getUserDetailsService)
+
+        public AdminController(IAdminDashboardCountService adminDashboardCountService, IGetUserDetailsService getUserDetailsService, IEmployeeRoleService employeeRoleService)
         {
             _adminDashboardCountService = adminDashboardCountService;
             _getUserDetailsService = getUserDetailsService;
+            _employeeRoleService = employeeRoleService;
         }
 
         /// <summary>
@@ -56,6 +62,51 @@ namespace mentorship_program_tool.Controllers
 
             var users = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize);
             return Ok(users);
+        }
+        /// <summary>
+        /// To get employee and their roles
+        /// </summary>
+        [HttpGet("viewrolesassigned")]
+        public IActionResult GetEmployeeRoles()
+        {
+            var employeeRole = _employeeRoleService.GetEmployeeRoles();
+            return Ok(employeeRole);
+        }
+        /// <summary>
+        /// To get employee and their roles by id
+        /// </summary>
+        [HttpGet("viewrolesbyid/{id}")]
+        public IActionResult GetEmployeeRoleById(int id)
+        {
+            var employeeRole = _employeeRoleService.GetEmployeeRoleById(id);
+            if (employeeRole == null)
+            {
+                return NotFound();
+            }
+            return Ok(employeeRole);
+        }
+        /// <summary>
+        /// To assign roles to a user
+        /// </summary>
+        [HttpPost("assignroletouser")]
+        public IActionResult AddEmployeeRole(EmployeeRoleMapping employeeRole)
+        {
+            _employeeRoleService.CreateEmployeeRole(employeeRole);
+            return CreatedAtAction(nameof(GetEmployeeRoleById), new { id = employeeRole.EmployeeRoleMappingID }, employeeRole);
+        }
+        /// <summary>
+        /// To update role of a user
+        /// </summary>
+        [HttpPut("updateroleofuser/{id}")]
+        public IActionResult UpdateEmployeeRole(int id, EmployeeRoleMapping employeeRole)
+        {
+            if (id != employeeRole.EmployeeID)
+            {
+                return BadRequest();
+            }
+
+            _employeeRoleService.UpdateEmployeeRole(id, employeeRole);
+            return NoContent();
         }
 
     }
