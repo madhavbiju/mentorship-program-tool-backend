@@ -2,9 +2,15 @@
 using mentorship_program_tool.Data;
 using mentorship_program_tool.Middleware;
 using mentorship_program_tool.Models.EntityModel;
+using mentorship_program_tool.Models.GraphModel;
+using mentorship_program_tool.Services;
 using mentorship_program_tool.Services.GraphAPIService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -14,11 +20,13 @@ namespace mentorship_program_tool.Controllers
     {
         private readonly GraphApiService _graphApiService;
         private readonly AppDbContext _dbContext;
+        private readonly JwtService _jwtService;
 
-        public LoginController(GraphApiService graphApiService, AppDbContext dbContext)
+        public LoginController(GraphApiService graphApiService, AppDbContext dbContext, JwtService jwtService)
         {
             _graphApiService = graphApiService;
             _dbContext = dbContext;
+            _jwtService = jwtService;
         }
 
         [HttpPost("CreateUser")]
@@ -40,42 +48,49 @@ namespace mentorship_program_tool.Controllers
 
                         if (existingEmployee != null)
                         {
+                            // Fetch roles based on the employee ID
                             var employeeRoleMappings = await _dbContext.EmployeeRoleMappings
-                                .Where(erm => erm.EmployeeID == existingEmployee.EmployeeID)
-                                .ToListAsync();
+                                                .Where(erm => erm.EmployeeID == existingEmployee.EmployeeID)
+                                                .ToListAsync();
+
+                            List<string> roles = new List<string>();
 
                             if (employeeRoleMappings.Any())
                             {
-                                var roles = await _dbContext.Roles
+                                var roleEntities = await _dbContext.Roles
                                     .Where(r => employeeRoleMappings.Select(erm => erm.RoleID).Contains(r.RoleID))
                                     .ToListAsync();
 
-                                return Ok(new
-                                {
-                                    message = "User exists",
-                                    roles = roles.Select(role => new { roleId = role.RoleID, roleName = role.RoleName }).ToList() // Return all roles
-                                });
+                                roles = roleEntities.Select(role => role.RoleName).ToList();
                             }
-                            else
-                            {
-                                return Ok(new { message = "User exists but no roles assigned" });
-                            }
+
+                            // Generate JWT with roles for existing user
+                            var token = _jwtService.GenerateJwtToken(userGraphData, userInfo.ExpiryTime, roles); // Adjust token expiration as needed
+                            return Ok(new { token = token, message = "Existing user", roles = roles });
                         }
-
-                        var employee = new Employee
+                        else
                         {
-                            OutlookEmployeeID = userGraphData.EmployeeId,
-                            FirstName = userGraphData.GivenName,
-                            LastName = userGraphData.SurName,
-                            EmailId = userGraphData.UserPrincipalName,
-                            CreatedDate = DateTime.UtcNow,
-                            AccountStatus = "active"
-                        };
+                            // Logic for new user creation, simplified for brevity
+                            // Note: Adjust according to your logic for handling new user roles, if applicable
 
-                        _dbContext.Employees.Add(employee);
-                        await _dbContext.SaveChangesAsync();
+                            var employee = new Employee
+                            {
+                                OutlookEmployeeID = userGraphData.EmployeeId,
+                                FirstName = userGraphData.GivenName,
+                                LastName = userGraphData.SurName,
+                                EmailId = userGraphData.UserPrincipalName,
+                                CreatedDate = DateTime.UtcNow,
+                                AccountStatus = "active"
+                            };
 
-                        return Ok(new { message = "Waiting for admin's approval" });
+                            _dbContext.Employees.Add(employee);
+                            await _dbContext.SaveChangesAsync();
+
+                            // Assuming new users do not immediately have roles, generate JWT without roles
+                            // For roles upon creation, adjust logic accordingly
+                            var token = _jwtService.GenerateJwtToken(userGraphData, userInfo.ExpiryTime, null); // Adjust token expiration as needed
+                            return Ok(new { token = token, message = "New user created" });
+                        }
                     }
                     else
                     {
@@ -96,6 +111,5 @@ namespace mentorship_program_tool.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-
     }
 }
