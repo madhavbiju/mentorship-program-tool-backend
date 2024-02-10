@@ -46,7 +46,7 @@ using mentorship_program_tool.Services.GraphAPIService;
 using mentorship_program_tool.Repository.EmployeeRoleRepository;
 using mentorship_program_tool.Services.EmployeeRoleService;
 using System.Text;
-using mentorship_program_tool.Models;
+using mentorship_program_tool.Models.GraphModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,8 +77,18 @@ builder.Services.AddAuthentication(x =>
         ValidAudience = jwtSettings.Audience
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    // Define a policy for the Admin role
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
+    // Define a policy for the Mentor role
+    options.AddPolicy("RequireMentorRole", policy => policy.RequireRole("mentor"));
+    // Define a policy for the Mentee role
+    options.AddPolicy("RequireMenteeRole", policy => policy.RequireRole("mentee"));
+});
 
 builder.Services.AddScoped<JwtService>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();

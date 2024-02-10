@@ -1,4 +1,4 @@
-﻿namespace mentorship_program_tool.Models
+﻿namespace mentorship_program_tool.Models.GraphModel
 {
     public class JwtSettings
     {
