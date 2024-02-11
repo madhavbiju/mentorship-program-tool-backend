@@ -16,22 +16,11 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
             _context = context;
         }
 
-        public GetAllMenteesOfMentorResponseAPIModel GetAllMenteesById(int ID, int pageNumber, int pageSize, string sortBy, string filterBy, DateTime? endDateFilter)
+        public GetAllMenteesOfMentorResponseAPIModel GetAllMenteesById(int ID, int pageNumber, int pageSize, string sortBy)
         {
             //get all programs of that mentor
             var query = _context.Programs
         .Where(p => p.MentorID == ID);
-
-            // Apply filtering if filterBy is provided
-            if (!string.IsNullOrEmpty(filterBy))
-            {
-                query = query.Where(p => p.ProgramName.Contains(filterBy));
-            }
-            //filter for end datel
-            if (endDateFilter != null)
-            {
-                query = query.Where(p => p.EndDate == endDateFilter);
-            }
 
             var totalCount = query.Count();
 
