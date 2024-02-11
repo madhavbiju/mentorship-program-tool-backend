@@ -42,6 +42,10 @@ using mentorship_program_tool.Middleware;
 using mentorship_program_tool.Services.GraphAPIService;
 using mentorship_program_tool.Repository.EmployeeRoleRepository;
 using mentorship_program_tool.Services.EmployeeRoleService;
+using mentorship_program_tool.Services.MenteesOfMentorListService;
+using mentorship_program_tool.Repository.MeetingScheduleRepository;
+using mentorship_program_tool.Repository.MeetingScheduleReposixtory;
+using mentorship_program_tool.Services.MeetingService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +85,9 @@ builder.Services.AddScoped<IReportTypeService, ReportTypeService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+builder.Services.AddScoped<IMeetingScheduleRepository, MeetingScheduleRepository>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
+
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
 
@@ -113,6 +120,8 @@ builder.Services.AddHttpClient<GraphApiService>();
 
 builder.Services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
 builder.Services.AddScoped<IEmployeeRoleService, EmployeeRoleService>();
+
+builder.Services.AddScoped<IMenteesOfMentorListService, MenteesOfMentorListService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
