@@ -33,14 +33,14 @@ namespace mentorship_program_tool.Controllers
         /// To get all details of mentees under a mentor.
         /// </summary>
         [HttpGet("mentor/{id}")]
-        public ActionResult<GetAllMenteesOfMentorResponseAPIModel> GetAllMenteesById(int id, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public ActionResult<GetAllMenteesOfMentorResponseAPIModel> GetAllMenteesById(int id, [FromQuery] int pageNumber, [FromQuery] int pageSize, string? sortBy)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be greater than 0.");
             }
 
-            var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id, pageNumber, pageSize);
+            var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id, pageNumber, pageSize, sortBy);
 
             if (menteesList == null)
             {
