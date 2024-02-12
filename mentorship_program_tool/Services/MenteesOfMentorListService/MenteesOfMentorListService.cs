@@ -27,6 +27,7 @@ namespace mentorship_program_tool.Services.MenteesOfMentorListService
                                   FirstName = mentee.FirstName,
                                   LastName = mentee.LastName,
                                   ProgramID = p.ProgramID,
+                                  EmailID = mentee.EmailId,
                               };
 
             return menteesList.ToList();
