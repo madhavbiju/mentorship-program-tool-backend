@@ -4,8 +4,9 @@
     {
         public int UserID { get; set; }
         public string UserName { get; set; }
-        public string UserRole { get; set; }
-        public string UserJob { get; set; } = "Lead Tester";
+        public List<string> UserRoles { get; set; } // Changed to accommodate multiple roles
+        public string UserJob { get; set; }
         public string UserStatus { get; set; }
     }
+
 }
