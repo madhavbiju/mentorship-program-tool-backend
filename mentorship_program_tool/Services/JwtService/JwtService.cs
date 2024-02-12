@@ -8,7 +8,7 @@ using mentorship_program_tool.Models.GraphModel;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace mentorship_program_tool.Services
+namespace mentorship_program_tool.Services.JwtService
 {
     public class JwtService
     {

@@ -5,6 +5,6 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
 {
     public interface IGetAllMenteesOfMentorService
     {
-        GetAllMenteesOfMentorResponseAPIModel GetAllMenteesById(int id, int pageNumber, int pageSize);
+        GetAllMenteesOfMentorResponseAPIModel GetAllMenteesById(int id, int pageNumber, int pageSize, string? sortBy);
     }
 }
