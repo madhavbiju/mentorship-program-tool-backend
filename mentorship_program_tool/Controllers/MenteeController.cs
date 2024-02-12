@@ -12,7 +12,7 @@ namespace mentorship_program_tool.Controllers
 {
     [ApiController]
     [Route("api/mentee")]
-    [Authorize(Policy = "RequireMenteeRole")]
+    /*   [Authorize(Policy = "RequireMenteeRole")]*/
     public class MenteeController : ControllerBase
     {
         private readonly IGetAllMenteesOfMentorService _getAllMenteesOfMentorService;

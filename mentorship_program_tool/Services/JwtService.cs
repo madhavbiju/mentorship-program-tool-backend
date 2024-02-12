@@ -23,7 +23,7 @@ namespace mentorship_program_tool.Services
             _audience = jwtSettings.Value.Audience;
         }
 
-        public string GenerateJwtToken(GraphUserData userData, DateTime azureTokenExpiration, IEnumerable<string> roles)
+        public string GenerateJwtToken(GraphUserData userData, DateTime azureTokenExpiration, IEnumerable<string> roles, int employeeID)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -32,6 +32,8 @@ namespace mentorship_program_tool.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userData.EmployeeId),
                 new Claim(JwtRegisteredClaimNames.Email, userData.UserPrincipalName),
+                new Claim(JwtRegisteredClaimNames.Name, userData.GivenName + " "+ userData.SurName),
+                new Claim(JwtRegisteredClaimNames.NameId,employeeID.ToString() ),
             };
 
             // Add roles as claims
@@ -44,7 +46,7 @@ namespace mentorship_program_tool.Services
                 issuer: _issuer,
                 audience: _audience,
                 claims: claims,
-                expires: azureTokenExpiration, // Subtract 2 minutes from the Azure token's expiration
+                expires: azureTokenExpiration.AddMinutes(-2), // Subtract 2 minutes from the Azure token's expiration
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

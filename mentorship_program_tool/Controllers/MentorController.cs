@@ -6,7 +6,7 @@ namespace mentorship_program_tool.Controllers
 {
     [ApiController]
     [Route("api/mentor")]
-    [Authorize(Policy = "RequireMentorRole")]
+    /* [Authorize(Policy = "RequireMentorRole")]*/
 
     public class MentorController : ControllerBase
     {

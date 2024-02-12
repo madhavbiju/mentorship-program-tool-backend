@@ -65,8 +65,8 @@ namespace mentorship_program_tool.Controllers
                             }
 
                             // Generate JWT with roles for existing user
-                            var token = _jwtService.GenerateJwtToken(userGraphData, userInfo.ExpiryTime, roles); // Adjust token expiration as needed
-                            return Ok(new { token = token, message = "Existing user", roles = roles });
+                            var token = _jwtService.GenerateJwtToken(userGraphData, userInfo.ExpiryTime, roles, existingEmployee.EmployeeID); // Adjust token expiration as needed
+                            return Ok(new { token = token, message = "Existing user" });
                         }
                         else
                         {
@@ -88,7 +88,7 @@ namespace mentorship_program_tool.Controllers
 
                             // Assuming new users do not immediately have roles, generate JWT without roles
                             // For roles upon creation, adjust logic accordingly
-                            var token = _jwtService.GenerateJwtToken(userGraphData, userInfo.ExpiryTime, null); // Adjust token expiration as needed
+                            var token = _jwtService.GenerateJwtToken(userGraphData, userInfo.ExpiryTime, null, employee.EmployeeID); // Adjust token expiration as needed
                             return Ok(new { token = token, message = "New user created" });
                         }
                     }
