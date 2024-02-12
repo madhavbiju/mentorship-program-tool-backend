@@ -16,17 +16,38 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
             _context = context;
         }
 
-        public GetAllMenteesOfMentorResponseAPIModel GetAllMenteesById(int ID, int pageNumber, int pageSize)
+        public GetAllMenteesOfMentorResponseAPIModel GetAllMenteesById(int ID, int pageNumber, int pageSize, string sortBy)
         {
-            var totalCount = _context.Programs
-                .Count(p => p.MentorID == ID);
+            //get all programs of that mentor
+            var query = _context.Programs
+        .Where(p => p.MentorID == ID);
+
+            var totalCount = query.Count();
+
+
+            //for sorting program name and endDate
+            switch (sortBy)
+            {
+                case "ProgramName":
+                    query = query.OrderBy(p => p.ProgramName); // Ascending order by default
+                    break;
+                case "ProgramName_desc":
+                    query = query.OrderByDescending(p => p.ProgramName); // Descending order for ProgramName
+                    break;
+                case "endDate":
+                    query = query.OrderBy(p => p.EndDate); // Ascending order by default
+                    break;
+                case "endDate_desc":
+                    query = query.OrderByDescending(p => p.EndDate); // Descending order for EndDate
+                    break;
+            }
+
 
             // Calculate the number of records to skip for pagination
             int skip = (pageNumber - 1) * pageSize;
 
-            var menteesList = (from p in _context.Programs
+            var menteesList = (from p in query
                                join mentee in _context.Employees on p.MenteeID equals mentee.EmployeeID
-                               where p.MentorID == ID
                                select new GetAllMenteesOfMentorAPIModel
                                {
                                    EmployeeID = p.MenteeID,
@@ -36,9 +57,9 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
                                    StartDate = p.StartDate,
                                    EndDate = p.EndDate
                                })
-                              .Skip(skip)
-                              .Take(pageSize)
-                              .ToList();
+                   .Skip(skip)
+                   .Take(pageSize)
+                   .ToList();
 
             return new GetAllMenteesOfMentorResponseAPIModel { Mentees = menteesList, TotalCount = totalCount };
         }

@@ -1,5 +1,8 @@
 using mentorship_program_tool.Data;
 using mentorship_program_tool.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using mentorship_program_tool.Repository.AdminApprovalRequestRepository;
 using mentorship_program_tool.Repository.AdminDashboardCountRepository;
 using mentorship_program_tool.Repository.EmployeeRepository;
@@ -38,11 +41,58 @@ using System.Reflection;
 using mentorship_program_tool.Repository.GetUserDetailsRepository;
 using mentorship_program_tool.Services.GetUserDetailsService;
 using mentorship_program_tool.Services.MentorDashboardCountService;
+using mentorship_program_tool.Middleware;
+using mentorship_program_tool.Services.GraphAPIService;
+using mentorship_program_tool.Repository.EmployeeRoleRepository;
+using mentorship_program_tool.Services.EmployeeRoleService;
+using System.Text;
+using mentorship_program_tool.Models.GraphModel;
+using mentorship_program_tool.Services.MenteesOfMentorListService;
+using mentorship_program_tool.Repository.MeetingScheduleRepository;
+using mentorship_program_tool.Repository.MeetingScheduleReposixtory;
+using mentorship_program_tool.Services.MeetingService;
+using mentorship_program_tool.Services.JwtService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var jwtSection = builder.Configuration.GetSection("JwtSettings");
+builder.Services.Configure<JwtSettings>(jwtSection);
+
+// Configure JWT Authentication
+var jwtSettings = jwtSection.Get<JwtSettings>();
+var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience
+    };
+});
+builder.Services.AddAuthorization(options =>
+{
+    // Define a policy for the Admin role
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
+    // Define a policy for the Mentor role
+    options.AddPolicy("RequireMentorRole", policy => policy.RequireRole("mentor"));
+    // Define a policy for the Mentee role
+    options.AddPolicy("RequireMenteeRole", policy => policy.RequireRole("mentee"));
+});
+
+builder.Services.AddScoped<JwtService>();
 
 // Add services to the container.
 
@@ -77,6 +127,9 @@ builder.Services.AddScoped<IReportTypeService, ReportTypeService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+builder.Services.AddScoped<IMeetingScheduleRepository, MeetingScheduleRepository>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
+
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IProgramService, ProgramService>();
 
@@ -105,6 +158,12 @@ builder.Services.AddScoped<IGetUserDetailsRepository, GetUserDetailsRepository>(
 builder.Services.AddScoped<IGetUserDetailsService, GetUserDetailsService>();
 
 builder.Services.AddScoped<IMentorDashboardCountService, MentorDashboardCountService>();
+builder.Services.AddHttpClient<GraphApiService>();
+
+builder.Services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
+builder.Services.AddScoped<IEmployeeRoleService, EmployeeRoleService>();
+
+builder.Services.AddScoped<IMenteesOfMentorListService, MenteesOfMentorListService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
@@ -133,7 +192,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+app.UseTokenDecodingMiddleware();
 app.UseCors();
 
 // Configure the HTTP request pipeline.

@@ -50,7 +50,7 @@ namespace mentorship_program_tool.Controllers
         /// To post a task
         /// </summary>
         //put task
-        [HttpPost("/create")]
+        [HttpPost("create")]
         public IActionResult AddTask(MentorTaskAPIModel mentortaskapimodel)
         {
             _mentorTaskService.CreateTask(mentortaskapimodel);
@@ -62,7 +62,7 @@ namespace mentorship_program_tool.Controllers
         /// To update Task status to appproved.
         /// </summary>
         //update status of task completed by mentee
-        [HttpPut("/mark-as-done/{id}")]
+        [HttpPut("mark-as-done/{id}")]
         public IActionResult UpdateStatus(int id, MentorTaskStatusUpdationAPIModel taskstatusupdationmodel)
         {
             if (id != taskstatusupdationmodel.TaskID)
@@ -79,7 +79,7 @@ namespace mentorship_program_tool.Controllers
         /// To Updating due date of task.
         /// </summary>
         //update due date of task 
-        [HttpPut("/modify/{id}")]
+        [HttpPut("modify/{id}")]
         public IActionResult UpdateDueDate(int id, MentorTaskEndDateUpdationModel taskenddateupdationmodel)
         {
             if (id != taskenddateupdationmodel.TaskID)
