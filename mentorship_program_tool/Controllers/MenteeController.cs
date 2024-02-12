@@ -2,6 +2,7 @@
 using mentorship_program_tool.Services;
 using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
 using mentorship_program_tool.Services.GetMenteeDetailsById;
+using mentorship_program_tool.Services.MenteesOfMentorListService;
 using mentorship_program_tool.Services.MentorDashboardCountService;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
@@ -17,9 +18,11 @@ namespace mentorship_program_tool.Controllers
         private readonly IGetAllActiveUnpairedMenteesService _getAllActiveUnpairedMenteesService;
         private readonly IGetMenteeDetailsByIdService _getMenteeDetailsByIdService;
         private readonly IMentorDashboardCountService _mentorDashboardCountService;
+        private readonly IMenteesOfMentorListService _menteesOfMentorListService;
 
-        public MenteeController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService)
+        public MenteeController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService, IMenteesOfMentorListService menteesOfMentorListService)
         {
+            _menteesOfMentorListService = menteesOfMentorListService;
             _getAllMenteesOfMentorService = getAllMenteesOfMentorService;
             _getAllActiveUnpairedMenteesService = GetAllActiveUnpairedMenteesService;
             _getMenteeDetailsByIdService = GetMenteeDetailsByIdService;
@@ -27,7 +30,7 @@ namespace mentorship_program_tool.Controllers
         }
 
         /// <summary>
-        /// To get all mentees under a mentor.
+        /// To get all details of mentees under a mentor.
         /// </summary>
         [HttpGet("mentor/{id}")]
         public ActionResult<GetAllMenteesOfMentorResponseAPIModel> GetAllMenteesById(int id, [FromQuery] int pageNumber, [FromQuery] int pageSize)
@@ -44,6 +47,18 @@ namespace mentorship_program_tool.Controllers
                 return NotFound();
             }
 
+            return Ok(menteesList);
+        }
+
+        /// <summary>
+        /// To get list of mentees under Mentor
+        /// </summary>
+        [HttpGet("mentor/list/{id}")]
+        public ActionResult<MenteesOfMentorListAPIModel> GetAllMenteesById(int id)
+        {
+            var menteesList = _menteesOfMentorListService.GetAllMenteesById(id);
+            if (menteesList == null)
+                return NotFound();
             return Ok(menteesList);
         }
 
