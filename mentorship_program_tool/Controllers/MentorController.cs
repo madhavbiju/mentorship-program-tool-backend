@@ -1,10 +1,13 @@
 ﻿using mentorship_program_tool.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mentorship_program_tool.Controllers
 {
     [ApiController]
     [Route("api/mentor")]
+    /* [Authorize(Policy = "RequireMentorRole")]*/
+
     public class MentorController : ControllerBase
     {
         private readonly IGetAllActiveMentorService _getAllActiveMentorService;
