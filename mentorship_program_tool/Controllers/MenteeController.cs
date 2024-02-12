@@ -4,6 +4,7 @@ using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
 using mentorship_program_tool.Services.GetMenteeDetailsById;
 using mentorship_program_tool.Services.MenteesOfMentorListService;
 using mentorship_program_tool.Services.MentorDashboardCountService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
 using static Azure.Core.HttpHeader;
@@ -12,6 +13,7 @@ namespace mentorship_program_tool.Controllers
 {
     [ApiController]
     [Route("api/mentee")]
+    /*   [Authorize(Policy = "RequireMenteeRole")]*/
     public class MenteeController : ControllerBase
     {
         private readonly IGetAllMenteesOfMentorService _getAllMenteesOfMentorService;

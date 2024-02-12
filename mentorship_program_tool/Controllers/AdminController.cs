@@ -4,6 +4,7 @@ using mentorship_program_tool.Services.AdminDashboardCountService;
 using mentorship_program_tool.Services.EmployeeRoleService;
 using mentorship_program_tool.Services.EmployeeService;
 using mentorship_program_tool.Services.GetUserDetailsService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace mentorship_program_tool.Controllers
@@ -11,6 +12,7 @@ namespace mentorship_program_tool.Controllers
 
     [ApiController]
     [Route("api/admin")]
+    /* [Authorize(Policy = "RequireAdminRole")]*/
     public class AdminController : ControllerBase
     {
         private readonly IAdminDashboardCountService _adminDashboardCountService;

@@ -26,27 +26,48 @@ namespace mentorship_program_tool.Middleware
                 try
                 {
                     var handler = new JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+                    var jsonToken = handler.ReadJwtToken(token); // Use ReadJwtToken for a more specific method
 
-                    // Access token decoding
-                    var userInfo = new UserInfo
+                    // Distinguish between Azure AD and custom tokens based on the presence of "upn" (for Azure AD)
+                    var isAzureToken = jsonToken.Claims.Any(c => c.Type == "upn");
+                    var isCustomToken = jsonToken.Claims.Any(c => c.Type == "Email"); // Assuming custom tokens have an "Email" claim
+
+                    if (isAzureToken)
                     {
-                        UserId = jsonToken?.Claims.FirstOrDefault(c => c.Type == "sub")?.Value,
-                        UserName = jsonToken?.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value,
-                        // Add other user information you want to extract
-                    };
-                    Console.WriteLine("TokenDecodingMiddleware invoked");
-                    // Set user info in the request
-                    context.Items["UserInfo"] = userInfo;
+                        // Extract the expiry time from the token
+                        var expClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
+                        var expiryTimeUtc = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expClaim)).UtcDateTime;
 
-                    // Id token decoding (assuming roles are in id token)
-                    var roles = jsonToken?.Claims.Where(c => c.Type == "roles").Select(c => c.Value).ToList();
-                    context.Items["Roles"] = roles;
-                    Console.WriteLine("TokenDecodingMiddleware completed");
+
+                        var userInfo = new UserInfo
+                        {
+                            UserId = jsonToken.Claims.FirstOrDefault(c => c.Type == "oid")?.Value,
+                            UserName = jsonToken.Claims.FirstOrDefault(c => c.Type == "upn")?.Value,
+                            ExpiryTime = expiryTimeUtc // Set the expiry time
+                        };
+                        context.Items["UserInfo"] = userInfo;
+                    }
+                    else if (isCustomToken)
+                    {
+                        // Extract user info from custom token
+                        var userInfo = new UserInfo
+                        {
+                            UserId = jsonToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value,
+                            UserName = jsonToken.Claims.FirstOrDefault(c => c.Type == "Email")?.Value,
+                        };
+                        context.Items["UserInfo"] = userInfo;
+                    }
+                    else
+                    {
+                        // Log or handle the case where the token is neither Azure AD nor a recognized custom token
+                        Console.WriteLine("Unrecognized token type.");
+                    }
+
+                    Console.WriteLine("TokenDecodingMiddleware invoked and processed.");
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    // Log or handle the exception
                     Console.WriteLine($"Token Decoding Error: {ex.Message}");
                 }
             }
@@ -54,12 +75,11 @@ namespace mentorship_program_tool.Middleware
             await _next(context);
         }
 
-        // Moved UserInfo class outside the TokenDecodingMiddleware class
         public class UserInfo
         {
             public string UserId { get; set; }
             public string UserName { get; set; }
-            // Add other properties as needed
+            public DateTime ExpiryTime { get; set; } // New property for expiry time
         }
     }
 
@@ -70,5 +90,4 @@ namespace mentorship_program_tool.Middleware
             return builder.UseMiddleware<TokenDecodingMiddleware>();
         }
     }
-
 }
