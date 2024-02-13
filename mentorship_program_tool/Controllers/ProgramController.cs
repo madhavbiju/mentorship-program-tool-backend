@@ -2,6 +2,11 @@
 using mentorship_program_tool.Services.GetAllProgramService;
 using mentorship_program_tool.Services.ProgramService;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
+using NuGet.Protocol;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -25,16 +30,38 @@ public class ProgramController : ControllerBase
         /// To get details of all programs
         /// </summary>
         [HttpGet]
-        public IActionResult GetPrograms()
+        public IActionResult GetPrograms([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var program = _programService.GetProgram();
+
+            // Validate pageNumber and pageSize
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+            var program = _programService.GetProgram(status, pageNumber, pageSize);
             return Ok(program);
         }
 
         [HttpGet("All")]
-        public IActionResult GetAllPrograms()
+        public IActionResult GetAllPrograms(int page = 1, [FromQuery] int? programStatus = null, [FromQuery] string sortOrder = "programName", [FromQuery] string search = null)
         {
-            var programs = _getAllProgramsService.GetAllPrograms();
+            try
+            {
+                var programs = _getAllProgramsService.GetAllPrograms(page, programStatus, sortOrder, search);
+
+                return Ok(programs);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                return StatusCode(500, "An error occurred while retrieving programs.");
+            }
+        }
+
+    [HttpGet("ending-soon")]
+        public IActionResult GetAllProgramsEndingSoon([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var programs = _getAllProgramsService.GetAllProgramsEndingSoon(pageNumber, pageSize);
             return Ok(programs);
 
         }

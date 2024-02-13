@@ -13,6 +13,11 @@ using mentorship_program_tool.Repository.MentorTaskRepository;
 using mentorship_program_tool.Repository.ProgramRepository;
 using mentorship_program_tool.Repository.GetActiveTasksRepository;
 using mentorship_program_tool.Repository.GetTasksByEmployeeIdRepository;
+using mentorship_program_tool.Repository.GetUserDetailsRepository;
+using mentorship_program_tool.Repository.EmployeeRoleRepository;
+using mentorship_program_tool.Models.EntityModel;
+using mentorship_program_tool.Repository.MeetingScheduleReposixtory;
+using mentorship_program_tool.Repository.MeetingScheduleRepository;
 
 namespace mentorship_program_tool.UnitOfWork
 {
@@ -29,6 +34,7 @@ namespace mentorship_program_tool.UnitOfWork
             ReportType = new ReportTypeRepository(_context);
             Employee = new EmployeeRepository(_context);
             Program = new ProgramRepository(_context);
+            MeetingSchedule = new MeetingScheduleRepository(_context);
             mentorRequestRepository = new MentorRequestRepository(_context);
             adminApprovalRequestRepository = new AdminApprovalRequestRepository(_context);
             getAllProgramsRepository = new GetAllProgramsRepository(_context);
@@ -36,11 +42,10 @@ namespace mentorship_program_tool.UnitOfWork
             getAllActiveUnpairedMenteesRepository = new GetAllActiveUnpairedMenteesRepository(_context);
             getTasksByProgramIdRepository = new GetTasksByProgramIdRepository(_context);
             getTasksByEmployeeIdRepository = new GetTasksbyEmployeeIdRepository(_context);
-
-
             mentorTaskRepository = new MentorTaskRepository(_context);
             menteeTaskSubmissionRepository = new MenteeTaskSubmissionRepository(_context);
-
+            getUserDetailsRepository = new GetUserDetailsRepository(_context);
+            employeeRoleRepository = new EmployeeRoleRepository(_context);
             // Initialize other repositories.
         }
 
@@ -48,6 +53,7 @@ namespace mentorship_program_tool.UnitOfWork
         public IStatusRepository Status { get; }
         public IReportTypeRepository ReportType { get; }
         public IEmployeeRepository Employee { get; }
+        public IMeetingScheduleRepository MeetingSchedule { get; }
         public IProgramRepository Program { get; }
         public IMentorRequestRepository mentorRequestRepository { get; }
         public IAdminApprovalRequestRepository adminApprovalRequestRepository { get; }
@@ -58,9 +64,11 @@ namespace mentorship_program_tool.UnitOfWork
         public IGetTasksByProgramIdRepository getTasksByProgramIdRepository { get; }
         public IGetTasksbyEmployeeIdRepository getTasksByEmployeeIdRepository { get; }
 
+        public IGetUserDetailsRepository getUserDetailsRepository { get; }
 
         public IMentorTaskRepository mentorTaskRepository { get; }
         public IMenteeTaskSubmissionRepository menteeTaskSubmissionRepository { get; }
+        public IEmployeeRoleRepository employeeRoleRepository { get; }
 
         public int Complete()
         {

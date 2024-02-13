@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace mentorship_program_tool.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/report")]
     public class ReportTypeController : ControllerBase
     {
         private readonly IReportTypeService _ReportTypeService;
@@ -15,14 +15,21 @@ namespace mentorship_program_tool.Controllers
             _ReportTypeService = ReportTypeService;
         }
 
-        [HttpGet]
+        /// <summary>
+        /// To get all report type ids
+        /// </summary>
+        [HttpGet("typeid/all/{id}")]
         public IActionResult GetReportTypes()
         {
             var ReportType = _ReportTypeService.GetReportType();
             return Ok(ReportType);
         }
 
-        [HttpGet("{id}")]
+        /// <summary>
+        /// To get one report type id
+        /// </summary>
+
+        [HttpGet("typeid/{id}")]
         public IActionResult GetReportTypeById(int id)
         {
             var ReportType = _ReportTypeService.GetReportTypeById(id);
@@ -33,14 +40,20 @@ namespace mentorship_program_tool.Controllers
             return Ok(ReportType);
         }
 
-        [HttpPost]
+        /// <summary>
+        /// To post a new report type id
+        /// </summary>
+        [HttpPost("typeid")]
         public IActionResult AddReportType(ReportType ReportType)
         {
             _ReportTypeService.CreateReportType(ReportType);
             return CreatedAtAction(nameof(GetReportTypeById), new { id = ReportType.ReportTypeID }, ReportType);
         }
 
-        [HttpPut("{id}")]
+        /// <summary>
+        /// To modify a new report type id
+        /// </summary>
+        [HttpPut("typeid/{id}")]
         public IActionResult UpdateReportType(int id, ReportType ReportType)
         {
             if (id != ReportType.ReportTypeID)
@@ -52,7 +65,11 @@ namespace mentorship_program_tool.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+
+        /// <summary>
+        /// To delete a new report type id
+        /// </summary>
+        [HttpDelete("typeid{id}")]
         public IActionResult DeleteReportType(int id)
         {
             if (id != null)

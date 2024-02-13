@@ -73,10 +73,30 @@ namespace mentorship_program_tool.Services.MentorRequestService
         }
 
         // Get all pending requests
-        public IEnumerable<ProgramExtension> GetPendingRequests()
+        public MentorRequestResponseAPIModel GetPendingRequests(int status, int pageNumber, int pageSize)
         {
-            var pendingRequests = _unitOfWork.mentorRequestRepository.GetAll().Where(n => n.RequestStatusID == 4);
-            return pendingRequests;
+            // Filter pending requests by status
+            var pendingRequests = _unitOfWork.mentorRequestRepository
+                                            .GetAll()
+                                            .Where(n => n.RequestStatusID == status);
+
+            // Get total count of pending requests
+            int totalCount = pendingRequests.Count();
+
+            // Implement pagination
+            var paginatedRequests = pendingRequests
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToList();
+
+            // Create result object
+            var result = new MentorRequestResponseAPIModel
+            {
+                Requests = paginatedRequests,
+                TotalCount = totalCount
+            };
+
+            return result;
         }
     }
 }

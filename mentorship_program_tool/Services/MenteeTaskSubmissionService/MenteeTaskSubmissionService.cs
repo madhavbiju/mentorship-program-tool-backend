@@ -21,17 +21,23 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
             _dbContext = dbContext;
         }
 
-        public void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
+        public  void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
         {
-            var existingTask = _unitOfWork.menteeTaskSubmissionRepository.GetById(ID);
-
-            if (existingTask == null)
+            try
             {
-                return;
-            }
+                var existingTask = _unitOfWork.menteeTaskSubmissionRepository.GetById(ID);
 
-            existingTask.FilePath = menteeTaskSubmissionAPIModel.FilePath;
-            existingTask.SubmissionTime = DateTime.Now;
+                if (existingTask == null)
+                {
+                    return;
+                }
+
+                // Update properties based on adminapi model
+                existingTask.TaskID = ID;
+                existingTask.FilePath = menteeTaskSubmissionAPIModel.filepath;
+                existingTask.SubmissionTime = DateTime.Now;
+                existingTask.TaskStatus = 6;
+
 
             _unitOfWork.Complete();
 

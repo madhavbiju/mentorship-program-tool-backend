@@ -1,11 +1,9 @@
-﻿using Humanizer;
-using mentorship_program_tool.Data;
-using mentorship_program_tool.UnitOfWork;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using System.Collections.Generic;
-using System.Linq;
+﻿using mentorship_program_tool.Data;
 using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Services.GetActiveTasksService.mentorship_program_tool.Services;
+using mentorship_program_tool.UnitOfWork;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace mentorship_program_tool.Services.GetActiveTasks
 {
@@ -20,8 +18,11 @@ namespace mentorship_program_tool.Services.GetActiveTasks
             _context = context;
         }
 
-        public IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int ID, int status)
+        public IEnumerable<GetTasksByProgramIdAPIModel> GetTasksByProgramId(int ID, int status, int page)
         {
+            int pageSize = 5;
+            int offset = (page - 1) * pageSize;
+
             var tasksQuery = from task in _context.Tasks
                              join program in _context.Programs on task.ProgramID equals program.ProgramID
                              join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
@@ -39,6 +40,9 @@ namespace mentorship_program_tool.Services.GetActiveTasks
                                  TaskName = task.Title,
                                  TaskStatus = task.TaskStatus
                              };
+
+            // Apply pagination
+            tasksQuery = tasksQuery.Skip(offset).Take(pageSize);
 
             return tasksQuery.ToList();
         }

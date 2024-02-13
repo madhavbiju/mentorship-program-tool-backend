@@ -16,9 +16,9 @@ namespace mentorship_program_tool.Models.EntityModel
 
         public DateTime CreatedTime { get; set; }
 
-        public int ModifiedBy { get; set; }
+        public int? ModifiedBy { get; set; }
 
-        public DateTime ModifiedTime { get; set; }
+        public DateTime? ModifiedTime { get; set; }
 
     }
 }
