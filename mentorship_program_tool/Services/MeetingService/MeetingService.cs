@@ -15,6 +15,7 @@ namespace mentorship_program_tool.Services.MeetingService
 
         public MeetingService(IUnitOfWork unitOfWork, AppDbContext context)
         {
+
             _unitOfWork = unitOfWork;
             _context = context;
         }
