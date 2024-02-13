@@ -6,6 +6,7 @@ using System.Drawing.Printing;
 using NuGet.Protocol;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -42,14 +43,22 @@ public class ProgramController : ControllerBase
         }
 
         [HttpGet("All")]
-        public IActionResult GetAllPrograms( int page)
+        public IActionResult GetAllPrograms(int page = 1, [FromQuery] int? programStatus = null, [FromQuery] string sortOrder = "programName", [FromQuery] string search = null)
         {
-            var programs = _getAllProgramsService.GetAllPrograms(page);
-            return Ok(programs);
+            try
+            {
+                var programs = _getAllProgramsService.GetAllPrograms(page, programStatus, sortOrder, search);
 
+                return Ok(programs);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                return StatusCode(500, "An error occurred while retrieving programs.");
+            }
         }
 
-        [HttpGet("ending-soon")]
+    [HttpGet("ending-soon")]
         public IActionResult GetAllProgramsEndingSoon([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             var programs = _getAllProgramsService.GetAllProgramsEndingSoon(pageNumber, pageSize);
