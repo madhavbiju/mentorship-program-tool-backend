@@ -44,7 +44,15 @@ public class ProgramController : ControllerBase
         [HttpGet("All")]
         public IActionResult GetAllPrograms( int page)
         {
-            var programs = _getAllProgramsService.GetAllPrograms(  page);
+            var programs = _getAllProgramsService.GetAllPrograms(page);
+            return Ok(programs);
+
+        }
+
+        [HttpGet("ending-soon")]
+        public IActionResult GetAllProgramsEndingSoon([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var programs = _getAllProgramsService.GetAllProgramsEndingSoon(pageNumber, pageSize);
             return Ok(programs);
 
         }
