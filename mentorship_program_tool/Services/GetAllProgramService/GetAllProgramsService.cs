@@ -19,7 +19,7 @@ namespace mentorship_program_tool.Services.GetAllProgramService
             _context = context;
         }
 
-        public GetAllProgramsResponseAPIModel GetAllPrograms(int page)
+        public GetAllProgramsResponseAPIModel GetAllPrograms(int page, int? programStatus, string sortOrder, string search)
         {
             int pageSize = 5;
             int offset = (page - 1) * pageSize;
@@ -37,9 +37,43 @@ namespace mentorship_program_tool.Services.GetAllProgramService
                                   MenteeLastName = mentee.LastName,
                                   EndDate = program.EndDate,
                                   StartDate = program.StartDate,
-
                                   ProgramStatus = program.ProgramStatus
                               };
+
+            // Apply filtering by ProgramStatus if provided
+            if (programStatus.HasValue)
+            {
+                programList = programList.Where(p => p.ProgramStatus == programStatus.Value);
+            }
+
+            // Apply search functionality if search text is provided
+            if (!string.IsNullOrEmpty(search))
+            {
+                programList = programList.Where(p =>
+                    p.ProgramName.Contains(search) ||
+                    p.MentorFirstName.Contains(search) ||
+                    p.MentorLastName.Contains(search) ||
+                    p.MenteeFirstName.Contains(search) ||
+                    p.MenteeLastName.Contains(search)
+                );
+            }
+
+            // Apply sorting
+            switch (sortOrder)
+            {
+                case "programName_desc":
+                    programList = programList.OrderByDescending(p => p.ProgramName);
+                    break;
+                case "endDate":
+                    programList = programList.OrderBy(p => p.EndDate);
+                    break;
+                case "endDate_desc":
+                    programList = programList.OrderByDescending(p => p.EndDate);
+                    break;
+                default:
+                    programList = programList.OrderBy(p => p.ProgramName);
+                    break;
+            }
 
             int totalCount = programList.Count();
 
@@ -51,9 +85,9 @@ namespace mentorship_program_tool.Services.GetAllProgramService
                 Programs = programList.ToList(),
                 TotalCount = totalCount
             };
-
-
         }
+
+
         public GetAllProgramsResponseAPIModel GetAllProgramsEndingSoon(int pageNumber, int pageSize)
         {
             DateTime today = DateTime.Today;
