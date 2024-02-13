@@ -24,11 +24,11 @@ namespace mentorship_program_tool.Services.MeetingService
             return _unitOfWork.MeetingSchedule.GetAll();
         }
 
-        public IEnumerable<MeetingSchedule> GetMeetingByEmployeeId(int id,int role)
+        public IEnumerable<MeetingSchedule> GetMeetingByEmployeeId(int id, int role)
         {
             var programIds = new List<int>();
             // Find program IDs where the given id matches either mentorID or menteeID
-            if (role==2)
+            if (role == 2)
             {
                 programIds = _context.Programs
                                      .Where(p => p.MentorID == id)
@@ -50,6 +50,38 @@ namespace mentorship_program_tool.Services.MeetingService
 
             return meetings;
         }
+
+
+
+
+        //to get upcoming 3meetings of a mentor or mentee
+        public IEnumerable<MeetingSchedule> GetSoonMeetingByEmployeeId(int id)
+        {
+            var mentorProgramIds = _context.Programs
+                                            .Where(p => p.MentorID == id)
+                                            .Select(p => p.ProgramID)
+                                            .ToList();
+
+            var menteeProgramIds = _context.Programs
+                                            .Where(p => p.MenteeID == id)
+                                            .Select(p => p.ProgramID)
+                                            .ToList();
+
+            var programIds = mentorProgramIds.Concat(menteeProgramIds).ToList();
+
+            var meetings = _context.MeetingSchedules
+                                 .Where(m => programIds.Contains(m.ProgramID) && m.ScheduleDate >= DateTime.Now)
+                                 .OrderBy(m => m.ScheduleDate)
+                                 .Take(3)
+                                 .ToList();
+
+            return meetings;
+        }
+
+
+
+
+
 
         public MeetingSchedule GetMeetingById(int id)
         {

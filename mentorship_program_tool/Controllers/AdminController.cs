@@ -48,22 +48,80 @@ namespace mentorship_program_tool.Controllers
         /// To get details of Users based on their role
         /// </summary>
         // Get users by role with pagination
-        [HttpGet("ByRole/{role}")]
-        public IActionResult GetUsersByRole(string role, [FromQuery] int pageNumber, [FromQuery] int pageSize)
-        {
-            if (string.IsNullOrWhiteSpace(role))
-            {
-                return BadRequest("Role is required.");
-            }
+        /*      [HttpGet("ByRole/{role}")]
+              public IActionResult GetUsersByRole(string role, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+              {
+                  if (string.IsNullOrWhiteSpace(role))
+                  {
+                      return BadRequest("Role is required.");
+                  }
 
-            // Validate pageNumber and pageSize
-            if (pageNumber <= 0 || pageSize <= 0)
+                  // Validate pageNumber and pageSize
+                  if (pageNumber <= 0 || pageSize <= 0)
+                  {
+                      return BadRequest("PageNumber and PageSize must be greater than 0.");
+                  }
+
+                  var users = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize);
+                  return Ok(users);
+              }*/
+        /*[HttpGet]
+        public ActionResult<UserDetailsResponseAPIModel> Get([FromQuery] string role = "all", [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string sortParameter = "UserName", [FromQuery] bool isAscending = true)
+        {
+            if (pageSize <= 0 || pageNumber <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be greater than 0.");
             }
 
-            var users = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize);
-            return Ok(users);
+            try
+            {
+                var userDetails = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize, sortParameter, isAscending);
+                if (userDetails.Users.Any())
+                {
+                    return Ok(userDetails);
+                }
+                else
+                {
+                    return NotFound("No users found.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+*/
+
+        [HttpGet]
+        public ActionResult<UserDetailsResponseAPIModel> Get([FromQuery] string role = "all", [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string sortParameter = "UserName", [FromQuery] string sortType = "Asc")
+        {
+            if (pageSize <= 0 || pageNumber <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+
+            // Validate sortType
+            if (!sortType.Equals("Asc", StringComparison.OrdinalIgnoreCase) && !sortType.Equals("Desc", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("SortType must be either 'Asc' or 'Desc'.");
+            }
+
+            try
+            {
+                var userDetails = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize, sortParameter, sortType);
+                if (userDetails.Users.Any())
+                {
+                    return Ok(userDetails);
+                }
+                else
+                {
+                    return NotFound("No users found.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         /*/// <summary>
         /// To get employee and their roles
