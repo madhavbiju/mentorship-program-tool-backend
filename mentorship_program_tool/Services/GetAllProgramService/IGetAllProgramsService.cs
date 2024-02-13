@@ -5,7 +5,9 @@ namespace mentorship_program_tool.Services.GetAllProgramService
 {
     public interface IGetAllProgramsService
     {
-        GetAllProgramsResponseAPIModel GetAllPrograms( int page);
+        GetAllProgramsResponseAPIModel GetAllPrograms(int page);
+
+        GetAllProgramsResponseAPIModel GetAllProgramsEndingSoon(int pageNumber, int pageSize);
 
     }
 }

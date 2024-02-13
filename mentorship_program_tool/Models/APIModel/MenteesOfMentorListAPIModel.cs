@@ -6,5 +6,6 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int ProgramID { get; set; }
+        public string EmailID { get; set; }
     }
 }

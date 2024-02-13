@@ -46,7 +46,43 @@ namespace mentorship_program_tool.Services.GetAllProgramService
             // Apply pagination
             programList = programList.Skip(offset).Take(pageSize);
 
-            return new GetAllProgramsResponseAPIModel { Programs = programList.ToList(), TotalCount = totalCount };
+            return new GetAllProgramsResponseAPIModel
+            {
+                Programs = programList.ToList(),
+                TotalCount = totalCount
+            };
+
+
         }
+        public GetAllProgramsResponseAPIModel GetAllProgramsEndingSoon(int pageNumber, int pageSize)
+        {
+            DateTime today = DateTime.Today;
+            int offset = (pageNumber - 1) * pageSize;
+
+            var programList = (from program in _context.Programs
+                               join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
+                               join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
+                               where program.EndDate >= today && program.ProgramStatus == 1
+                               orderby program.EndDate
+                               select new GetAllProgramsAPIModel
+                               {
+                                   ProgramID = program.ProgramID,
+                                   ProgramName = program.ProgramName,
+                                   MentorFirstName = mentor.FirstName,
+                                   MentorLastName = mentor.LastName,
+                                   MenteeFirstName = mentee.FirstName,
+                                   MenteeLastName = mentee.LastName,
+                                   EndDate = program.EndDate,
+                                   StartDate = program.StartDate,
+                                   ProgramStatus = program.ProgramStatus
+                               }).Skip(offset).Take(pageSize).ToList();
+
+            int totalCount = _context.Programs.Count(p => p.EndDate >= today && p.ProgramStatus == 1);
+
+            return new GetAllProgramsResponseAPIModel { Programs = programList, TotalCount = totalCount };
+        }
+
+
+
     }
 }
