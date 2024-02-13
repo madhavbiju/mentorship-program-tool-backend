@@ -74,10 +74,6 @@ public class ProgramController : ControllerBase
         public IActionResult GetProgramsById(int id)
         {
             var program = _programService.GetProgramById(id);
-            if (program == null)
-            {
-                return NotFound();
-            }
             return Ok(program);
         }
 
