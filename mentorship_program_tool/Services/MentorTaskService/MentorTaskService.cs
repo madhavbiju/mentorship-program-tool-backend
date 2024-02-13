@@ -65,7 +65,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
                 ReferenceMaterialFilePath = mentortaskapimodel.ReferenceMaterialFilePath,
                 FilePath = null,
                 SubmissionTime = null,
-                TaskStatus = 4,
+                TaskStatus = 1,
                 CreatedBy = mentortaskapimodel.CreatedBy
             };
         }
