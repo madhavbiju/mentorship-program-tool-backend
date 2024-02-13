@@ -1,4 +1,5 @@
-﻿using mentorship_program_tool.Models.EntityModel;
+﻿using mentorship_program_tool.Models.ApiModel;
+using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.EmployeeService;
 using mentorship_program_tool.Services.MeetingService;
 using Microsoft.AspNetCore.Http;
@@ -28,10 +29,22 @@ namespace mentorship_program_tool.Controllers
             return Ok(meeting);
         }
 
+
+        /// <summary>
+        /// To get details of all Meetings with pagination
+        /// </summary>
+        [HttpGet("{pageNumber}")]
+        public IActionResult GetAllMeetings(int pageNumber, string sortBy)
+        {
+            var meetings = _meetingService.GetAllMeetings(pageNumber, sortBy);
+            return Ok(meetings);
+
+        }
+
         /// <summary>
         /// To get details of a particular Meeting
         /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet("Meetings{id}")]
         public IActionResult GetMeetingById(int id)
         {
             var meeting = _meetingService.GetMeetingById(id);
