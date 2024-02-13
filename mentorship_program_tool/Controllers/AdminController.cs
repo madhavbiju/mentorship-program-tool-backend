@@ -12,7 +12,8 @@ namespace mentorship_program_tool.Controllers
 
     [ApiController]
     [Route("api/admin")]
-    /* [Authorize(Policy = "RequireAdminRole")]*/
+    [Authorize(Policy = "RequireAdminRole")] 
+
     public class AdminController : ControllerBase
     {
         private readonly IAdminDashboardCountService _adminDashboardCountService;
