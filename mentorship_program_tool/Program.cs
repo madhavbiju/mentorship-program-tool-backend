@@ -52,6 +52,7 @@ using mentorship_program_tool.Repository.MeetingScheduleRepository;
 using mentorship_program_tool.Repository.MeetingScheduleReposixtory;
 using mentorship_program_tool.Services.MeetingService;
 using mentorship_program_tool.Services.JwtService;
+using mentorship_program_tool.Services.StatusUpdaterService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -164,6 +165,8 @@ builder.Services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
 builder.Services.AddScoped<IEmployeeRoleService, EmployeeRoleService>();
 
 builder.Services.AddScoped<IMenteesOfMentorListService, MenteesOfMentorListService>();
+
+builder.Services.AddHostedService<ProgramStatusUpdater>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
