@@ -46,9 +46,23 @@ namespace mentorship_program_tool.Controllers
         /// To get all meetings of a particular employee
         /// </summary>
         [HttpGet("employee/{id}")]
-        public IActionResult GetMeetingByEmployeeId([FromQuery][Required] int role,int id)
+        public IActionResult GetMeetingByEmployeeId([FromQuery][Required] int role, int id)
         {
-            var meeting = _meetingService.GetMeetingByEmployeeId(id,role);
+            var meeting = _meetingService.GetMeetingByEmployeeId(id, role);
+            if (meeting == null)
+            {
+                return NotFound();
+            }
+            return Ok(meeting);
+        }
+
+        /// <summary>
+        /// To get upcoming 3 meetings of a particular employee
+        /// </summary>
+        [HttpGet("employee/upcoming/meetings/{id}")]
+        public IActionResult GetSoonMeetingByEmployeeId(int id)
+        {
+            var meeting = _meetingService.GetSoonMeetingByEmployeeId(id);
             if (meeting == null)
             {
                 return NotFound();
