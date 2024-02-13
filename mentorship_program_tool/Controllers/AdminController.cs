@@ -65,7 +65,7 @@ namespace mentorship_program_tool.Controllers
             var users = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize);
             return Ok(users);
         }
-        /// <summary>
+        /*/// <summary>
         /// To get employee and their roles
         /// </summary>
         [HttpGet("viewrolesassigned")]
@@ -109,6 +109,37 @@ namespace mentorship_program_tool.Controllers
 
             _employeeRoleService.UpdateEmployeeRole(id, employeeRole);
             return NoContent();
+        }*/
+        [HttpPost("assignroles")]
+        public IActionResult AssignRoles([FromBody] AssignRolesToEmployeeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                // Assuming the adminUserId comes from the authenticated user's claims or context
+                int adminUserId = GetAdminUserIdFromClaims();
+
+                _employeeRoleService.UpdateEmployeeRoles(model, adminUserId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                // Consider logging the error for debugging purposes
+                return StatusCode(500, "An error occurred while assigning roles.");
+            }
+        }
+
+        private int GetAdminUserIdFromClaims()
+        {
+            // Placeholder for fetching the admin's user ID from the claims
+            // This needs to be replaced with actual code to fetch the authenticated user's ID
+            return 1; // Example user ID
         }
 
     }
