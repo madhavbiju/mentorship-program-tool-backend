@@ -21,7 +21,7 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
             _dbContext = dbContext;
         }
 
-        public  void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
+        public void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
         {
             try
             {
@@ -39,36 +39,41 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
                 existingTask.TaskStatus = 6;
 
 
-            _unitOfWork.Complete();
+                _unitOfWork.Complete();
 
-            // Retrieve program ID associated with the task
-            int programId = existingTask.ProgramID;
+                // Retrieve program ID associated with the task
+                int programId = existingTask.ProgramID;
 
-            // Retrieve mentor ID using the program ID
-            var program = _dbContext.Programs.FirstOrDefault(p => p.ProgramID == programId);
-            if (program == null)
-            {
-                // Handle case where program is not found
-                return;
+                // Retrieve mentor ID using the program ID
+                var program = _dbContext.Programs.FirstOrDefault(p => p.ProgramID == programId);
+                if (program == null)
+                {
+                    // Handle case where program is not found
+                    return;
+                }
+
+                var mentorUserId = program.MentorID;
+                var menteeUserId = program.MenteeID;
+
+                var notification = new Notifications
+                {
+                    NotifiedEmployeeID = mentorUserId,
+                    Notification = "Task submitted notification",
+                    CreatedBy = menteeUserId,
+                    CreatedTime = DateTime.UtcNow
+                };
+
+                // Add notification to the database
+                _dbContext.Notifications.Add(notification);
+                _dbContext.SaveChanges();
+
+                // Trigger notification service to send the notification
+                _notificationService.SendTaskSubmittedNotificationAsync(mentorUserId.ToString()).Wait();
             }
-
-            var mentorUserId = program.MentorID;
-            var menteeUserId = program.MenteeID;
-
-            var notification = new Notifications
+            catch (Exception ex)
             {
-                NotifiedEmployeeID = mentorUserId,
-                Notification = "Task submitted notification",
-                CreatedBy = menteeUserId,
-                CreatedTime = DateTime.UtcNow
-            };
-
-            // Add notification to the database
-            _dbContext.Notifications.Add(notification);
-            _dbContext.SaveChanges();
-
-            // Trigger notification service to send the notification
-            _notificationService.SendTaskSubmittedNotificationAsync(mentorUserId.ToString()).Wait();
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
     }
 }

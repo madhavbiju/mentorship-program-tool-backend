@@ -20,8 +20,6 @@ public class NotificationService : INotificationService
 
     public async System.Threading.Tasks.Task SendPairCreationNotificationAsync(string mentorUser, string menteeUser)
     {
-        // Send pair creation notification using SignalR
-        await _hubContext.Clients.All.SendAsync("PairCreated", mentorUser, menteeUser);
 
         int mentorId = int.Parse(mentorUser);
         int menteeId = int.Parse(menteeUser);
@@ -50,6 +48,9 @@ public class NotificationService : INotificationService
 
         // Save changes to the database
         await _dbContext.SaveChangesAsync();
+
+        // Send pair creation notification using SignalR
+        await _hubContext.Clients.All.SendAsync("PairCreated", mentorUser, menteeUser);
     }
 
 
