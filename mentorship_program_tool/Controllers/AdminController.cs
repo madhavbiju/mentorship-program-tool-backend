@@ -92,7 +92,7 @@ namespace mentorship_program_tool.Controllers
         }
 */
 
-        [HttpGet]
+        /*[HttpGet]
         public ActionResult<UserDetailsResponseAPIModel> Get([FromQuery] string role = "all", [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string sortParameter = "UserName", [FromQuery] string sortType = "Asc")
         {
             if (pageSize <= 0 || pageNumber <= 0)
@@ -122,7 +122,53 @@ namespace mentorship_program_tool.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }*/
+        [HttpGet]
+        public ActionResult<UserDetailsResponseAPIModel> Get(
+    [FromQuery] string role = "all",
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string sortParameter = "UserName",
+    [FromQuery] string sortType = "Asc",
+    [FromQuery] string status = "all") // Added status parameter
+        {
+            if (pageSize <= 0 || pageNumber <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+
+            // Validate sortType
+            if (!sortType.Equals("Asc", StringComparison.OrdinalIgnoreCase) && !sortType.Equals("Desc", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("SortType must be either 'Asc' or 'Desc'.");
+            }
+
+            // Optional: Validate status
+            if (!status.Equals("all", StringComparison.OrdinalIgnoreCase) &&
+                !status.Equals("active", StringComparison.OrdinalIgnoreCase) &&
+                !status.Equals("inactive", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("Status must be either 'all', 'active', or 'inactive'.");
+            }
+
+            try
+            {
+                var userDetails = _getUserDetailsService.GetUserDetails(role, pageNumber, pageSize, sortParameter, sortType, status); // Passed status to the service method
+                if (userDetails.Users.Any())
+                {
+                    return Ok(userDetails);
+                }
+                else
+                {
+                    return NotFound("No users found.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         /*/// <summary>
         /// To get employee and their roles
         /// </summary>
