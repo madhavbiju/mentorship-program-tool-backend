@@ -15,6 +15,7 @@ namespace mentorship_program_tool.Models.EntityModel
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }
+        public int MeetingStatus { get; set; }
 
     public int CreatedBy { get; set; }
 
