@@ -17,7 +17,7 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public GetTasksByEmployeeIdResponseAPIModel GetTasksByEmployeeId(int employeeId, int status, int page)
+        public GetTasksByEmployeeIdResponseAPIModel GetTasksByEmployeeId(int employeeId, int status, int page, string sortBy)
         {
             int pageSize = 5;
             int offset = (page - 1) * pageSize;
@@ -40,10 +40,29 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
                                                                  TaskStatus = task.TaskStatus
                                                              };
 
+            // Filter by task status if status is provided
             if (status >= 1)
             {
                 query = query.Where(task => task.TaskStatus == status);
             }
+
+            // Apply sorting
+            switch (sortBy)
+            {
+                case "TaskName":
+                    query = query.OrderBy(p => p.TaskName); // Ascending order by default
+                    break;
+                case "TaskName_desc":
+                    query = query.OrderByDescending(p => p.TaskName); // Descending order for ProgramName
+                    break;
+                case "endDate":
+                    query = query.OrderBy(p => p.EndDate); // Ascending order by default
+                    break;
+                case "endDate_desc":
+                    query = query.OrderByDescending(p => p.EndDate); // Descending order for EndDate
+                    break;
+            }
+
             int totalCount = query.Count();
 
             // Apply pagination
@@ -51,5 +70,6 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
 
             return new GetTasksByEmployeeIdResponseAPIModel { Tasks = query.ToList(), TotalCount = totalCount };
         }
+
     }
 }
