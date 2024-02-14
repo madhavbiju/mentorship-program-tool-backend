@@ -75,6 +75,56 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
             return new GetTasksByEmployeeIdResponseAPIModel { Tasks = query.ToList(), TotalCount = totalCount };
         }
 
+        public GetTasksByEmployeeIdResponseAPIModel GetTasksByMenteeId(int employeeId, int status, int page, string sortBy)
+        {
+            int pageSize = 5;
+            int offset = (page - 1) * pageSize;
+
+            IQueryable<GetTasksByEmployeeIdAPIModel> query = from task in _context.Tasks
+                                                             join program in _context.Programs on task.ProgramID equals program.ProgramID
+                                                             join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
+                                                             where mentee.EmployeeID == employeeId && program.ProgramStatus == 1
+                                                             select new GetTasksByEmployeeIdAPIModel
+                                                             {
+                                                                 TaskID = task.TaskID,
+                                                                 StartDate = task.StartDate,
+                                                                 EndDate = task.EndDate,
+                                                                 TaskName = task.Title,
+                                                                 TaskStatus = task.TaskStatus
+                                                             };
+
+            // Filter by task status if status is provided
+            if (status >= 1)
+            {
+                query = query.Where(task => task.TaskStatus == status);
+            }
+
+            // Apply sorting
+            switch (sortBy)
+            {
+                case "TaskName":
+                    query = query.OrderBy(p => p.TaskName); // Ascending order by default
+                    break;
+                case "TaskName_desc":
+                    query = query.OrderByDescending(p => p.TaskName); // Descending order for ProgramName
+                    break;
+                case "endDate":
+                    query = query.OrderBy(p => p.EndDate); // Ascending order by default
+                    break;
+                case "endDate_desc":
+                    query = query.OrderByDescending(p => p.EndDate); // Descending order for EndDate
+                    break;
+            }
+
+            int totalCount = query.Count();
+
+            // Apply pagination
+            query = query.Skip(offset).Take(pageSize);
+
+            return new GetTasksByEmployeeIdResponseAPIModel { Tasks = query.ToList(), TotalCount = totalCount };
+        }
+
 
     }
+
 }

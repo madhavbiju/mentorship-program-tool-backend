@@ -104,6 +104,17 @@ namespace mentorship_program_tool.Controllers
         }
 
         /// <summary>
+        /// To get the tasks of an Employee Based on the Mentee id and status.
+        /// </summary>
+        [HttpGet("Mentee/{id},{status}")]
+        public IActionResult GetTasksByMenteeId(int id, int status, int page, string? sortBy)
+        {
+            var tasks = _getTasksByEmployeeIdService.GetTasksByMenteeId(id, status, page, sortBy);
+            return Ok(tasks);
+
+        }
+
+        /// <summary>
         /// To get the tasks of an Employee Based on the program id and status.
         /// </summary>
         [HttpGet("Program/{id},{status}")]
