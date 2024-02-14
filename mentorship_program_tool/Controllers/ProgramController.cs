@@ -82,6 +82,21 @@ public class ProgramController : ControllerBase
         }
 
         /// <summary>
+        /// To get details for pair report
+        /// </summary>
+        [HttpGet("pair-details")]
+        public IActionResult GetPairDetailsById(int id)
+        {
+            var pairDetails = _programService.GetPairDetailsById(id); // Call GetPairDetailsById from IPairService
+            if (pairDetails == null)
+            {
+                return NotFound();
+            }
+            return Ok(pairDetails);
+        }
+
+
+        /// <summary>
         /// To create a new program
         /// </summary>
         [HttpPost]

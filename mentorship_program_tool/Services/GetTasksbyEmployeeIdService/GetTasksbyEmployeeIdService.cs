@@ -65,11 +65,16 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
 
             int totalCount = query.Count();
 
-            // Apply pagination
-            query = query.Skip(offset).Take(pageSize);
+            // Check if pagination is required
+            if (page > 0)
+            {
+                // Apply pagination
+                query = query.Skip(offset).Take(pageSize);
+            }
 
             return new GetTasksByEmployeeIdResponseAPIModel { Tasks = query.ToList(), TotalCount = totalCount };
         }
+
 
     }
 }
