@@ -44,11 +44,6 @@ namespace mentorship_program_tool.Controllers
 
             var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id, pageNumber, pageSize, sortBy);
 
-            if (menteesList == null)
-            {
-                return NotFound();
-            }
-
             return Ok(menteesList);
         }
 
@@ -59,8 +54,6 @@ namespace mentorship_program_tool.Controllers
         public ActionResult<MenteesOfMentorListAPIModel> GetAllMenteesById(int id)
         {
             var menteesList = _menteesOfMentorListService.GetAllMenteesById(id);
-            if (menteesList == null)
-                return NotFound();
             return Ok(menteesList);
         }
 
@@ -94,10 +87,6 @@ namespace mentorship_program_tool.Controllers
         public IActionResult GetDetailsById(int id)
         {
             var details = _getMenteeDetailsByIdService.GetDetailsById(id);
-            if (details == null)
-            {
-                return NotFound();
-            }
             return Ok(details);
         }
     }

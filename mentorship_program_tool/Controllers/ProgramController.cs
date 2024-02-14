@@ -88,12 +88,23 @@ namespace mentorship_program_tool.Controllers
         public IActionResult GetProgramsById(int id)
         {
             var program = _programService.GetProgramById(id);
-            if (program == null)
+            return Ok(program);
+        }
+
+        /// <summary>
+        /// To get details for pair report
+        /// </summary>
+        [HttpGet("pair-details")]
+        public IActionResult GetPairDetailsById(int id)
+        {
+            var pairDetails = _programService.GetPairDetailsById(id); // Call GetPairDetailsById from IPairService
+            if (pairDetails == null)
             {
                 return NotFound();
             }
-            return Ok(program);
+            return Ok(pairDetails);
         }
+
 
         /// <summary>
         /// To create a new program

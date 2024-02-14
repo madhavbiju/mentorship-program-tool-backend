@@ -1,4 +1,6 @@
-﻿using mentorship_program_tool.Models.EntityModel;
+﻿using mentorship_program_tool.Data;
+using mentorship_program_tool.Models.ApiModel;
+using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
 using System.Collections.Generic;
 
@@ -7,10 +9,12 @@ namespace mentorship_program_tool.Services.EmployeeService
     public class EmployeeService : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AppDbContext _context;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(IUnitOfWork unitOfWork, AppDbContext context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public IEnumerable<Employee> GetEmployees()
@@ -41,5 +45,8 @@ namespace mentorship_program_tool.Services.EmployeeService
             _unitOfWork.Employee.Delete(employee);
             _unitOfWork.Complete();
         }
+
+        
+
     }
 }
