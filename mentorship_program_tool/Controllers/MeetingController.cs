@@ -107,5 +107,16 @@ namespace mentorship_program_tool.Controllers
 
             return NotFound();
         }
+
+        /// <summary>
+        /// To get the meetings of an Employee Based on the program id.
+        /// </summary>
+        [HttpGet("meetings/programid/{id}")]
+        public IActionResult GetMeetingsByProgramId(int id,  int page, string? sortBy)
+        {
+            var tasks = _meetingService.GetMeetingsByProgramId(id,  page, sortBy);
+            return Ok(tasks);
+
+        }
     }
 }
