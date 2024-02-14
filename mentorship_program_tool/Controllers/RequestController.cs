@@ -1,6 +1,7 @@
 ﻿using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.AdminApprovalRequestService;
+using mentorship_program_tool.Services.GetProgramExtensionService;
 using mentorship_program_tool.Services.MentorRequestService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -14,11 +15,13 @@ namespace mentorship_program_tool.Controllers
     {
         private readonly IAdminApprovalRequestService _adminapprovalrequestService;
         private readonly IMentorRequestService _mentorRequestService;
+        private readonly IProgramExtensionService _service;
 
-        public RequestController(IAdminApprovalRequestService adminapprovalrequestService, IMentorRequestService mentorRequestService)
+        public RequestController(IAdminApprovalRequestService adminapprovalrequestService, IMentorRequestService mentorRequestService, IProgramExtensionService service)
         {
             _adminapprovalrequestService = adminapprovalrequestService;
             _mentorRequestService = mentorRequestService;
+            _service = service;
         }
 
         /// <summary>
@@ -63,6 +66,13 @@ namespace mentorship_program_tool.Controllers
             }
             var pendingRequest = _mentorRequestService.GetPendingRequests(status, pageNumber, pageSize);
             return Ok(pendingRequest);
+        }
+        [HttpGet("allPendingRequests")]
+        public async Task<IActionResult> GetAllProgramExtensions([FromQuery] int status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var response = await _service.GetAllProgramExtensionRequestsAsync(status, pageNumber, pageSize);
+            if (response.Requests == null || !response.Requests.Any()) return Ok(response);
+            return Ok(response);
         }
 
 

@@ -53,6 +53,9 @@ using mentorship_program_tool.Repository.MeetingScheduleReposixtory;
 using mentorship_program_tool.Services.MeetingService;
 using mentorship_program_tool.Services.JwtService;
 using mentorship_program_tool.Services.StatusUpdaterService;
+using mentorship_program_tool.Services.GetProgramExtensionService;
+using mentorship_program_tool.Services.PutProgramDateExtensionService;
+using mentorship_program_tool.Services.PutProgramExtensionService;
 using mentorship_program_tool.Services.MentorsOfMenteesListService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -169,6 +172,9 @@ builder.Services.AddScoped<IEmployeeRoleService, EmployeeRoleService>();
 builder.Services.AddScoped<IMenteesOfMentorListService, MenteesOfMentorListService>();
 builder.Services.AddScoped<IMentorsOfMenteesListService, MentorsOfMenteesListService>();
 
+
+builder.Services.AddScoped<IProgramExtensionService, ProgramExtensionService>();
+builder.Services.AddScoped<IProgramDateExtensionService, ProgramDateExtensionService>();
 
 builder.Services.AddHostedService<ProgramStatusUpdater>();
 
