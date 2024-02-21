@@ -36,8 +36,8 @@ namespace mentorship_program_tool.Services.GetActiveTasks
                                                                      MentorLastName = mentor.LastName,
                                                                      MenteeFirstName = mentee.FirstName,
                                                                      MenteeLastName = mentee.LastName,
-                                                                     StartDate = program.StartDate,
-                                                                     EndDate = program.EndDate,
+                                                                     StartDate = task.StartDate,
+                                                                     EndDate = task.EndDate,
                                                                      TaskName = task.Title,
                                                                      TaskStatus = task.TaskStatus
                                                                  };
