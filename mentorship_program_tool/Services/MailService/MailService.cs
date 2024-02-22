@@ -60,10 +60,20 @@ namespace mentorship_program_tool.Services.MailService
         {
             // Compose email content
             var mailSubject = "New Program Extension Request";
-            var mailBody = $"Dear Admin,\n\nA program extension request has been created for the program \" {programName} \". Please check your admin dashboard for details.";
+            var mailBody = $"Dear Admin,\n\nA program extension request has created for the program \" {programName} \". Please check your admin dashboard for details.";
 
             await SendEmailAsync(adminEmail, mailSubject, mailBody);
 
+        }
+
+        public async Task SendMeetingScheduledEmailAsync(string menteeEmail, string programName, DateTime scheduleDate)
+        {
+            // Compose email content
+            var mailSubject = "New Meeting Scheduled";
+            var mailBody = $"Dear Mentee,\n\nYour mentor has scheduled a meeting for the program \"{programName}\" on {scheduleDate}. Please check your dashboard for more details.";
+
+            // Send email to the mentee
+            await SendEmailAsync(menteeEmail, mailSubject, mailBody);
         }
     }
 }

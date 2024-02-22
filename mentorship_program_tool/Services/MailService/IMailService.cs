@@ -5,5 +5,6 @@
         Task SendEmailAsync(string toEmail, string subject, string body);
         Task SendProgramCreatedEmailAsync(string mentorEmail, string menteeEmail, string ProgramName);
         Task SendProgramExtensionRequestEmailAsync(string adminEmail, string programName);
+        Task SendMeetingScheduledEmailAsync(string menteeEmail, string programName, DateTime scheduleDate);
     }
 }
