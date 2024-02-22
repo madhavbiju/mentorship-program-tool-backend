@@ -75,5 +75,14 @@ namespace mentorship_program_tool.Services.MailService
             // Send email to the mentee
             await SendEmailAsync(menteeEmail, mailSubject, mailBody);
         }
+
+        public async Task SendExtensionApprovalEmailAsync(string mentorEmail, string programName, DateTime endDate)
+        {
+            var mailSubject = "Program Extension Approved";
+            var mailBody = $"Dear Mentor,\n\nThe program extension for \"{programName}\" has been approved until {endDate:MMMM dd, yyyy}. Please check your dashboard for more details.";
+
+            // Send email to the mentor
+            await SendEmailAsync(mentorEmail, mailSubject, mailBody);
+        }
     }
 }

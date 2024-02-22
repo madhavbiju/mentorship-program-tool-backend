@@ -94,6 +94,12 @@ namespace mentorship_program_tool.Services.ProgramService
 
 
             _unitOfWork.Complete();
+
+
+            _notificationService.AddNotification(programDto.MentorID, "Program Extension Request approved", (int)programDto.ModifiedBy);
+
+            var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
+            _mailService.SendExtensionApprovalEmailAsync(mentorEmail, programDto.ProgramName, programDto.EndDate);
         }
 
         public void DeleteProgram(int id)
