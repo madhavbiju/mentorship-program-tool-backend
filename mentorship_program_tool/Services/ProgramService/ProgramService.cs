@@ -69,7 +69,7 @@ namespace mentorship_program_tool.Services.ProgramService
             _notificationService.AddNotification(programDto.MenteeID, "New Pair created", programDto.CreatedBy);
 
 
-            //mail sending code below
+            //send mail
             var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
             var menteeEmail = _unitOfWork.Employee.GetById(programDto.MenteeID)?.EmailId;
 

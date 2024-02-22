@@ -47,14 +47,23 @@ namespace mentorship_program_tool.Services.MailService
         {
             // Compose email content
             var mentorSubject = "New Program Created";
-            var mentorBody = $"Dear Mentor,\n\nA new program {ProgramName} has been created. Please check your mentor dashboard for details.";
+            var mentorBody = $"Dear Mentor,\n\nA new program \" {ProgramName}\" has been created. Please check your mentor dashboard for details.";
 
             var menteeSubject = "New Program Assigned";
-            var menteeBody = $"Dear Mentee,\n\nYou have been assigned to a new program {ProgramName}. Please check your mentee dashboard for details.";
+            var menteeBody = $"Dear Mentee,\n\nYou have been assigned to a new program \"{ProgramName}\". Please check your mentee dashboard for details.";
 
             // Send emails asynchronously
             await SendEmailAsync(mentorEmail, mentorSubject, mentorBody);
             await SendEmailAsync(menteeEmail, menteeSubject, menteeBody);
+        }
+        public async Task SendProgramExtensionRequestEmailAsync(string adminEmail, string programName)
+        {
+            // Compose email content
+            var mailSubject = "New Program Extension Request";
+            var mailBody = $"Dear Admin,\n\nA program extension request has been created for the program \" {programName} \". Please check your admin dashboard for details.";
+
+            await SendEmailAsync(adminEmail, mailSubject, mailBody);
+
         }
     }
 }
