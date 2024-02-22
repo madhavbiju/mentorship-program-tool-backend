@@ -78,8 +78,10 @@ namespace mentorship_program_tool.Services.GetAllProgramService
             int totalCount = programList.Count();
 
             // Apply pagination
-            programList = programList.Skip(offset).Take(pageSize);
-
+            if (page != 0)
+            {
+                programList = programList.Skip(offset).Take(pageSize);
+            }
             return new GetAllProgramsResponseAPIModel
             {
                 Programs = programList.ToList(),
