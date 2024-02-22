@@ -4,6 +4,7 @@ using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.ProgramService;
 using mentorship_program_tool.Services.MailService;
+using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,12 +16,14 @@ namespace mentorship_program_tool.Services.ProgramService
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _context;
         private readonly IMailService _mailService;
+        private readonly INotificationService _notificationService;
 
-        public ProgramService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService)
+        public ProgramService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _context = context;
             _mailService = mailService;
+            _notificationService = notificationService;
         }
 
         public ProgramDetailsResponseAPIModel GetProgram(int status, int pageNumber, int pageSize)
@@ -61,11 +64,14 @@ namespace mentorship_program_tool.Services.ProgramService
             _unitOfWork.Program.Add(programDto);
             _unitOfWork.Complete();
 
-            var mentor = _unitOfWork.Employee.GetById(programDto.MentorID);
-            var mentee = _unitOfWork.Employee.GetById(programDto.MenteeID);
+            //for updating notification table
+            _notificationService.AddNotification(programDto.MentorID, "New Pair created", programDto.CreatedBy);
+            _notificationService.AddNotification(programDto.MenteeID, "New Pair created", programDto.CreatedBy);
 
-            var mentorEmail = mentor.EmailId;
-            var menteeEmail = mentee.EmailId;  //retreiving mail id for sending email
+
+            //mail sending code below
+            var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
+            var menteeEmail = _unitOfWork.Employee.GetById(programDto.MenteeID)?.EmailId;
 
             // Call SendProgramCreatedEmailAsync method on the mailService instance
             _mailService.SendProgramCreatedEmailAsync(mentorEmail, menteeEmail, programDto.ProgramName);

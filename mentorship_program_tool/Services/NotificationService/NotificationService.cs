@@ -1,26 +1,29 @@
 ﻿using mentorship_program_tool.Data;
+using mentorship_program_tool.Models.EntityModel;
 
 namespace mentorship_program_tool.Services.NotificationService
 {
-    public class NotificationService
+    public class NotificationService : INotificationService
     {
         private readonly AppDbContext _context;
+
         public NotificationService(AppDbContext context)
         {
             _context = context;
         }
-        // Store the notification in the database for the mentor
-        _context.Notifications.Add(mentorNotification);
 
-        var menteeNotification = new Notifications
+        public void AddNotification(int employeeId, string notificationMessage, int createdBy)
         {
-            NotifiedEmployeeID = menteeId, // Assign mentee ID
-            Notification = "Pair creation notification", // Provide the notification message
-            CreatedBy = 4, // Provide the user who triggered the notification if available
-            CreatedTime = DateTime.Now // Provide the creation time
-        };
+            var notification = new Notifications
+            {
+                NotifiedEmployeeID = employeeId,
+                Notification = notificationMessage,
+                CreatedBy = createdBy,
+                CreatedTime = DateTime.Now
+            };
 
-        // Store the notification in the database for the mentee
-        _dbContext.Notifications.Add(menteeNotification);
+            _context.Notifications.Add(notification);
+            _context.SaveChanges();
+        }
     }
 }
