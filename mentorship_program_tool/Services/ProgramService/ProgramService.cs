@@ -3,6 +3,7 @@ using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.ProgramService;
+using mentorship_program_tool.Services.MailService;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,11 +14,13 @@ namespace mentorship_program_tool.Services.ProgramService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _context;
+        private readonly IMailService _mailService;
 
-        public ProgramService(IUnitOfWork unitOfWork, AppDbContext context)
+        public ProgramService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _context = context;
+            _mailService = mailService;
         }
 
         public ProgramDetailsResponseAPIModel GetProgram(int status, int pageNumber, int pageSize)
@@ -57,6 +60,15 @@ namespace mentorship_program_tool.Services.ProgramService
 
             _unitOfWork.Program.Add(programDto);
             _unitOfWork.Complete();
+
+            var mentor = _unitOfWork.Employee.GetById(programDto.MentorID);
+            var mentee = _unitOfWork.Employee.GetById(programDto.MenteeID);
+
+            var mentorEmail = mentor.EmailId;
+            var menteeEmail = mentee.EmailId;  //retreiving mail id for sending email
+
+            // Call SendProgramCreatedEmailAsync method on the mailService instance
+            _mailService.SendProgramCreatedEmailAsync(mentorEmail, menteeEmail, programDto.ProgramName);
         }
 
         public void UpdateProgram(int id, Models.EntityModel.Program programDto)
@@ -107,7 +119,7 @@ namespace mentorship_program_tool.Services.ProgramService
                             EndDate = p.EndDate
                         };
 
-                            
+
 
 
             return query.FirstOrDefault();
