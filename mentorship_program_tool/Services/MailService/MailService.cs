@@ -1,4 +1,5 @@
-﻿using System;
+﻿using mentorship_program_tool.Models.APIModel;
+using System;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -83,6 +84,14 @@ namespace mentorship_program_tool.Services.MailService
 
             // Send email to the mentor
             await SendEmailAsync(mentorEmail, mailSubject, mailBody);
+        }
+        public async Task SendTaskPostedEmailAsync(string menteeEmail, string title, DateTime endDate)
+        {
+            var mailSubject = "New Task Received";
+            var mailBody = $"Dear Mentee,\n\nA new task titled \"{title}\" has been received. The due date for this task is {endDate:MMMM dd, yyyy}. Please check your dashboard for more details.";
+
+            // Send email to the mentee
+            await SendEmailAsync(menteeEmail, mailSubject, mailBody);
         }
     }
 }

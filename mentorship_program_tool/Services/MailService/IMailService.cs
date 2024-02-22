@@ -7,5 +7,6 @@
         Task SendProgramExtensionRequestEmailAsync(string adminEmail, string programName);
         Task SendMeetingScheduledEmailAsync(string menteeEmail, string programName, DateTime scheduleDate);
         Task SendExtensionApprovalEmailAsync(string mentorEmail, string programName, DateTime endDate);
+        Task SendTaskPostedEmailAsync(string menteeEmail, string title, DateTime endDate);
     }
 }
