@@ -63,10 +63,11 @@ namespace mentorship_program_tool.Services.GetActiveTasks
                     break;
             }
             int totalCount = tasksQuery.Count();
-
             // Apply pagination
-            tasksQuery = tasksQuery.Skip(offset).Take(pageSize);
-
+            if (page != 0)
+            {
+                tasksQuery = tasksQuery.Skip(offset).Take(pageSize);
+            }
             return new GetTasksByProgramIdResponseAPIModel { Tasks = tasksQuery.ToList(), TotalCount = totalCount };
         }
     }

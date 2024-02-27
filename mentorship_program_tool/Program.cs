@@ -57,6 +57,7 @@ using mentorship_program_tool.Services.GetProgramExtensionService;
 using mentorship_program_tool.Services.PutProgramDateExtensionService;
 using mentorship_program_tool.Services.PutProgramExtensionService;
 using mentorship_program_tool.Services.MentorsOfMenteesListService;
+using mentorship_program_tool.Services.GetAllMenteesListService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -150,6 +151,7 @@ builder.Services.AddScoped<IGetTasksByProgramIdService, GetTasksByProgramIdServi
 builder.Services.AddScoped<IGetTasksbyEmployeeIdRepository, GetTasksbyEmployeeIdRepository>();
 builder.Services.AddScoped<IGetTasksbyEmployeeIdService, GetTasksByEmployeeIdService>();
 
+builder.Services.AddScoped<IGetAllMenteesListService, GetAllMenteesListService>();
 
 
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
