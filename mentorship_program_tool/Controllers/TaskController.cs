@@ -104,14 +104,39 @@ namespace mentorship_program_tool.Controllers
         }
 
         /// <summary>
+        /// To get the tasks of an Employee Based on the Mentee id and status.
+        /// </summary>
+        [HttpGet("Mentee/{id},{status}")]
+        public IActionResult GetTasksByMenteeId(int id, int status, int page, string? sortBy)
+        {
+            var tasks = _getTasksByEmployeeIdService.GetTasksByMenteeId(id, status, page, sortBy);
+            return Ok(tasks);
+
+        }
+
+        /// <summary>
         /// To get the tasks of an Employee Based on the program id and status.
         /// </summary>
         [HttpGet("Program/{id},{status}")]
-        public IActionResult GetTasksByProgramId(int id, int status, int page)
+        public IActionResult GetTasksByProgramId(int id, int status, int page, string? sortBy)
         {
-            var tasks = _getTasksByProgramIdService.GetTasksByProgramId(id, status, page);
+            var tasks = _getTasksByProgramIdService.GetTasksByProgramId(id, status, page, sortBy);
             return Ok(tasks);
 
+        }
+
+        /// <summary>
+        /// To get details of a particular task
+        /// </summary>
+        [HttpGet("tasks/{id}")]
+        public IActionResult GetTaskById(int id)
+        {
+            var task = _getTasksByProgramIdService.GetTaskById(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return Ok(task);
         }
 
 

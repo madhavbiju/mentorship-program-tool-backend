@@ -5,13 +5,13 @@ using mentorship_program_tool.Services.NotificationService;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
-public class NotificationService : INotificationService
+public class SignalNotificationService : ISignalNotificationService
 {
     private readonly IHubContext<NotificationHub> _hubContext;
     private readonly AppDbContext _dbContext; // Inject the database context
     private readonly IProgramRepository _programRepository;
 
-    public NotificationService(IHubContext<NotificationHub> hubContext, IProgramRepository programRepository, AppDbContext dbContext)
+    public SignalNotificationService(IHubContext<NotificationHub> hubContext, IProgramRepository programRepository, AppDbContext dbContext)
     {
         _hubContext = hubContext;
         _programRepository = programRepository;

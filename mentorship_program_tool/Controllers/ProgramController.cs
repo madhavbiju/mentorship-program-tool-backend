@@ -7,23 +7,27 @@ using NuGet.Protocol;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using mentorship_program_tool.Models.APIModel;
+using mentorship_program_tool.Services.PutProgramExtensionService;
 
 namespace mentorship_program_tool.Controllers
 {
-    
+
 
     [ApiController]
     [Route("api/program")]
-public class ProgramController : ControllerBase
+    public class ProgramController : ControllerBase
     {
         private readonly IProgramService _programService;
         private readonly IGetAllProgramsService _getAllProgramsService;
+        private readonly IProgramDateExtensionService _programDateExtensionService;
 
 
-        public ProgramController(IProgramService programService, IGetAllProgramsService GetAllProgramsService)
+        public ProgramController(IProgramService programService, IGetAllProgramsService GetAllProgramsService, IProgramDateExtensionService programDateExtensionService)
         {
             _programService = programService;
             _getAllProgramsService = GetAllProgramsService;
+            _programDateExtensionService = programDateExtensionService;
         }
 
         /// <summary>
@@ -40,7 +44,9 @@ public class ProgramController : ControllerBase
             }
             var program = _programService.GetProgram(status, pageNumber, pageSize);
             return Ok(program);
-        }
+        } 
+       
+
 
         [HttpGet("All")]
         public IActionResult GetAllPrograms(int page = 1, [FromQuery] int? programStatus = null, [FromQuery] string sortOrder = "programName", [FromQuery] string search = null)
@@ -58,12 +64,22 @@ public class ProgramController : ControllerBase
             }
         }
 
-    [HttpGet("ending-soon")]
+        [HttpGet("ending-soon")]
         public IActionResult GetAllProgramsEndingSoon([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             var programs = _getAllProgramsService.GetAllProgramsEndingSoon(pageNumber, pageSize);
             return Ok(programs);
 
+        }
+
+        [HttpPut("UpdateProgramDate")]
+        public async Task<IActionResult> UpdateProgramDate([FromBody] ProgramDateUpdateAPIModel model)
+        {
+            var result = await _programDateExtensionService.UpdateProgramDateAsync(model);
+            if (result)
+                return Ok(new { message = "Program date updated successfully" });
+            else
+                return NotFound(new { message = "Program not found" });
         }
 
 
@@ -74,12 +90,23 @@ public class ProgramController : ControllerBase
         public IActionResult GetProgramsById(int id)
         {
             var program = _programService.GetProgramById(id);
-            if (program == null)
+            return Ok(program);
+        }
+
+        /// <summary>
+        /// To get details for pair report
+        /// </summary>
+        [HttpGet("pair-details")]
+        public IActionResult GetPairDetailsById(int id)
+        {
+            var pairDetails = _programService.GetPairDetailsById(id); // Call GetPairDetailsById from IPairService
+            if (pairDetails == null)
             {
                 return NotFound();
             }
-            return Ok(program);
+            return Ok(pairDetails);
         }
+
 
         /// <summary>
         /// To create a new program

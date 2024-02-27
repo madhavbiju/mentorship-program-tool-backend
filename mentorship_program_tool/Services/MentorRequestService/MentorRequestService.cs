@@ -3,6 +3,7 @@ using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Repository;
+using mentorship_program_tool.Services.MailService;
 using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
 
@@ -11,14 +12,16 @@ namespace mentorship_program_tool.Services.MentorRequestService
     public class MentorRequestService : IMentorRequestService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ISignalNotificationService _notificationService;
-        private readonly AppDbContext _dbContext;
+        private readonly INotificationService _notificationService;
+        private readonly AppDbContext _context;
+        private readonly IMailService _mailService;
 
-        public MentorRequestService(IUnitOfWork unitOfWork, ISignalNotificationService notificationService, AppDbContext dbContext)
+        public MentorRequestService(IUnitOfWork unitOfWork, INotificationService notificationService, AppDbContext context, IMailService mailService)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;
-            _dbContext = dbContext;
+            _context = context;
+            _mailService = mailService;
         }
 
 
@@ -29,33 +32,48 @@ namespace mentorship_program_tool.Services.MentorRequestService
             _unitOfWork.mentorRequestRepository.Add(request);
             _unitOfWork.Complete();
 
-            if (request != null)
+            //to find the program name
+            var programName = _context.Programs
+                .Where(program => program.ProgramID == mentorRequestAPIModel.ProgramID)
+                .Select(program => program.ProgramName)
+                .FirstOrDefault();
+
+            //to find who is submitting the request
+            var mentorID = _context.Programs
+                .Where(program => program.ProgramID == mentorRequestAPIModel.ProgramID)
+                .Select(program => program.MentorID)
+                .FirstOrDefault();
+
+            //to get all admins
+            var admins = _context.EmployeeRoleMappings
+                      .Where(mapping => mapping.RoleID == 1) // Filter by admin role ID
+                      .Select(mapping => mapping.EmployeeID)
+                      .ToList();
+
+            // Add notification for each admin and updating notification table
+            foreach (var adminId in admins)
             {
-                var adminRoleUsers = _dbContext.EmployeeRoleMappings
-                    .Where(rm => rm.RoleID == 1) // Assuming admin role ID is 1
-                    .Select(rm => rm.EmployeeID)
-                    .ToList();
-
-                // Add notification for each admin user
-                foreach (var adminUserId in adminRoleUsers)
-                {
-                    var notification = new Notifications
-                    {
-                        NotifiedEmployeeID = adminUserId,
-                        Notification = "Extension request notification", // Provide the notification message
-                        CreatedBy = 4, // Assuming ModifiedBy holds mentor ID
-                        CreatedTime = DateTime.Now // Provide the creation time
-                    };
-
-                    _dbContext.Notifications.Add(notification);
-                    _notificationService.SendExtensionRequestNotificationAsync(adminUserId.ToString()).Wait(); // Wait for the notification to be sent
-                }
-
-                // Save changes to the database
-                _dbContext.SaveChanges();
+                _notificationService.AddNotification(adminId, "New Program Extension", mentorID);
             }
 
+            //send mail
+            // Initialize a list to store admins' email IDs
+            var adminEmails = new List<string>();
 
+            // Loop through admin IDs to get their email IDs
+            foreach (var adminId in admins)
+            {
+                var admin = _unitOfWork.Employee.GetById(adminId);
+                if (admin != null)
+                {
+                    adminEmails.Add(admin.EmailId);
+                }
+            }
+
+            foreach (var adminEmail in adminEmails)
+            {
+                _mailService.SendProgramExtensionRequestEmailAsync(adminEmail, programName);
+            }
         }
 
         private ProgramExtension MapToProgramExtension(MentorRequestAPIModel mentorRequestAPIModel)

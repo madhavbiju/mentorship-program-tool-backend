@@ -51,6 +51,7 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
                                select new GetAllMenteesOfMentorAPIModel
                                {
                                    EmployeeID = p.MenteeID,
+                                   ProgramID = p.ProgramID,
                                    FirstName = mentee.FirstName,
                                    LastName = mentee.LastName,
                                    ProgramName = p.ProgramName,

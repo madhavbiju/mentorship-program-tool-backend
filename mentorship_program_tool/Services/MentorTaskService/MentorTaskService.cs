@@ -1,6 +1,7 @@
 ﻿using mentorship_program_tool.Data;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
+using mentorship_program_tool.Services.MailService;
 using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,14 +14,18 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
     public class MentorTaskService : IMentorTaskService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AppDbContext _dbContext;
-        private readonly ISignalNotificationService _notificationService;
+        private readonly IMailService _mailService;
+        private readonly ISignalNotificationService _signalnotificationService;
+        private readonly INotificationService _notificationService;
+        private readonly AppDbContext _context;
 
-        public MentorTaskService(IUnitOfWork unitOfWork, AppDbContext dbContext, ISignalNotificationService notificationService)
+        public MentorTaskService(IUnitOfWork unitOfWork, INotificationService notificationService, IMailService mailService, ISignalNotificationService signalnotificationService, AppDbContext context)
         {
             _unitOfWork = unitOfWork;
-            _dbContext = dbContext;
+            _mailService = mailService;
+            _signalnotificationService = signalnotificationService;
             _notificationService = notificationService;
+            _context = context;
         }
 
         public void CreateTask(MentorTaskAPIModel mentortaskapimodel)
@@ -29,30 +34,20 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             _unitOfWork.mentorTaskRepository.Add(request);
             _unitOfWork.Complete();
 
-            // Retrieve corresponding program's mentee id
-            var program = _dbContext.Programs.FirstOrDefault(p => p.ProgramID == mentortaskapimodel.ProgramID);
-            if (program != null)
-            {
-                var menteeId = program.MenteeID;
+            //to find mentee
+            var menteeID = _context.Programs
+                .Where(program => program.ProgramID == mentortaskapimodel.ProgramID)
+                .Select(program => program.MenteeID)
+                .FirstOrDefault();
 
-                var taskNotification = new Notifications
-                {
-                    NotifiedEmployeeID = menteeId, // Assign mentee ID
-                    Notification = "New task posted notification", // Provide the notification message
-                    CreatedBy = mentortaskapimodel.CreatedBy, // Provide the user who triggered the notification if available
-                    CreatedTime = DateTime.Now // Provide the creation time
-                };
+            _notificationService.AddNotification(menteeID, "New Task is Posted", mentortaskapimodel.CreatedBy);
 
-                // Store the notification in the database for the mentee
-                _dbContext.Notifications.Add(taskNotification);
-                _dbContext.SaveChanges(); // Save changes to the database
+            var menteeEmail = _unitOfWork.Employee.GetById(menteeID)?.EmailId;
 
-                // Send notification
-                _notificationService.SendTaskPostedNotificationAsync(menteeId.ToString()).Wait();
-            }
+            // Call SendProgramCreatedEmailAsync method on the mailService instance
+            _mailService.SendTaskPostedEmailAsync(menteeEmail, mentortaskapimodel.Title, mentortaskapimodel.EndDate);
+
         }
-
-
         private Models.EntityModel.Task MapToProgramExtension(MentorTaskAPIModel mentortaskapimodel)
         {
             return new Models.EntityModel.Task
@@ -108,7 +103,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             if (existingEndDate != taskenddateupdationmodel.EndDate)
             {
                 // Get the program associated with the task
-                var program = _dbContext.Programs.FirstOrDefault(p => p.ProgramID == existingTask.ProgramID);
+                var program = _context.Programs.FirstOrDefault(p => p.ProgramID == existingTask.ProgramID);
 
                 // Create a new notification entry for the end date update
                 var notification = new Notifications
@@ -120,11 +115,11 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
                 };
 
                 // Add notification to the database
-                _dbContext.Notifications.Add(notification);
-                _dbContext.SaveChanges();
+                _context.Notifications.Add(notification);
+                _context.SaveChanges();
 
                 // Trigger notification service to send the notification
-                _notificationService.SendTaskDueDateUpdatedNotificationAsync(program.MenteeID.ToString()).Wait();
+                _signalnotificationService.SendTaskDueDateUpdatedNotificationAsync(program.MenteeID.ToString()).Wait();
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace mentorship_program_tool.Services.NotificationService
 {
-    public interface INotificationService
+    public interface ISignalNotificationService
     {
         Task SendPairCreationNotificationAsync(string mentorUser, string menteeUser);
         /*Task SendMeetingScheduledNotificationAsync(string mentorUser, string menteeUser, DateTime meetingDateTime);*/

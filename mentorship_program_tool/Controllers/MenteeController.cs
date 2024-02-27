@@ -1,13 +1,17 @@
-﻿using mentorship_program_tool.Models.APIModel;
+﻿using mentorship_program_tool.Models.ApiModel;
+using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Services;
 using mentorship_program_tool.Services.GetAllMenteesOfMentorService;
 using mentorship_program_tool.Services.GetMenteeDetailsById;
 using mentorship_program_tool.Services.MenteesOfMentorListService;
+using mentorship_program_tool.Services.MentorsOfMenteesListService;
+
 using mentorship_program_tool.Services.MentorDashboardCountService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
 using static Azure.Core.HttpHeader;
+using mentorship_program_tool.Services.GetAllMenteesListService;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -21,14 +25,19 @@ namespace mentorship_program_tool.Controllers
         private readonly IGetMenteeDetailsByIdService _getMenteeDetailsByIdService;
         private readonly IMentorDashboardCountService _mentorDashboardCountService;
         private readonly IMenteesOfMentorListService _menteesOfMentorListService;
+        private readonly IMentorsOfMenteesListService _mentorsOfMenteesListService;
+        private readonly IGetAllMenteesListService _getAllMenteesListService;
 
-        public MenteeController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService, IMenteesOfMentorListService menteesOfMentorListService)
+
+        public MenteeController(IGetAllMenteesListService getAllMenteesListService, IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService, IMenteesOfMentorListService menteesOfMentorListService, IMentorsOfMenteesListService mentorsOfMenteesListService)
         {
             _menteesOfMentorListService = menteesOfMentorListService;
             _getAllMenteesOfMentorService = getAllMenteesOfMentorService;
             _getAllActiveUnpairedMenteesService = GetAllActiveUnpairedMenteesService;
             _getMenteeDetailsByIdService = GetMenteeDetailsByIdService;
             _mentorDashboardCountService = mentorDashboardCountService;
+            _mentorsOfMenteesListService = mentorsOfMenteesListService;
+            _getAllMenteesListService= getAllMenteesListService;
         }
 
         /// <summary>
@@ -44,11 +53,6 @@ namespace mentorship_program_tool.Controllers
 
             var menteesList = _getAllMenteesOfMentorService.GetAllMenteesById(id, pageNumber, pageSize, sortBy);
 
-            if (menteesList == null)
-            {
-                return NotFound();
-            }
-
             return Ok(menteesList);
         }
 
@@ -59,9 +63,27 @@ namespace mentorship_program_tool.Controllers
         public ActionResult<MenteesOfMentorListAPIModel> GetAllMenteesById(int id)
         {
             var menteesList = _menteesOfMentorListService.GetAllMenteesById(id);
-            if (menteesList == null)
-                return NotFound();
             return Ok(menteesList);
+        }
+
+        /// <summary>
+        /// To get list of all mentees
+        /// </summary>
+        [HttpGet("all/list/")]
+        public ActionResult<MenteesOfMentorListAPIModel> GetAllMenteesList()
+        {
+            var menteesList = _getAllMenteesListService.GetAllMenteesList();
+            return Ok(menteesList);
+        }
+
+        /// <summary>
+        /// To get list of Mentors of Mentee
+        /// </summary>
+        [HttpGet("mentees/list/{id}")]
+        public ActionResult<MentorsOfMenteesListAPImodel> GetAllMentorsById(int id)
+        {
+            var mentorsList = _mentorsOfMenteesListService.GetAllMentorsById(id);
+            return Ok(mentorsList);
         }
 
 
@@ -94,10 +116,6 @@ namespace mentorship_program_tool.Controllers
         public IActionResult GetDetailsById(int id)
         {
             var details = _getMenteeDetailsByIdService.GetDetailsById(id);
-            if (details == null)
-            {
-                return NotFound();
-            }
             return Ok(details);
         }
     }

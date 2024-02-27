@@ -1,20 +1,22 @@
 ﻿using mentorship_program_tool.Data;
+using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.Services.ProgramService;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace mentorship_program_tool.Services.ProgramService
 {
     public class ProgramService : IProgramService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
         private readonly AppDbContext _dbContext;
 
-        public ProgramService(IUnitOfWork unitOfWork, INotificationService notificationService)
+        public ProgramService(IUnitOfWork unitOfWork, ISignalNotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;
@@ -96,6 +98,28 @@ namespace mentorship_program_tool.Services.ProgramService
 
             _unitOfWork.Program.Delete(program);
             _unitOfWork.Complete();
+        }
+
+        public GetPairByProgramIdAPIModel GetPairDetailsById(int id)
+        {
+            var query = from p in _dbContext.Programs
+                        join m in _dbContext.Employees on p.MentorID equals m.EmployeeID
+                        join mm in _dbContext.Employees on p.MenteeID equals mm.EmployeeID
+                        join s in _dbContext.Statuses on p.ProgramStatus equals s.StatusID
+                        where p.ProgramID == id
+                        select new GetPairByProgramIdAPIModel
+                        {
+                            MentorName = m.FirstName,
+                            MenteeName = mm.FirstName,
+                            ProgramName = p.ProgramName,
+                            ProgramStatus = s.StatusValue,
+                            EndDate = p.EndDate
+                        };
+
+
+
+
+            return query.FirstOrDefault();
         }
 
 
