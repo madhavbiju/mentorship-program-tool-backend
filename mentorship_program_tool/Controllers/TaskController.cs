@@ -125,6 +125,20 @@ namespace mentorship_program_tool.Controllers
 
         }
 
+        /// <summary>
+        /// To get details of a particular task
+        /// </summary>
+        [HttpGet("tasks/{id}")]
+        public IActionResult GetTaskById(int id)
+        {
+            var task = _getTasksByProgramIdService.GetTaskById(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return Ok(task);
+        }
+
 
     }
 }
