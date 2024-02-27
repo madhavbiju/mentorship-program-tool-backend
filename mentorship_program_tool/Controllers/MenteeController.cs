@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
 using static Azure.Core.HttpHeader;
+using mentorship_program_tool.Services.GetAllMenteesListService;
 
 namespace mentorship_program_tool.Controllers
 {
@@ -25,9 +26,10 @@ namespace mentorship_program_tool.Controllers
         private readonly IMentorDashboardCountService _mentorDashboardCountService;
         private readonly IMenteesOfMentorListService _menteesOfMentorListService;
         private readonly IMentorsOfMenteesListService _mentorsOfMenteesListService;
+        private readonly IGetAllMenteesListService _getAllMenteesListService;
 
 
-        public MenteeController(IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService, IMenteesOfMentorListService menteesOfMentorListService, IMentorsOfMenteesListService mentorsOfMenteesListService)
+        public MenteeController(IGetAllMenteesListService getAllMenteesListService, IGetAllMenteesOfMentorService getAllMenteesOfMentorService, IGetAllActiveUnpairedMenteesService GetAllActiveUnpairedMenteesService, IGetMenteeDetailsByIdService GetMenteeDetailsByIdService, IMentorDashboardCountService mentorDashboardCountService, IMenteesOfMentorListService menteesOfMentorListService, IMentorsOfMenteesListService mentorsOfMenteesListService)
         {
             _menteesOfMentorListService = menteesOfMentorListService;
             _getAllMenteesOfMentorService = getAllMenteesOfMentorService;
@@ -35,6 +37,7 @@ namespace mentorship_program_tool.Controllers
             _getMenteeDetailsByIdService = GetMenteeDetailsByIdService;
             _mentorDashboardCountService = mentorDashboardCountService;
             _mentorsOfMenteesListService = mentorsOfMenteesListService;
+            _getAllMenteesListService= getAllMenteesListService;
         }
 
         /// <summary>
@@ -60,6 +63,16 @@ namespace mentorship_program_tool.Controllers
         public ActionResult<MenteesOfMentorListAPIModel> GetAllMenteesById(int id)
         {
             var menteesList = _menteesOfMentorListService.GetAllMenteesById(id);
+            return Ok(menteesList);
+        }
+
+        /// <summary>
+        /// To get list of all mentees
+        /// </summary>
+        [HttpGet("all/list/")]
+        public ActionResult<MenteesOfMentorListAPIModel> GetAllMenteesList()
+        {
+            var menteesList = _getAllMenteesListService.GetAllMenteesList();
             return Ok(menteesList);
         }
 

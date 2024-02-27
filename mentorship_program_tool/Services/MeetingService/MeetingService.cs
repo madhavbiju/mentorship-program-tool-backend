@@ -70,7 +70,11 @@ namespace mentorship_program_tool.Services.MeetingService
             int totalCount = query.Count();
 
             // Apply pagination
-            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            if (pageNumber != 0)
+            {
+                // Apply pagination
+                query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            }
 
             return new GetAllMeetingsResponseAPIModel { Meetings = query.ToList(), TotalCount = totalCount };
         }
@@ -173,14 +177,17 @@ namespace mentorship_program_tool.Services.MeetingService
                     break;
                 // Add more cases for other sorting criteria if needed
                 default:
-                    meetingsQuery = meetingsQuery.OrderBy(meeting => meeting.Title); // Default sorting by Title
+                    meetingsQuery = meetingsQuery.OrderBy(meeting => meeting.ScheduleDate); // Default sorting by Title
                     break;
             }
 
             int totalCount = meetingsQuery.Count();
 
             // Apply pagination
-            meetingsQuery = meetingsQuery.Skip(offset).Take(pageSize);
+            if (page != 0)
+            {
+                meetingsQuery = meetingsQuery.Skip(offset).Take(pageSize);
+            }
 
             return new GetMeetingsByProgramIdResponseAPIModel { Meetings = meetingsQuery.ToList(), TotalCount = totalCount };
         }
