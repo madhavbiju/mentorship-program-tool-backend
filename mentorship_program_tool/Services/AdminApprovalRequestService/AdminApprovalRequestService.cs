@@ -11,9 +11,9 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _dbContext;
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
 
-        public AdminApprovalRequestService(IUnitOfWork unitOfWork, AppDbContext dbContext, INotificationService notificationService)
+        public AdminApprovalRequestService(IUnitOfWork unitOfWork, AppDbContext dbContext, ISignalNotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _dbContext = dbContext;

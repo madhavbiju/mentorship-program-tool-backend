@@ -11,10 +11,10 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
     public class MenteeTaskSubmissionService : IMenteeTaskSubmissionService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
         private readonly AppDbContext _dbContext;
 
-        public MenteeTaskSubmissionService(IUnitOfWork unitOfWork, INotificationService notificationService, AppDbContext dbContext)
+        public MenteeTaskSubmissionService(IUnitOfWork unitOfWork, ISignalNotificationService notificationService, AppDbContext dbContext)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;

@@ -11,10 +11,10 @@ namespace mentorship_program_tool.Services.MentorRequestService
     public class MentorRequestService : IMentorRequestService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
         private readonly AppDbContext _dbContext;
 
-        public MentorRequestService(IUnitOfWork unitOfWork, INotificationService notificationService, AppDbContext dbContext)
+        public MentorRequestService(IUnitOfWork unitOfWork, ISignalNotificationService notificationService, AppDbContext dbContext)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;

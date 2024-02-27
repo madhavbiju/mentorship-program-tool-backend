@@ -14,9 +14,9 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _dbContext;
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
 
-        public MentorTaskService(IUnitOfWork unitOfWork, AppDbContext dbContext, INotificationService notificationService)
+        public MentorTaskService(IUnitOfWork unitOfWork, AppDbContext dbContext, ISignalNotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _dbContext = dbContext;

@@ -7,9 +7,9 @@ namespace mentorship_program_tool.Controllers
     [Route("api/notification")]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
 
-        public NotificationController(INotificationService notificationService)
+        public NotificationController(ISignalNotificationService notificationService)
         {
             _notificationService = notificationService;
         }
