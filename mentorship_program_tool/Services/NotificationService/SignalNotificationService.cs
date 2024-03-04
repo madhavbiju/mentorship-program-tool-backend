@@ -27,7 +27,7 @@ public class SignalNotificationService : ISignalNotificationService
         var mentorNotification = new Notifications
         {
             NotifiedEmployeeID = mentorId, // Assign mentor ID
-            Notification = "Pair creation notification", // Provide the notification message
+            Notification = "New Pair created", // Provide the notification message
             CreatedBy = 4, // Provide the user who triggered the notification if available
             CreatedTime = DateTime.Now // Provide the creation time
         };
@@ -38,7 +38,7 @@ public class SignalNotificationService : ISignalNotificationService
         var menteeNotification = new Notifications
         {
             NotifiedEmployeeID = menteeId, // Assign mentee ID
-            Notification = "Pair creation notification", // Provide the notification message
+            Notification = " New Pair created", // Provide the notification message
             CreatedBy = 4, // Provide the user who triggered the notification if available
             CreatedTime = DateTime.Now // Provide the creation time
         };
@@ -50,7 +50,7 @@ public class SignalNotificationService : ISignalNotificationService
         await _dbContext.SaveChangesAsync();
 
         // Send pair creation notification using SignalR
-        await _hubContext.Clients.All.SendAsync("PairCreated", mentorUser, menteeUser);
+        await _hubContext.Clients.All.SendAsync("PairCreated", "New Pair Created", mentorUser, menteeUser);
     }
 
 
@@ -61,9 +61,9 @@ public class SignalNotificationService : ISignalNotificationService
     }*/
 
 
-    public async System.Threading.Tasks.Task SendExtensionRequestNotificationAsync(string adminUser)
+    public async System.Threading.Tasks.Task SendExtensionRequestNotificationAsync(string adminUser, string mentorID, string mentorName)
     {
-        await _hubContext.Clients.User(adminUser).SendAsync("ExtensionRequestNotification", adminUser);
+        await _hubContext.Clients.All.SendAsync("ExtensionRequestNotification", "A Program extension request raised", adminUser, mentorID, mentorName);
     }
 
     public async System.Threading.Tasks.Task SendExtensionApprovalNotificationAsync(string mentorUser)

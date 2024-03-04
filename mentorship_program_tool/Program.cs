@@ -220,6 +220,8 @@ var app = builder.Build();
 app.UseTokenDecodingMiddleware();
 app.UseCors();
 app.UseRouting();
+app.UseAuthorization();
+
 
 app.UseEndpoints(endpoints =>
 {
@@ -236,7 +238,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
 
 app.MapControllers();
 
