@@ -63,7 +63,7 @@ public class SignalNotificationService : ISignalNotificationService
 
     public async System.Threading.Tasks.Task SendExtensionRequestNotificationAsync(string adminUser, string mentorID, string mentorName)
     {
-        await _hubContext.Clients.All.SendAsync("ExtensionRequestNotification", "A Program extension request raised", adminUser, mentorID, mentorName);
+        await _hubContext.Clients.All.SendAsync("ExtensionRequestNotification", $"A Program extension request raised by {mentorName}", adminUser, mentorID, mentorName);
     }
 
     public async System.Threading.Tasks.Task SendExtensionApprovalNotificationAsync(string mentorUser)
