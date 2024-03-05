@@ -84,6 +84,10 @@ namespace mentorship_program_tool.Services.ProgramService
 
 
             _unitOfWork.Complete();
+
+            string mentorUser = programDto.MentorID.ToString();
+
+            _notificationService.SendExtensionApprovalNotificationAsync(mentorUser).Wait();
         }
 
         public void DeleteProgram(int id)

@@ -55,6 +55,11 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
                 var mentorUserId = program.MentorID;
                 var menteeUserId = program.MenteeID;
 
+                var menteeName = _dbContext.Employees
+                    .Where(p => p.EmployeeID == menteeUserId)
+                    .Select(p => p.FirstName)
+                    .FirstOrDefault();
+
                 var notification = new Notifications
                 {
                     NotifiedEmployeeID = mentorUserId,
@@ -68,7 +73,8 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
                 _dbContext.SaveChanges();
 
                 // Trigger notification service to send the notification
-                _notificationService.SendTaskSubmittedNotificationAsync(mentorUserId.ToString()).Wait();
+                _notificationService.SendTaskSubmittedNotificationAsync(mentorUserId.ToString(), menteeName).Wait();
+
             }
             catch (Exception ex)
             {

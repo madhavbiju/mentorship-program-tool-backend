@@ -19,14 +19,16 @@ namespace mentorship_program_tool.Services.MeetingService
         private readonly AppDbContext _context;
         private readonly IMailService _mailService;
         private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _signalnotificationService;
 
-        public MeetingService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService, INotificationService notificationService)
+        public MeetingService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService, INotificationService notificationService, ISignalNotificationService signalnotificationService)
         {
 
             _unitOfWork = unitOfWork;
             _context = context;
             _mailService = mailService;
             _notificationService = notificationService;
+            _signalnotificationService = signalnotificationService;
         }
 
         public IEnumerable<MeetingSchedule> GetMeetings()
@@ -221,6 +223,8 @@ namespace mentorship_program_tool.Services.MeetingService
 
             var menteeEmail = _unitOfWork.Employee.GetById(menteeID)?.EmailId;
             _mailService.SendMeetingScheduledEmailAsync(menteeEmail, programName, meeting.ScheduleDate);
+
+            _signalnotificationService.SendMeetingScheduledNotificationAsync(menteeID.ToString(), meeting.ScheduleDate).Wait();
 
         }
 

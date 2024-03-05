@@ -47,6 +47,9 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             // Call SendProgramCreatedEmailAsync method on the mailService instance
             _mailService.SendTaskPostedEmailAsync(menteeEmail, mentortaskapimodel.Title, mentortaskapimodel.EndDate);
 
+            string menteeUser = menteeID.ToString();
+            _signalnotificationService.SendTaskPostedNotificationAsync(menteeUser).Wait();
+
         }
         private Models.EntityModel.Task MapToProgramExtension(MentorTaskAPIModel mentortaskapimodel)
         {
@@ -119,7 +122,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
                 _context.SaveChanges();
 
                 // Trigger notification service to send the notification
-                _signalnotificationService.SendTaskDueDateUpdatedNotificationAsync(program.MenteeID.ToString()).Wait();
+                _signalnotificationService.SendTaskDueDateUpdatedNotificationAsync(program.MenteeID.ToString(), existingTask.Title).Wait();
             }
         }
 

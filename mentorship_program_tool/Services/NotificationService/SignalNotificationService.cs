@@ -55,10 +55,10 @@ public class SignalNotificationService : ISignalNotificationService
 
 
 
-    /*public async Task SendMeetingScheduledNotificationAsync(string mentorUser, string menteeUser, DateTime meetingDateTime)
+    public async System.Threading.Tasks.Task SendMeetingScheduledNotificationAsync(string menteeUser, DateTime meetingDateTime)
     {
-        await _hubContext.Clients.All.SendAsync("MeetingScheduledNotification", mentorUser, menteeUser, meetingDateTime);
-    }*/
+        await _hubContext.Clients.All.SendAsync("MeetingScheduledNotification", $"New meeting is scheduled by mentor on {meetingDateTime}", menteeUser);
+    }
 
 
     public async System.Threading.Tasks.Task SendExtensionRequestNotificationAsync(string adminUser, string mentorID, string mentorName)
@@ -68,20 +68,22 @@ public class SignalNotificationService : ISignalNotificationService
 
     public async System.Threading.Tasks.Task SendExtensionApprovalNotificationAsync(string mentorUser)
     {
-        await _hubContext.Clients.User(mentorUser).SendAsync("ExtensionApprovalNotification", mentorUser);
+        await _hubContext.Clients.All.SendAsync("ExtensionApprovalNotification", "Your program extension request has been approved.", mentorUser);
     }
 
     public async System.Threading.Tasks.Task SendTaskPostedNotificationAsync(string menteeUser)
     {
-        await _hubContext.Clients.User(menteeUser).SendAsync("TaskPostedNotification", menteeUser);
-    }
-    public async System.Threading.Tasks.Task SendTaskSubmittedNotificationAsync(string mentorUser)
-    {
-        await _hubContext.Clients.User(mentorUser).SendAsync("TaskSubmittedNotification", mentorUser);
+        await _hubContext.Clients.All.SendAsync("TaskPostedNotification", "New Task is Assigned to You", menteeUser);
     }
 
-    public async System.Threading.Tasks.Task SendTaskDueDateUpdatedNotificationAsync(string menteeUser)
+
+    public async System.Threading.Tasks.Task SendTaskSubmittedNotificationAsync(string mentorUser, string menteeName)
     {
-        await _hubContext.Clients.User(menteeUser).SendAsync("TaskDueDateUpdatedNotification", menteeUser);
+        await _hubContext.Clients.User(mentorUser).SendAsync("TaskSubmittedNotification", $"Task assigned is submitted by Your mentee {menteeName}", mentorUser);
+    }
+
+    public async System.Threading.Tasks.Task SendTaskDueDateUpdatedNotificationAsync(string menteeUser, string taskName)
+    {
+        await _hubContext.Clients.User(menteeUser).SendAsync("TaskDueDateUpdatedNotification", $"Task {taskName} due date is extented", menteeUser);
     }
 }
