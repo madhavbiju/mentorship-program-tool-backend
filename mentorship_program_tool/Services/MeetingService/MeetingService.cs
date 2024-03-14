@@ -2,6 +2,8 @@
 using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
+using mentorship_program_tool.Services.MailService;
+using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,12 +17,16 @@ namespace mentorship_program_tool.Services.MeetingService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly AppDbContext _context;
+        private readonly IMailService _mailService;
+        private readonly INotificationService _notificationService;
 
-        public MeetingService(IUnitOfWork unitOfWork, AppDbContext context)
+        public MeetingService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService, INotificationService notificationService)
         {
 
             _unitOfWork = unitOfWork;
             _context = context;
+            _mailService = mailService;
+            _notificationService = notificationService;
         }
 
         public IEnumerable<MeetingSchedule> GetMeetings()
@@ -251,6 +257,25 @@ namespace mentorship_program_tool.Services.MeetingService
         {
             _unitOfWork.MeetingSchedule.Add(meeting);
             _unitOfWork.Complete();
+
+            //to find the mentee 
+            var menteeID = _context.Programs
+                .Where(program => program.ProgramID == meeting.ProgramID)
+                .Select(program => program.MenteeID)
+                .FirstOrDefault();
+
+            //to find the program name
+            var programName = _context.Programs
+                .Where(program => program.ProgramID == meeting.ProgramID)
+                .Select(program => program.ProgramName)
+                .FirstOrDefault();
+
+            //for updating notification table
+            _notificationService.AddNotification(menteeID, "New meeting Scheduled", meeting.CreatedBy);
+
+            var menteeEmail = _unitOfWork.Employee.GetById(menteeID)?.EmailId;
+            _mailService.SendMeetingScheduledEmailAsync(menteeEmail, programName, meeting.ScheduleDate);
+
         }
 
         public void DeleteMeeting(int id)

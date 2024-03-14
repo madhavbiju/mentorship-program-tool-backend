@@ -57,6 +57,8 @@ using mentorship_program_tool.Services.GetProgramExtensionService;
 using mentorship_program_tool.Services.PutProgramDateExtensionService;
 using mentorship_program_tool.Services.PutProgramExtensionService;
 using mentorship_program_tool.Services.MentorsOfMenteesListService;
+using mentorship_program_tool.Services.MailService;
+using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.Services.GetAllMenteesListService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -177,6 +179,10 @@ builder.Services.AddScoped<IMentorsOfMenteesListService, MentorsOfMenteesListSer
 
 builder.Services.AddScoped<IProgramExtensionService, ProgramExtensionService>();
 builder.Services.AddScoped<IProgramDateExtensionService, ProgramDateExtensionService>();
+
+builder.Services.AddScoped<IMailService, MailService>();
+
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddHostedService<ProgramStatusUpdater>();
 
