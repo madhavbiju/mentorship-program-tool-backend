@@ -6,6 +6,7 @@ namespace mentorship_program_tool.Models.EntityModel
     {
 
     [Key]
+
     public int MeetingID { get; set; }
 
     public int ProgramID { get; set; }
