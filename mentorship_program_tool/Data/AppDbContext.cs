@@ -6,7 +6,6 @@ namespace mentorship_program_tool.Data
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
         public DbSet<Role> Roles { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<ReportType> ReportTypes { get; set; }
