@@ -192,6 +192,60 @@ namespace mentorship_program_tool.Services.MeetingService
             return new GetMeetingsByProgramIdResponseAPIModel { Meetings = meetingsQuery.ToList(), TotalCount = totalCount };
         }
 
+        public GetMeetingsByEmployeeIdResponseApiModel GetMeetingsByEmployeeId(int employeeId, int page, string sortBy)
+        {
+            int pageSize = 5;
+            int offset = (page - 1) * pageSize;
+
+          IQueryable<GetMeetingsByEmployeeIdApiModel> meetingsQuery = 
+                                                                        from meeting in _context.MeetingSchedules
+                                                                        join program in _context.Programs on meeting.ProgramID equals program.ProgramID
+                                                                        join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
+                                                                        join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
+                                                                        where mentor.EmployeeID == employeeId || mentee.EmployeeID == employeeId
+                                                                        select new GetMeetingsByEmployeeIdApiModel
+                                                                        {
+                                                                            MeetingID = meeting.MeetingID,
+                                                                            ProgramID = meeting.ProgramID,
+                                                                            Title = meeting.Title,
+                                                                            MenteeFirstName = mentee.FirstName,
+                                                                            MentorFirstName = mentor.FirstName,
+                                                                            StartTime = meeting.StartTime,
+                                                                            ScheduleDate = meeting.ScheduleDate,
+                                                                            MeetingStatus = meeting.MeetingStatus // You need to implement a method to determine meeting status based on StartTime and EndTime
+                                                                        };
+            // Apply sorting
+            switch (sortBy)
+            {
+                case "Title":
+                    meetingsQuery = meetingsQuery.OrderBy(meeting => meeting.Title); // Ascending order by default
+                    break;
+                case "Title_desc":
+                    meetingsQuery = meetingsQuery.OrderByDescending(meeting => meeting.Title); // Descending order for Title
+                    break;
+                case "ScheduleDate":
+                    meetingsQuery = meetingsQuery.OrderBy(meeting => meeting.ScheduleDate); // Ascending order by default
+                    break;
+                case "ScheduleDate_desc":
+                    meetingsQuery = meetingsQuery.OrderByDescending(meeting => meeting.ScheduleDate); // Descending order for ScheduleDate
+                    break;
+                // Add more cases for other sorting criteria if needed
+                default:
+                    meetingsQuery = meetingsQuery.OrderBy(meeting => meeting.ScheduleDate); // Default sorting by Title
+                    break;
+            }
+
+            int totalCount = meetingsQuery.Count();
+
+            // Apply pagination
+            if (page != 0)
+            {
+                meetingsQuery = meetingsQuery.Skip(offset).Take(pageSize);
+            }
+
+            return new GetMeetingsByEmployeeIdResponseApiModel { Meetings = meetingsQuery.ToList(), TotalCount = totalCount };
+        }
+
 
 
         public MeetingSchedule GetMeetingById(int id)

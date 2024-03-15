@@ -8,6 +8,7 @@ using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Drawing.Printing;
 
 namespace mentorship_program_tool.Services.ProgramService
 {
@@ -140,5 +141,47 @@ namespace mentorship_program_tool.Services.ProgramService
         }
 
 
+        public GetProgramsofMentorResponseApiModel GetProgramsofMentor(int id, int pageNumber, int pageSize)
+        {
+            int offset = (pageSize - 1) * pageSize;
+
+            var programList = from program in _context.Programs
+                              join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
+                              join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
+                              where mentor.EmployeeID == id 
+                              select new GetProgramsofMentorApiModel
+                              {
+                                  ProgramID = program.ProgramID,
+                                  ProgramName = program.ProgramName,
+                                  MentorFirstName = mentor.FirstName,
+                                  MentorLastName = mentor.LastName,
+                                  MenteeFirstName = mentee.FirstName,
+                                  MenteeLastName = mentee.LastName,
+                                  EndDate = program.EndDate,
+                                  StartDate = program.StartDate,
+                                  ProgramStatus = program.ProgramStatus
+                              };
+
+
+
+            // Apply sorting
+
+            programList = programList.OrderByDescending(p => p.ProgramName);
+                  
+            int totalCount = programList.Count();
+
+            // Apply pagination
+           /* if (pageSize != 0)
+            {
+                programList = programList.Skip(offset).Take(pageSize);
+            }*/
+            return new GetProgramsofMentorResponseApiModel
+            {
+                Programs = programList.ToList(),
+                TotalCount = totalCount
+            };
+        }
+
+       
     }
 }
