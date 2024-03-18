@@ -13,9 +13,9 @@ namespace mentorship_program_tool.Models.APIModel
 
         public DateTime ModifiedTime { get; set; }
 
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public string? ProgramName { get; set; }
     }

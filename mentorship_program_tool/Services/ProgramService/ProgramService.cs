@@ -93,15 +93,13 @@ namespace mentorship_program_tool.Services.ProgramService
             }
             existingProgram.ModifiedBy = programDto.ModifiedBy;
             existingProgram.ModifiedTime = programDto.ModifiedTime;
-            if (programDto.EndDate.HasValue)
-            {
-                existingProgram.EndDate = programDto.EndDate.Value;
-            }
+
+                existingProgram.EndDate = programDto.EndDate;
+            
             existingProgram.ProgramName = programDto.ProgramName;
-            if (programDto.StartDate.HasValue)
-            {
-                existingProgram.StartDate = programDto.StartDate.Value;
-            }
+           
+                existingProgram.StartDate = programDto.StartDate;
+            
 
             _unitOfWork.Complete();
 
