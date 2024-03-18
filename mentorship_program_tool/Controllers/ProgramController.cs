@@ -44,8 +44,8 @@ namespace mentorship_program_tool.Controllers
             }
             var program = _programService.GetProgram(status, pageNumber, pageSize);
             return Ok(program);
-        } 
-       
+        }
+
 
 
         [HttpGet("All")]
@@ -93,6 +93,24 @@ namespace mentorship_program_tool.Controllers
             return Ok(program);
         }
 
+
+        /// <summary>
+        /// To get details of programs of a mentor
+        /// </summary>
+        /// 
+        [HttpGet("mentor/{id}")]
+
+        public IActionResult GetProgramsofMentor([FromQuery] int pageNumber, [FromQuery] int pageSize, int id)
+        {
+
+            // Validate pageNumber and pageSize
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be greater than 0.");
+            }
+            var program = _programService.GetProgramsofMentor(id, pageNumber, pageSize);
+            return Ok(program);
+        }
         /// <summary>
         /// To get details for pair report
         /// </summary>
@@ -122,7 +140,7 @@ namespace mentorship_program_tool.Controllers
         /// To edit a program
         /// </summary>
         [HttpPut("{id}")]
-        public IActionResult UpdatePrograms(int id, Models.EntityModel.Program program)
+        public IActionResult UpdatePrograms(int id, ProgramAPIModel program)
         {
             if (id != program.ProgramID)
             {

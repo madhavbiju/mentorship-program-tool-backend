@@ -118,5 +118,19 @@ namespace mentorship_program_tool.Controllers
             return Ok(tasks);
 
         }
+        /// <summary>
+        /// to get meetings by employees
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="page"></param>
+        /// <param name="sortBy"></param>
+        /// <returns></returns>
+        [HttpGet("meetings/employeeid/{id}")]
+        public IActionResult GetMeetingsByEmployeeId(int id, int page, string? sortBy)
+        {
+            var tasks = _meetingService.GetMeetingsByEmployeeId(id, page, sortBy);
+            return Ok(tasks);
+
+        }
     }
 }
