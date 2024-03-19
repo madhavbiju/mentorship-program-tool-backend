@@ -10,9 +10,9 @@
         public DateTime NewEndDate { get; set; }
         public string Reason { get; set; }
         public string MenteeName { get; set; }
-        public string MentorName { get; set; } 
+        public string MentorName { get; set; }
         public DateTime CurrentEndDate { get; set; }
-        public int RequestStatusID { get; set; }
+        public int? RequestStatusID { get; set; }
     }
 
 }

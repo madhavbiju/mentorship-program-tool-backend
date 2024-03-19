@@ -2,24 +2,24 @@
 using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
-using mentorship_program_tool.Services.ProgramService;
 using mentorship_program_tool.Services.MailService;
 using mentorship_program_tool.Services.NotificationService;
+using mentorship_program_tool.Services.ProgramService;
 using mentorship_program_tool.UnitOfWork;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Drawing.Printing;
-
 namespace mentorship_program_tool.Services.ProgramService
 {
     public class ProgramService : IProgramService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly AppDbContext _context;
         private readonly IMailService _mailService;
-        private readonly INotificationService _notificationService;
+        private readonly ISignalNotificationService _notificationService;
+        private readonly AppDbContext _context;
 
-        public ProgramService(IUnitOfWork unitOfWork, AppDbContext context, IMailService mailService, INotificationService notificationService)
+        public ProgramService(IUnitOfWork unitOfWork, IMailService mailService, AppDbContext context, ISignalNotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _context = context;
@@ -52,8 +52,6 @@ namespace mentorship_program_tool.Services.ProgramService
             return result;
         }
 
-       
-
 
         public Models.EntityModel.Program GetProgramById(int id)
         {
@@ -67,10 +65,8 @@ namespace mentorship_program_tool.Services.ProgramService
             _unitOfWork.Program.Add(programDto);
             _unitOfWork.Complete();
 
-            //for updating notification table
-            _notificationService.AddNotification(programDto.MentorID, "New Pair created", programDto.CreatedBy);
-            _notificationService.AddNotification(programDto.MenteeID, "New Pair created", programDto.CreatedBy);
-
+            string mentorIdAsString = programDto.MentorID.ToString();
+            string menteeIdAsString = programDto.MenteeID.ToString();
 
             //send mail
             var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
@@ -78,9 +74,11 @@ namespace mentorship_program_tool.Services.ProgramService
 
             // Call SendProgramCreatedEmailAsync method on the mailService instance
             _mailService.SendProgramCreatedEmailAsync(mentorEmail, menteeEmail, programDto.ProgramName);
+            // Trigger pair creation notification after completing the program creation process
+            _notificationService.SendPairCreationNotificationAsync(mentorIdAsString, menteeIdAsString).Wait(); // Wait for the notification to be sent
         }
 
-        public void UpdateProgram(int id, Models.EntityModel.Program programDto)
+        public void UpdateProgram(int id, ProgramAPIModel programDto)
         {
             var existingProgram = _unitOfWork.Program.GetById(id);
 
@@ -89,20 +87,28 @@ namespace mentorship_program_tool.Services.ProgramService
                 // Handle not found scenario
                 return;
             }
-
-            existingProgram.MentorID = programDto.MentorID;
+            if (programDto.MentorID.HasValue)
+            {
+                existingProgram.MentorID = programDto.MentorID.Value;
+            }
             existingProgram.ModifiedBy = programDto.ModifiedBy;
             existingProgram.ModifiedTime = programDto.ModifiedTime;
+
             existingProgram.EndDate = programDto.EndDate;
+
+            existingProgram.ProgramName = programDto.ProgramName;
+
+            existingProgram.StartDate = programDto.StartDate;
+            existingProgram.ProgramStatus = programDto.ProgramStatus;
 
 
             _unitOfWork.Complete();
 
+            /* var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
+             _mailService.SendExtensionApprovalEmailAsync(mentorEmail, programDto.ProgramName, programDto.EndDate);
+             string mentorUser = programDto.MentorID.ToString();
 
-            _notificationService.AddNotification(programDto.MentorID, "Program Extension Request approved", (int)programDto.ModifiedBy);
-
-            var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
-            _mailService.SendExtensionApprovalEmailAsync(mentorEmail, programDto.ProgramName, programDto.EndDate);
+             _notificationService.SendExtensionApprovalNotificationAsync(mentorUser).Wait();*/
         }
 
         public void DeleteProgram(int id)
@@ -118,6 +124,7 @@ namespace mentorship_program_tool.Services.ProgramService
             _unitOfWork.Program.Delete(program);
             _unitOfWork.Complete();
         }
+
         public GetPairByProgramIdAPIModel GetPairDetailsById(int id)
         {
             var query = from p in _context.Programs
@@ -148,7 +155,7 @@ namespace mentorship_program_tool.Services.ProgramService
             var programList = from program in _context.Programs
                               join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
                               join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
-                              where mentor.EmployeeID == id 
+                              where mentor.EmployeeID == id
                               select new GetProgramsofMentorApiModel
                               {
                                   ProgramID = program.ProgramID,
@@ -167,14 +174,14 @@ namespace mentorship_program_tool.Services.ProgramService
             // Apply sorting
 
             programList = programList.OrderByDescending(p => p.ProgramName);
-                  
+
             int totalCount = programList.Count();
 
             // Apply pagination
-           /* if (pageSize != 0)
-            {
-                programList = programList.Skip(offset).Take(pageSize);
-            }*/
+            /* if (pageSize != 0)
+             {
+                 programList = programList.Skip(offset).Take(pageSize);
+             }*/
             return new GetProgramsofMentorResponseApiModel
             {
                 Programs = programList.ToList(),
@@ -182,6 +189,6 @@ namespace mentorship_program_tool.Services.ProgramService
             };
         }
 
-       
+
     }
 }

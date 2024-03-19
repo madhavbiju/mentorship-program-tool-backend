@@ -6,6 +6,7 @@ namespace mentorship_program_tool.Models.EntityModel
     {
         [Key]
         public int NotificationID { get; set; }
+
         public int NotifiedEmployeeID { get; set; }
         public string Notification { get; set; }
         public int CreatedBy { get; set; }

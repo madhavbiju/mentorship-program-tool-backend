@@ -15,13 +15,15 @@ namespace mentorship_program_tool.Services.MentorRequestService
         private readonly INotificationService _notificationService;
         private readonly AppDbContext _context;
         private readonly IMailService _mailService;
+        private readonly ISignalNotificationService _signalnotificationService;
 
-        public MentorRequestService(IUnitOfWork unitOfWork, INotificationService notificationService, AppDbContext context, IMailService mailService)
+        public MentorRequestService(IUnitOfWork unitOfWork, INotificationService notificationService, AppDbContext context, IMailService mailService, ISignalNotificationService signalnotificationService)
         {
             _unitOfWork = unitOfWork;
             _notificationService = notificationService;
             _context = context;
             _mailService = mailService;
+            _signalnotificationService = signalnotificationService;
         }
 
 
@@ -44,6 +46,11 @@ namespace mentorship_program_tool.Services.MentorRequestService
                 .Select(program => program.MentorID)
                 .FirstOrDefault();
 
+            var mentorName = _context.Employees
+                .Where(program => program.EmployeeID == mentorID)
+                .Select(program => program.FirstName)
+                .FirstOrDefault();
+
             //to get all admins
             var admins = _context.EmployeeRoleMappings
                       .Where(mapping => mapping.RoleID == 1) // Filter by admin role ID
@@ -54,6 +61,9 @@ namespace mentorship_program_tool.Services.MentorRequestService
             foreach (var adminId in admins)
             {
                 _notificationService.AddNotification(adminId, "New Program Extension", mentorID);
+                string adminIdAsString = adminId.ToString();
+                string mentorIdAsString = mentorID.ToString();
+                _signalnotificationService.SendExtensionRequestNotificationAsync(adminIdAsString, mentorIdAsString, mentorName).Wait();
             }
 
             //send mail

@@ -17,7 +17,7 @@ namespace mentorship_program_tool.Models.EntityModel
 
         public string Reason { get; set; }
 
-        public int RequestStatusID { get; set; }
+        public int? RequestStatusID { get; set; }
 
 
     }

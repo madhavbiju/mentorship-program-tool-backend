@@ -12,7 +12,7 @@ namespace mentorship_program_tool.Services.ProgramService
         GetPairByProgramIdAPIModel GetPairDetailsById(int id);
         Models.EntityModel.Program GetProgramById(int id);
         void CreateProgram(Models.EntityModel.Program program);
-        void UpdateProgram(int id, Models.EntityModel.Program program);
+        void UpdateProgram(int id, ProgramAPIModel program);
         void DeleteProgram(int id);
     }
 }
