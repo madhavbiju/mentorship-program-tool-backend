@@ -51,9 +51,9 @@ namespace mentorship_program_tool.Controllers
         /// </summary>
         //put task
         [HttpPost("create")]
-        public IActionResult AddTask(MentorTaskAPIModel mentortaskapimodel)
+        public async Task<IActionResult> AddTask(MentorTaskAPIModel mentortaskapimodel)
         {
-            _mentorTaskService.CreateTask(mentortaskapimodel);
+            await _mentorTaskService.CreateTask(mentortaskapimodel);
             return Ok();
         }
 
@@ -129,9 +129,9 @@ namespace mentorship_program_tool.Controllers
         /// To get details of a particular task
         /// </summary>
         [HttpGet("tasks/{id}")]
-        public IActionResult GetTaskById(int id)
+        public async Task<IActionResult> GetTaskById(int id)
         {
-            var task = _getTasksByProgramIdService.GetTaskById(id);
+            var task = await _getTasksByProgramIdService.GetTaskById(id);
             if (task == null)
             {
                 return NotFound();

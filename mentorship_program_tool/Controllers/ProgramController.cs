@@ -34,7 +34,7 @@ namespace mentorship_program_tool.Controllers
         /// To get details of all programs
         /// </summary>
         [HttpGet]
-        public IActionResult GetPrograms([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetPrograms([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
 
             // Validate pageNumber and pageSize
@@ -42,7 +42,7 @@ namespace mentorship_program_tool.Controllers
             {
                 return BadRequest("PageNumber and PageSize must be greater than 0.");
             }
-            var program = _programService.GetProgram(status, pageNumber, pageSize);
+            var program = await _programService.GetProgram(status, pageNumber, pageSize);
             return Ok(program);
         }
 
@@ -87,9 +87,9 @@ namespace mentorship_program_tool.Controllers
         /// To get details of a particular program
         /// </summary>
         [HttpGet("{id}")]
-        public IActionResult GetProgramsById(int id)
+        public async Task<IActionResult> GetProgramsById(int id)
         {
-            var program = _programService.GetProgramById(id);
+            var program = await _programService.GetProgramById(id);
             return Ok(program);
         }
 
@@ -130,9 +130,9 @@ namespace mentorship_program_tool.Controllers
         /// To create a new program
         /// </summary>
         [HttpPost]
-        public IActionResult AddPrograms(Models.EntityModel.Program program)
+        public async Task<IActionResult> AddPrograms(Models.EntityModel.Program program)
         {
-            _programService.CreateProgram(program);
+            await _programService.CreateProgram(program);
             return CreatedAtAction(nameof(GetProgramsById), new { id = program.ProgramID }, program);
         }
 

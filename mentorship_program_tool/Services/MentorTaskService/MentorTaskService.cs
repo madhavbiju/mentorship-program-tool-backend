@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.MentorTaskRepository
 {
@@ -28,10 +29,10 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             _context = context;
         }
 
-        public void CreateTask(MentorTaskAPIModel mentortaskapimodel)
+        public async Task CreateTask(MentorTaskAPIModel mentortaskapimodel)
         {
             var request = MapToProgramExtension(mentortaskapimodel);
-            _unitOfWork.mentorTaskRepository.Add(request);
+            await _unitOfWork.mentorTaskRepository.Add(request);
             _unitOfWork.Complete();
 
             //to find mentee
@@ -42,7 +43,7 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
 
             _notificationService.AddNotification(menteeID, "New Task is Posted", mentortaskapimodel.CreatedBy);
 
-            var menteeEmail = _unitOfWork.Employee.GetById(menteeID)?.EmailId;
+            var menteeEmail = (await _unitOfWork.Employee.GetById(menteeID))?.EmailId;
 
             // Call SendProgramCreatedEmailAsync method on the mailService instance
             _mailService.SendTaskPostedEmailAsync(menteeEmail, mentortaskapimodel.Title, mentortaskapimodel.EndDate);
@@ -69,9 +70,9 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
         }
 
 
-        public void UpdateStatusOfTask(int id, MentorTaskStatusUpdationAPIModel taskstatusupdationmodel)
+        public async void UpdateStatusOfTask(int id, MentorTaskStatusUpdationAPIModel taskstatusupdationmodel)
         {
-            var existingTask = _unitOfWork.mentorTaskRepository.GetById(id);
+            var existingTask = await _unitOfWork.mentorTaskRepository.GetById(id);
 
             if (existingTask == null)
             {
@@ -84,9 +85,9 @@ namespace mentorship_program_tool.Services.MentorTaskRepository
             _unitOfWork.Complete();
         }
 
-        public void UpdateEndDateOfTask(int id, MentorTaskEndDateUpdationModel taskenddateupdationmodel)
+        public async void UpdateEndDateOfTask(int id, MentorTaskEndDateUpdationModel taskenddateupdationmodel)
         {
-            var existingTask = _unitOfWork.mentorTaskRepository.GetById(id);
+            var existingTask = await _unitOfWork.mentorTaskRepository.GetById(id);
 
             if (existingTask == null)
             {

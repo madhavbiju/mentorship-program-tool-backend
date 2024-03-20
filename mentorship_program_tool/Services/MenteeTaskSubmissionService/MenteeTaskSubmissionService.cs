@@ -21,11 +21,11 @@ namespace mentorship_program_tool.Services.MenteeTaskSubmissionService
             _dbContext = dbContext;
         }
 
-        public void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
+        public async void SubmitTask(int ID, MenteeTaskSubmissionAPIModel menteeTaskSubmissionAPIModel)
         {
             try
             {
-                var existingTask = _unitOfWork.menteeTaskSubmissionRepository.GetById(ID);
+                var existingTask = await _unitOfWork.menteeTaskSubmissionRepository.GetById(ID);
 
                 if (existingTask == null)
                 {
