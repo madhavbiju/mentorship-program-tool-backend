@@ -20,7 +20,8 @@ namespace mentorship_program_tool.Services.GetAllMenteesOfMentorService
         {
             //get all programs of that mentor
             var query = _context.Programs
-        .Where(p => p.MentorID == ID);
+        .Where(p => p.MentorID == ID && p.EndDate >= DateTime.Now);
+
 
             var totalCount = query.Count();
 

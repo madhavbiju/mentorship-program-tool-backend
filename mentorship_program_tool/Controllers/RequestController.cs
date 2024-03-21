@@ -46,9 +46,9 @@ namespace mentorship_program_tool.Controllers
         /// </summary>
         //put request
         [HttpPost("create/program-extension")]
-        public IActionResult AddRequest(MentorRequestAPIModel mentorrequestapimodel)
+        public async Task<IActionResult> AddRequest(MentorRequestAPIModel mentorrequestapimodel)
         {
-            _mentorRequestService.CreateRequest(mentorrequestapimodel);
+            await _mentorRequestService.CreateRequest(mentorrequestapimodel);
             return Ok();
         }
 
@@ -57,14 +57,14 @@ namespace mentorship_program_tool.Controllers
         /// </summary>
         //getall Pending request
         [HttpGet("all")]
-        public IActionResult GetPendingRequest([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetPendingRequest([FromQuery][Required] int status, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             // Validate pageNumber and pageSize
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be greater than 0.");
             }
-            var pendingRequest = _mentorRequestService.GetPendingRequests(status, pageNumber, pageSize);
+            var pendingRequest = await _mentorRequestService.GetPendingRequests(status, pageNumber, pageSize);
             return Ok(pendingRequest);
         }
         [HttpGet("allPendingRequests")]

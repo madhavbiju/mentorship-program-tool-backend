@@ -6,6 +6,7 @@ using mentorship_program_tool.Repository;
 using mentorship_program_tool.Services.MailService;
 using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
+using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.MentorRequestService
 {
@@ -28,10 +29,10 @@ namespace mentorship_program_tool.Services.MentorRequestService
 
 
         // Mentor adding a request (status ID will be 4 and modified by will be null)
-        public void CreateRequest(MentorRequestAPIModel mentorRequestAPIModel)
+        public async Task CreateRequest(MentorRequestAPIModel mentorRequestAPIModel)
         {
             var request = MapToProgramExtension(mentorRequestAPIModel);
-            _unitOfWork.mentorRequestRepository.Add(request);
+            await _unitOfWork.mentorRequestRepository.Add(request);
             _unitOfWork.Complete();
 
             //to find the program name
@@ -73,7 +74,7 @@ namespace mentorship_program_tool.Services.MentorRequestService
             // Loop through admin IDs to get their email IDs
             foreach (var adminId in admins)
             {
-                var admin = _unitOfWork.Employee.GetById(adminId);
+                var admin = await _unitOfWork.Employee.GetById(adminId);
                 if (admin != null)
                 {
                     adminEmails.Add(admin.EmailId);
@@ -101,11 +102,11 @@ namespace mentorship_program_tool.Services.MentorRequestService
         }
 
         // Get all pending requests
-        public MentorRequestResponseAPIModel GetPendingRequests(int status, int pageNumber, int pageSize)
+        public async Task<MentorRequestResponseAPIModel> GetPendingRequests(int status, int pageNumber, int pageSize)
         {
             // Filter pending requests by status
-            var pendingRequests = _unitOfWork.mentorRequestRepository
-                                            .GetAll()
+            var pendingRequests = (await _unitOfWork.mentorRequestRepository
+                                            .GetAll())
                                             .Where(n => n.RequestStatusID == status);
 
             // Get total count of pending requests

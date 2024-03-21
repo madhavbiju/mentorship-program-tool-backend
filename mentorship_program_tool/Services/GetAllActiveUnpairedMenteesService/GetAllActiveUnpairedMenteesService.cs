@@ -23,23 +23,25 @@ namespace mentorship_program_tool.Services
         public IEnumerable<GetAllActiveUnpairedMenteesAPIModel> GetAllActiveUnpairedMentees()
         {
             var menteeList = _context.Employees
-                .Join(_context.EmployeeRoleMappings,
-                    e => e.EmployeeID,
-                    erm => erm.EmployeeID,
-                    (e, erm) => new { Employee = e, EmployeeRoleMapping = erm })
-                .Where(x => x.EmployeeRoleMapping.RoleID == 3 && x.Employee.AccountStatus == "active")
-                .GroupJoin(_context.Programs,
-                    x => x.Employee.EmployeeID,
-                    p => p.MenteeID ,
-                    (x, programs) => new { Employee = x.Employee, Programs = programs })
-                .Where(x => !x.Programs.Any())
-                .Select(x => new GetAllActiveUnpairedMenteesAPIModel
-                {
-                    EmployeeID = x.Employee.EmployeeID,
-                    FirstName = x.Employee.FirstName,
-                    LastName = x.Employee.LastName,
-                })
-                .ToList();
+            .Join(_context.EmployeeRoleMappings,
+            e => e.EmployeeID,
+            erm => erm.EmployeeID,
+            (e, erm) => new { Employee = e, EmployeeRoleMapping = erm })
+            .Where(x => x.EmployeeRoleMapping.RoleID == 3 && x.Employee.AccountStatus == "active")
+            .GroupJoin(_context.Programs,
+            x => x.Employee.EmployeeID,
+            p => p.MenteeID,
+            (x, programs) => new { Employee = x.Employee, Programs = programs })
+            .SelectMany(x => x.Programs.DefaultIfEmpty(), (x, program) => new { Employee = x.Employee, Program = program })
+            .Where(x => x.Program == null || x.Program.EndDate < DateTime.Today)
+            .Select(x => new GetAllActiveUnpairedMenteesAPIModel
+            {
+            EmployeeID = x.Employee.EmployeeID,
+            FirstName = x.Employee.FirstName,
+            LastName = x.Employee.LastName,
+            })
+           .Distinct()
+           .ToList();
 
             return menteeList;
         }

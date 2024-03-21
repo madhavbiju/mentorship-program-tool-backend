@@ -26,7 +26,7 @@ namespace mentorship_program_tool.Services.GetTasksbyEmployeeIdService
                                                              join program in _context.Programs on task.ProgramID equals program.ProgramID
                                                              join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
                                                              join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
-                                                             where employeeId == 0 || mentor.EmployeeID == employeeId
+                                                             where employeeId == 0 || mentor.EmployeeID == employeeId && program.EndDate >= DateTime.Today
                                                              select new GetTasksByEmployeeIdAPIModel
                                                              {
                                                                  TaskID = task.TaskID,

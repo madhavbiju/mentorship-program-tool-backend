@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Drawing.Printing;
+using Task = System.Threading.Tasks.Task;
 namespace mentorship_program_tool.Services.ProgramService
 {
     public class ProgramService : IProgramService
@@ -27,10 +28,10 @@ namespace mentorship_program_tool.Services.ProgramService
             _notificationService = notificationService;
         }
 
-        public ProgramDetailsResponseAPIModel GetProgram(int status, int pageNumber, int pageSize)
+        public async Task<ProgramDetailsResponseAPIModel> GetProgram(int status, int pageNumber, int pageSize)
         {
-            var programs = _unitOfWork.Program
-                             .GetAll()
+            var programs = (await _unitOfWork.Program
+                             .GetAll())
                              .Where(p => p.ProgramStatus == status);
 
             // Get total count of programs
@@ -53,34 +54,34 @@ namespace mentorship_program_tool.Services.ProgramService
         }
 
 
-        public Models.EntityModel.Program GetProgramById(int id)
+        public async Task<Models.EntityModel.Program> GetProgramById(int id)
         {
-            var program = _unitOfWork.Program.GetById(id);
+            var program = await _unitOfWork.Program.GetById(id);
             return program;
         }
 
-        public void CreateProgram(Models.EntityModel.Program programDto)
+        public async Task CreateProgram(Models.EntityModel.Program programDto)
         {
 
-            _unitOfWork.Program.Add(programDto);
+            await _unitOfWork.Program.Add(programDto);
             _unitOfWork.Complete();
 
             string mentorIdAsString = programDto.MentorID.ToString();
             string menteeIdAsString = programDto.MenteeID.ToString();
 
             //send mail
-            var mentorEmail = _unitOfWork.Employee.GetById(programDto.MentorID)?.EmailId;
-            var menteeEmail = _unitOfWork.Employee.GetById(programDto.MenteeID)?.EmailId;
+            var mentorEmail = (await _unitOfWork.Employee.GetById(programDto.MentorID))?.EmailId;
+            var menteeEmail = (await _unitOfWork.Employee.GetById(programDto.MenteeID))?.EmailId;
 
             // Call SendProgramCreatedEmailAsync method on the mailService instance
-            _mailService.SendProgramCreatedEmailAsync(mentorEmail, menteeEmail, programDto.ProgramName);
+            await _mailService.SendProgramCreatedEmailAsync(mentorEmail, menteeEmail, programDto.ProgramName);
             // Trigger pair creation notification after completing the program creation process
             _notificationService.SendPairCreationNotificationAsync(mentorIdAsString, menteeIdAsString).Wait(); // Wait for the notification to be sent
         }
 
-        public void UpdateProgram(int id, ProgramAPIModel programDto)
+        public async void UpdateProgram(int id, ProgramAPIModel programDto)
         {
-            var existingProgram = _unitOfWork.Program.GetById(id);
+            var existingProgram = await _unitOfWork.Program.GetById(id);
 
             if (existingProgram == null)
             {
@@ -111,9 +112,9 @@ namespace mentorship_program_tool.Services.ProgramService
              _notificationService.SendExtensionApprovalNotificationAsync(mentorUser).Wait();*/
         }
 
-        public void DeleteProgram(int id)
+        public async void DeleteProgram(int id)
         {
-            var program = _unitOfWork.Program.GetById(id);
+            var program = await _unitOfWork.Program.GetById(id);
 
             if (program == null)
             {

@@ -16,16 +16,16 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetStatuss()
+        public async Task<IActionResult> GetStatuss()
         {
-            var status = _statusService.GetStatus();
+            var status = await _statusService.GetStatus();
             return Ok(status);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetStatusById(int id)
+        public async Task<IActionResult> GetStatusById(int id)
         {
-            var status = _statusService.GetStatusById(id);
+            var status = await _statusService.GetStatusById(id);
             if (status == null)
             {
                 return NotFound();
@@ -34,9 +34,9 @@ namespace mentorship_program_tool.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddStatus(Status status)
+        public async Task<IActionResult> AddStatus(Status status)
         {
-            _statusService.CreateStatus(status);
+            await _statusService.CreateStatus(status);
             return CreatedAtAction(nameof(GetStatusById), new { id = status.StatusID }, status);
         }
 

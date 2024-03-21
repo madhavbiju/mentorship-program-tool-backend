@@ -26,9 +26,9 @@ namespace mentorship_program_tool.Controllers
         /// To get all roles
         /// </summary>
         [HttpGet]
-        public IActionResult GetRoles()
+        public async Task<IActionResult> GetRoles()
         {
-            var roles = _roleService.GetRoles();
+            var roles = await _roleService.GetRoles();
             return Ok(roles);
         }
 
@@ -36,9 +36,9 @@ namespace mentorship_program_tool.Controllers
         /// To get a role by id.
         /// </summary>
         [HttpGet("{id}")]
-        public IActionResult GetRoleById(int id)
+        public async Task<IActionResult> GetRoleById(int id)
         {
-            var role = _roleService.GetRoleById(id);
+            var role = await _roleService.GetRoleById(id);
             if (role == null)
             {
                 return NotFound();
@@ -50,9 +50,9 @@ namespace mentorship_program_tool.Controllers
         /// To add a role
         /// </summary>
         [HttpPost]
-        public IActionResult AddRole(Role role)
+        public async Task<IActionResult> AddRole(Role role)
         {
-            _roleService.CreateRole(role);
+            await _roleService.CreateRole(role);
             return CreatedAtAction(nameof(GetRoleById), new { id = role.RoleID }, role);
         }
 

@@ -3,6 +3,7 @@ using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
 using System.Collections.Generic;
+using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.EmployeeService
 {
@@ -17,25 +18,25 @@ namespace mentorship_program_tool.Services.EmployeeService
             _context = context;
         }
 
-        public IEnumerable<Employee> GetEmployees()
+        public async Task<IEnumerable<Employee>> GetEmployees()
         {
-            return _unitOfWork.Employee.GetAll();
+            return await _unitOfWork.Employee.GetAll();
         }
 
-        public Employee GetEmployeeById(int id)
+        public async Task<Employee> GetEmployeeById(int id)
         {
-            return _unitOfWork.Employee.GetById(id);
+            return await _unitOfWork.Employee.GetById(id);
         }
 
-        public void CreateEmployee(Employee employee)
+        public async Task CreateEmployee(Employee employee)
         {
-            _unitOfWork.Employee.Add(employee);
+            await _unitOfWork.Employee.Add(employee);
             _unitOfWork.Complete();
         }
 
-        public void DeleteEmployee(int id)
+        public async void DeleteEmployee(int id)
         {
-            var employee = _unitOfWork.Employee.GetById(id);
+            var employee = await _unitOfWork.Employee.GetById(id);
 
             if (employee == null)
             {
@@ -46,7 +47,7 @@ namespace mentorship_program_tool.Services.EmployeeService
             _unitOfWork.Complete();
         }
 
-        
+
 
     }
 }

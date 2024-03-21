@@ -2,6 +2,7 @@
 using mentorship_program_tool.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.RoleService
 {
@@ -14,31 +15,31 @@ namespace mentorship_program_tool.Services.RoleService
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Role> GetRoles()
+        public async Task<IEnumerable<Role>> GetRoles()
         {
 
-            var roles = _unitOfWork.Role.GetAll();
+            var roles = await _unitOfWork.Role.GetAll();
 
             return roles;
         }
 
-        public Role GetRoleById(int id)
+        public async Task<Role> GetRoleById(int id)
         {
-            var roles = _unitOfWork.Role.GetById(id);
+            var roles = await _unitOfWork.Role.GetById(id);
 
 
             return roles;
         }
 
-        public void CreateRole(Role rolemodel)
+        public async Task CreateRole(Role rolemodel)
         {
-            _unitOfWork.Role.Add(rolemodel);
+            await _unitOfWork.Role.Add(rolemodel);
             _unitOfWork.Complete();
         }
 
-        public void UpdateRole(int id, Role rolemodel)
+        public async void UpdateRole(int id, Role rolemodel)
         {
-            var existingRole = _unitOfWork.Role.GetById(id);
+            var existingRole = await _unitOfWork.Role.GetById(id);
 
             if (existingRole == null)
             {
@@ -52,9 +53,9 @@ namespace mentorship_program_tool.Services.RoleService
             _unitOfWork.Complete();
         }
 
-        public void DeleteRole(int id)
+        public async void DeleteRole(int id)
         {
-            var roles = _unitOfWork.Role.GetById(id);
+            var roles = await _unitOfWork.Role.GetById(id);
 
             if (roles == null)
             {
