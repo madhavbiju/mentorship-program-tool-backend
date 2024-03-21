@@ -13,30 +13,20 @@ namespace mentorship_program_tool.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _meetingService;
-        private readonly ILogger _logger;
 
-        public MeetingController(IMeetingService meetingService, ILogger<MeetingController> logger)
+        public MeetingController(IMeetingService meetingService)
         {
             _meetingService = meetingService;
-            _logger = logger;
         }
 
         /// <summary>
         /// To get details of all Meetings
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetMeetings()
+        public IActionResult GetMeetings()
         {
-            try
-            {
-                var meeting = await _meetingService.GetMeetings();
-                return Ok(meeting);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving meetings. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            var meeting = _meetingService.GetMeetings();
+            return Ok(meeting);
         }
 
 
@@ -46,41 +36,24 @@ namespace mentorship_program_tool.Controllers
         [HttpGet("{pageNumber}")]
         public IActionResult GetAllMeetings(int pageNumber, string sortBy)
         {
-            try
-            {
-                var meetings = _meetingService.GetAllMeetings(pageNumber, sortBy);
-                return Ok(meetings);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving meetings. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
-        }
+            var meetings = _meetingService.GetAllMeetings(pageNumber, sortBy);
+            return Ok(meetings);
 
+        }
 
         /// <summary>
         /// To get details of a particular Meeting
         /// </summary>
         [HttpGet("Meetings{id}")]
-        public async Task<IActionResult> GetMeetingById(int id)
+        public IActionResult GetMeetingById(int id)
         {
-            try
+            var meeting = _meetingService.GetMeetingById(id);
+            if (meeting == null)
             {
-                var meeting = await _meetingService.GetMeetingById(id);
-                if (meeting == null)
-                {
-                    return NotFound();
-                }
-                return Ok(meeting);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving meeting with ID {id}. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            return Ok(meeting);
         }
-
 
         /// <summary>
         /// To get all meetings of a particular employee
@@ -88,20 +61,12 @@ namespace mentorship_program_tool.Controllers
         [HttpGet("employee/{id}")]
         public IActionResult GetMeetingByEmployeeId([FromQuery][Required] int role, int id)
         {
-            try
+            var meeting = _meetingService.GetMeetingByEmployeeId(id, role);
+            if (meeting == null)
             {
-                var meeting = _meetingService.GetMeetingByEmployeeId(id, role);
-                if (meeting == null)
-                {
-                    return NotFound();
-                }
-                return Ok(meeting);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving meeting with EmployeeID {id}. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            return Ok(meeting);
         }
 
         /// <summary>
@@ -110,40 +75,23 @@ namespace mentorship_program_tool.Controllers
         [HttpGet("employee/upcoming/meetings/{id}")]
         public IActionResult GetSoonMeetingByEmployeeId(int id)
         {
-            try
+            var meeting = _meetingService.GetSoonMeetingByEmployeeId(id);
+            if (meeting == null)
             {
-                var meeting = _meetingService.GetSoonMeetingByEmployeeId(id);
-                if (meeting == null)
-                {
-                    return NotFound();
-                }
-                return Ok(meeting);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving soon meeting for employee with ID {id}. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            return Ok(meeting);
         }
 
         /// <summary>
         /// To create a new Meeting
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> AddMeeting(MeetingSchedule meeting)
+        public IActionResult AddMeeting(MeetingSchedule meeting)
         {
-            try
-            {
-                await _meetingService.CreateMeeting(meeting);
-                return CreatedAtAction(nameof(GetMeetingById), new { id = meeting.MeetingID }, meeting);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while adding the meeting. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            _meetingService.CreateMeeting(meeting);
+            return CreatedAtAction(nameof(GetMeetingById), new { id = meeting.MeetingID }, meeting);
         }
-
 
         /// <summary>
         /// To delete an Meeting
@@ -151,39 +99,23 @@ namespace mentorship_program_tool.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteMeeting(int id)
         {
-            try
+            if (id != null)
             {
-                if (id != null)
-                {
-                    _meetingService.DeleteMeeting(id);
-                    return NoContent();
-                }
+                _meetingService.DeleteMeeting(id);
+                return NoContent();
+            }
 
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while deleting meeting with ID {id}. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            return NotFound();
         }
 
         /// <summary>
         /// To get the meetings of an Employee Based on the program id.
         /// </summary>
         [HttpGet("meetings/programid/{id}")]
-        public IActionResult GetMeetingsByProgramId(int id, int page, string? sortBy)
+        public IActionResult GetMeetingsByProgramId(int id,  int page, string? sortBy)
         {
-            try
-            {
-                var tasks = _meetingService.GetMeetingsByProgramId(id, page, sortBy);
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving meeting for program with ID {id}. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            var tasks = _meetingService.GetMeetingsByProgramId(id,  page, sortBy);
+            return Ok(tasks);
 
         }
         /// <summary>
@@ -196,16 +128,8 @@ namespace mentorship_program_tool.Controllers
         [HttpGet("meetings/employeeid/{id}")]
         public IActionResult GetMeetingsByEmployeeId(int id, int page, string? sortBy)
         {
-            try
-            {
-                var tasks = _meetingService.GetMeetingsByEmployeeId(id, page, sortBy);
-                return Ok(tasks);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"ERROR: An error occurred while retrieving meeting for employee with ID {id}. Exception: {ex}");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
+            var tasks = _meetingService.GetMeetingsByEmployeeId(id, page, sortBy);
+            return Ok(tasks);
 
         }
     }

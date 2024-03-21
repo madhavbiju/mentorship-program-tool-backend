@@ -60,11 +60,8 @@ using mentorship_program_tool.Services.GetProgramExtensionService;
 using mentorship_program_tool.Services.MentorsOfMenteesListService;
 using mentorship_program_tool.Services.PutProgramDateExtensionService;
 using mentorship_program_tool.Services.PutProgramExtensionService;
-using mentorship_program_tool.Log;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddTransient<ILogHandler, SeriLogHandler>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -220,21 +217,17 @@ builder.Services.AddCors(options =>
 builder.Services.AddSignalR();
 
 var app = builder.Build();
-
-app.UseMiddleware<LogMiddleware>();
 app.UseTokenDecodingMiddleware();
 app.UseCors();
 app.UseRouting();
 app.UseAuthorization();
+
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<NotificationHub>("/notificationHub"); // Map the NotificationHub
 });
-
-var ilogHandler = app.Services.GetService<ILogHandler>();
-ilogHandler.Initialize();   //initialize logHandler
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

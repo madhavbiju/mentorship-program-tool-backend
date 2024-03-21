@@ -74,9 +74,9 @@ namespace mentorship_program_tool.Services.GetActiveTasks
             return new GetTasksByProgramIdResponseAPIModel { Tasks = tasksQuery.ToList(), TotalCount = totalCount };
         }
 
-        public async Task<Models.EntityModel.Task> GetTaskById(int id)
+        public Models.EntityModel.Task GetTaskById(int id)
         {
-            return await _unitOfWork.menteeTaskSubmissionRepository.GetById(id);
+            return _unitOfWork.menteeTaskSubmissionRepository.GetById(id);
         }
     }
 }

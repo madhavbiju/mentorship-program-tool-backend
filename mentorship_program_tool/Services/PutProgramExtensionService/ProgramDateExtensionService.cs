@@ -44,8 +44,8 @@ namespace mentorship_program_tool.Services.PutProgramDateExtensionService
 
             var programdata = _context.Programs.FirstOrDefault(p => p.ProgramID == model.ProgramID);
 
-            var mentorEmail = (await _unitOfWork.Employee.GetById(programdata.MentorID))?.EmailId;
-            await _mailService.SendExtensionApprovalEmailAsync(mentorEmail, programdata.ProgramName, programdata.EndDate);
+            var mentorEmail = _unitOfWork.Employee.GetById(programdata.MentorID)?.EmailId;
+            _mailService.SendExtensionApprovalEmailAsync(mentorEmail, programdata.ProgramName, programdata.EndDate);
 
             string mentorUser = programdata.MentorID.ToString();
 

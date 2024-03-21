@@ -19,9 +19,9 @@ namespace mentorship_program_tool.Controllers
         /// To get all report type ids
         /// </summary>
         [HttpGet("typeid/all/{id}")]
-        public async Task<IActionResult> GetReportTypes()
+        public IActionResult GetReportTypes()
         {
-            var ReportType = await _ReportTypeService.GetReportType();
+            var ReportType = _ReportTypeService.GetReportType();
             return Ok(ReportType);
         }
 
@@ -30,9 +30,9 @@ namespace mentorship_program_tool.Controllers
         /// </summary>
 
         [HttpGet("typeid/{id}")]
-        public async Task<IActionResult> GetReportTypeById(int id)
+        public IActionResult GetReportTypeById(int id)
         {
-            var ReportType = await _ReportTypeService.GetReportTypeById(id);
+            var ReportType = _ReportTypeService.GetReportTypeById(id);
             if (ReportType == null)
             {
                 return NotFound();
@@ -44,9 +44,9 @@ namespace mentorship_program_tool.Controllers
         /// To post a new report type id
         /// </summary>
         [HttpPost("typeid")]
-        public async Task<IActionResult> AddReportType(ReportType ReportType)
+        public IActionResult AddReportType(ReportType ReportType)
         {
-            await _ReportTypeService.CreateReportType(ReportType);
+            _ReportTypeService.CreateReportType(ReportType);
             return CreatedAtAction(nameof(GetReportTypeById), new { id = ReportType.ReportTypeID }, ReportType);
         }
 

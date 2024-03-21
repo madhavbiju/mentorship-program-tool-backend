@@ -1,6 +1,5 @@
 ﻿using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
-using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.ReportTypeService
 {
@@ -13,29 +12,29 @@ namespace mentorship_program_tool.Services.ReportTypeService
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<ReportType>> GetReportType()
+        public IEnumerable<ReportType> GetReportType()
         {
 
-            var ReportType = await _unitOfWork.ReportType.GetAll();
+            var ReportType = _unitOfWork.ReportType.GetAll();
             return ReportType;
         }
 
-        public async Task<ReportType> GetReportTypeById(int id)
+        public ReportType GetReportTypeById(int id)
         {
-            var ReportType = await _unitOfWork.ReportType.GetById(id);
+            var ReportType = _unitOfWork.ReportType.GetById(id);
             return ReportType;
         }
 
-        public async Task CreateReportType(ReportType ReportTypeDto)
+        public void CreateReportType(ReportType ReportTypeDto)
         {
 
-            await _unitOfWork.ReportType.Add(ReportTypeDto);
+            _unitOfWork.ReportType.Add(ReportTypeDto);
             _unitOfWork.Complete();
         }
 
-        public async void UpdateReportType(int id, ReportType ReportTypeDto)
+        public void UpdateReportType(int id, ReportType ReportTypeDto)
         {
-            var existingReportType = await _unitOfWork.ReportType.GetById(id);
+            var existingReportType = _unitOfWork.ReportType.GetById(id);
 
             if (existingReportType == null)
             {
@@ -50,9 +49,9 @@ namespace mentorship_program_tool.Services.ReportTypeService
             _unitOfWork.Complete();
         }
 
-        public async void DeleteReport(int id)
+        public void DeleteReport(int id)
         {
-            var ReportType = await _unitOfWork.ReportType.GetById(id);
+            var ReportType = _unitOfWork.ReportType.GetById(id);
 
             if (ReportType == null)
             {

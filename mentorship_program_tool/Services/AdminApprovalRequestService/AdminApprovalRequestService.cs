@@ -21,9 +21,9 @@ namespace mentorship_program_tool.Services.AdminApprovalRequestService
         }
 
         // Admin updating request
-        public async void UpdateRequest(int id, AdminApprovalAPIModel adminApprovalApiModel)
+        public void UpdateRequest(int id, AdminApprovalAPIModel adminApprovalApiModel)
         {
-            var existingRequest = await _unitOfWork.adminApprovalRequestRepository.GetById(id);
+            var existingRequest = _unitOfWork.adminApprovalRequestRepository.GetById(id);
 
             if (existingRequest == null)
             {

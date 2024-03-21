@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
-using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.MeetingService
 {
@@ -32,9 +31,9 @@ namespace mentorship_program_tool.Services.MeetingService
             _signalnotificationService = signalnotificationService;
         }
 
-        public async Task<IEnumerable<MeetingSchedule>> GetMeetings()
+        public IEnumerable<MeetingSchedule> GetMeetings()
         {
-            return await _unitOfWork.MeetingSchedule.GetAll();
+            return _unitOfWork.MeetingSchedule.GetAll();
         }
 
         public GetAllMeetingsResponseAPIModel GetAllMeetings(int pageNumber, string sortBy)
@@ -200,23 +199,23 @@ namespace mentorship_program_tool.Services.MeetingService
             int pageSize = 5;
             int offset = (page - 1) * pageSize;
 
-            IQueryable<GetMeetingsByEmployeeIdApiModel> meetingsQuery =
-                                                                          from meeting in _context.MeetingSchedules
-                                                                          join program in _context.Programs on meeting.ProgramID equals program.ProgramID
-                                                                          join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
-                                                                          join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
-                                                                          where mentor.EmployeeID == employeeId || mentee.EmployeeID == employeeId
-                                                                          select new GetMeetingsByEmployeeIdApiModel
-                                                                          {
-                                                                              MeetingID = meeting.MeetingID,
-                                                                              ProgramID = meeting.ProgramID,
-                                                                              Title = meeting.Title,
-                                                                              MenteeFirstName = mentee.FirstName,
-                                                                              MentorFirstName = mentor.FirstName,
-                                                                              StartTime = meeting.StartTime,
-                                                                              ScheduleDate = meeting.ScheduleDate,
-                                                                              MeetingStatus = meeting.MeetingStatus // You need to implement a method to determine meeting status based on StartTime and EndTime
-                                                                          };
+          IQueryable<GetMeetingsByEmployeeIdApiModel> meetingsQuery = 
+                                                                        from meeting in _context.MeetingSchedules
+                                                                        join program in _context.Programs on meeting.ProgramID equals program.ProgramID
+                                                                        join mentor in _context.Employees on program.MentorID equals mentor.EmployeeID
+                                                                        join mentee in _context.Employees on program.MenteeID equals mentee.EmployeeID
+                                                                        where mentor.EmployeeID == employeeId || mentee.EmployeeID == employeeId
+                                                                        select new GetMeetingsByEmployeeIdApiModel
+                                                                        {
+                                                                            MeetingID = meeting.MeetingID,
+                                                                            ProgramID = meeting.ProgramID,
+                                                                            Title = meeting.Title,
+                                                                            MenteeFirstName = mentee.FirstName,
+                                                                            MentorFirstName = mentor.FirstName,
+                                                                            StartTime = meeting.StartTime,
+                                                                            ScheduleDate = meeting.ScheduleDate,
+                                                                            MeetingStatus = meeting.MeetingStatus // You need to implement a method to determine meeting status based on StartTime and EndTime
+                                                                        };
             // Apply sorting
             switch (sortBy)
             {
@@ -251,14 +250,14 @@ namespace mentorship_program_tool.Services.MeetingService
 
 
 
-        public async Task<MeetingSchedule> GetMeetingById(int id)
+        public MeetingSchedule GetMeetingById(int id)
         {
-            return await _unitOfWork.MeetingSchedule.GetById(id);
+            return _unitOfWork.MeetingSchedule.GetById(id);
         }
 
-        public async Task CreateMeeting(MeetingSchedule meeting)
+        public void CreateMeeting(MeetingSchedule meeting)
         {
-            await _unitOfWork.MeetingSchedule.Add(meeting);
+            _unitOfWork.MeetingSchedule.Add(meeting);
             _unitOfWork.Complete();
 
             //to find the mentee 
@@ -276,21 +275,16 @@ namespace mentorship_program_tool.Services.MeetingService
             //for updating notification table
             _notificationService.AddNotification(menteeID, "New meeting Scheduled", meeting.CreatedBy);
 
-            var mentee = await _unitOfWork.Employee.GetById(menteeID);
-            string menteeEmail = "";
-            if (mentee != null)
-            {
-                menteeEmail = mentee.EmailId;
-                await _mailService.SendMeetingScheduledEmailAsync(menteeEmail, programName, meeting.ScheduleDate);
-            }
+            var menteeEmail = _unitOfWork.Employee.GetById(menteeID)?.EmailId;
+            _mailService.SendMeetingScheduledEmailAsync(menteeEmail, programName, meeting.ScheduleDate);
 
             _signalnotificationService.SendMeetingScheduledNotificationAsync(menteeID.ToString(), meeting.ScheduleDate).Wait();
 
         }
 
-        public async void DeleteMeeting(int id)
+        public void DeleteMeeting(int id)
         {
-            var meeting = await _unitOfWork.MeetingSchedule.GetById(id);
+            var meeting = _unitOfWork.MeetingSchedule.GetById(id);
 
             if (meeting == null)
             {

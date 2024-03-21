@@ -9,7 +9,7 @@ namespace mentorship_program_tool.Services.GetActiveTasksService
         public interface IGetTasksByProgramIdService
         {
             GetTasksByProgramIdResponseAPIModel GetTasksByProgramId(int ID, int status, int page, string? sortBy);
-            Task<Models.EntityModel.Task> GetTaskById(int id);
+            Models.EntityModel.Task GetTaskById(int id);
         }
     }
 }
