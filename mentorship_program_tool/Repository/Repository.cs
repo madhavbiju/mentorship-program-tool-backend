@@ -13,19 +13,19 @@ namespace mentorship_program_tool.Repository
             Context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            return await Context.Set<T>().ToListAsync();
+            return Context.Set<T>().ToList();
         }
 
-        public async Task<T> GetById(int id)
+        public T GetById(int id)
         {
-            return await Context.Set<T>().FindAsync(id);
+            return Context.Set<T>().Find(id);
         }
 
-        public async Task Add(T entity)
+        public void Add(T entity)
         {
-            await Context.Set<T>().AddAsync(entity);
+            Context.Set<T>().Add(entity);
         }
 
         public void Update(T entity)

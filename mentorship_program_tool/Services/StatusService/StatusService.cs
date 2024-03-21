@@ -1,6 +1,5 @@
 ﻿using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.UnitOfWork;
-using Task = System.Threading.Tasks.Task;
 
 namespace mentorship_program_tool.Services.StatusService
 {
@@ -13,29 +12,29 @@ namespace mentorship_program_tool.Services.StatusService
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Status>> GetStatus()
+        public IEnumerable<Status> GetStatus()
         {
 
-            var status = await _unitOfWork.Status.GetAll();
+            var status = _unitOfWork.Status.GetAll();
             return status;
         }
 
-        public async Task<Status> GetStatusById(int id)
+        public Status GetStatusById(int id)
         {
-            var status = await _unitOfWork.Status.GetById(id);
+            var status = _unitOfWork.Status.GetById(id);
             return status;
         }
 
-        public async Task CreateStatus(Status statusDto)
+        public void CreateStatus(Status statusDto)
         {
 
-            await _unitOfWork.Status.Add(statusDto);
+            _unitOfWork.Status.Add(statusDto);
             _unitOfWork.Complete();
         }
 
-        public async void UpdateStatus(int id, Status statusDto)
+        public void UpdateStatus(int id, Status statusDto)
         {
-            var existingStatus = await _unitOfWork.Status.GetById(id);
+            var existingStatus = _unitOfWork.Status.GetById(id);
 
             if (existingStatus == null)
             {
@@ -50,9 +49,9 @@ namespace mentorship_program_tool.Services.StatusService
             _unitOfWork.Complete();
         }
 
-        public async void DeleteStatus(int id)
+        public void DeleteStatus(int id)
         {
-            var status = await _unitOfWork.Status.GetById(id);
+            var status = _unitOfWork.Status.GetById(id);
 
             if (status == null)
             {
