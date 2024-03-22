@@ -53,10 +53,13 @@ using mentorship_program_tool.Repository.MeetingScheduleReposixtory;
 using mentorship_program_tool.Services.MeetingService;
 using mentorship_program_tool.Services.JwtService;
 using mentorship_program_tool.Services.StatusUpdaterService;
+using mentorship_program_tool.Services.NotificationService;
+using mentorship_program_tool.Services.MailService;
+using mentorship_program_tool.Services.GetAllMenteesListService;
 using mentorship_program_tool.Services.GetProgramExtensionService;
+using mentorship_program_tool.Services.MentorsOfMenteesListService;
 using mentorship_program_tool.Services.PutProgramDateExtensionService;
 using mentorship_program_tool.Services.PutProgramExtensionService;
-using mentorship_program_tool.Services.MentorsOfMenteesListService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -150,6 +153,7 @@ builder.Services.AddScoped<IGetTasksByProgramIdService, GetTasksByProgramIdServi
 builder.Services.AddScoped<IGetTasksbyEmployeeIdRepository, GetTasksbyEmployeeIdRepository>();
 builder.Services.AddScoped<IGetTasksbyEmployeeIdService, GetTasksByEmployeeIdService>();
 
+builder.Services.AddScoped<IGetAllMenteesListService, GetAllMenteesListService>();
 
 
 builder.Services.AddScoped<IGetAllActiveUnpairedMenteesRepository, GetAllActiveUnpairedMenteesRepository>();
@@ -176,7 +180,12 @@ builder.Services.AddScoped<IMentorsOfMenteesListService, MentorsOfMenteesListSer
 builder.Services.AddScoped<IProgramExtensionService, ProgramExtensionService>();
 builder.Services.AddScoped<IProgramDateExtensionService, ProgramDateExtensionService>();
 
+builder.Services.AddScoped<IMailService, MailService>();
+
 builder.Services.AddHostedService<ProgramStatusUpdater>();
+
+builder.Services.AddScoped<ISignalNotificationService, SignalNotificationService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
@@ -200,13 +209,25 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 app.UseTokenDecodingMiddleware();
 app.UseCors();
+app.UseRouting();
+app.UseAuthorization();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/notificationHub"); // Map the NotificationHub
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -217,7 +238,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
 
 app.MapControllers();
 

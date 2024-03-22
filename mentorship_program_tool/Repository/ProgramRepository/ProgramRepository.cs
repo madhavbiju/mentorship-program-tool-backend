@@ -6,5 +6,6 @@ namespace mentorship_program_tool.Repository.ProgramRepository
     public class ProgramRepository : Repository<Models.EntityModel.Program>, IProgramRepository
     {
         public ProgramRepository(AppDbContext context) : base(context) { }
+
     }
 }

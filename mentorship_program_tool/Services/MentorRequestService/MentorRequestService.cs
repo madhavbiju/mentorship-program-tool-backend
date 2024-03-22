@@ -1,7 +1,10 @@
-﻿using mentorship_program_tool.Models.ApiModel;
+﻿using mentorship_program_tool.Data;
+using mentorship_program_tool.Models.ApiModel;
 using mentorship_program_tool.Models.APIModel;
 using mentorship_program_tool.Models.EntityModel;
 using mentorship_program_tool.Repository;
+using mentorship_program_tool.Services.MailService;
+using mentorship_program_tool.Services.NotificationService;
 using mentorship_program_tool.UnitOfWork;
 
 namespace mentorship_program_tool.Services.MentorRequestService
@@ -9,10 +12,18 @@ namespace mentorship_program_tool.Services.MentorRequestService
     public class MentorRequestService : IMentorRequestService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService _notificationService;
+        private readonly AppDbContext _context;
+        private readonly IMailService _mailService;
+        private readonly ISignalNotificationService _signalnotificationService;
 
-        public MentorRequestService(IUnitOfWork unitOfWork)
+        public MentorRequestService(IUnitOfWork unitOfWork, INotificationService notificationService, AppDbContext context, IMailService mailService, ISignalNotificationService signalnotificationService)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
+            _context = context;
+            _mailService = mailService;
+            _signalnotificationService = signalnotificationService;
         }
 
 
@@ -22,6 +33,57 @@ namespace mentorship_program_tool.Services.MentorRequestService
             var request = MapToProgramExtension(mentorRequestAPIModel);
             _unitOfWork.mentorRequestRepository.Add(request);
             _unitOfWork.Complete();
+
+            //to find the program name
+            var programName = _context.Programs
+                .Where(program => program.ProgramID == mentorRequestAPIModel.ProgramID)
+                .Select(program => program.ProgramName)
+                .FirstOrDefault();
+
+            //to find who is submitting the request
+            var mentorID = _context.Programs
+                .Where(program => program.ProgramID == mentorRequestAPIModel.ProgramID)
+                .Select(program => program.MentorID)
+                .FirstOrDefault();
+
+            var mentorName = _context.Employees
+                .Where(program => program.EmployeeID == mentorID)
+                .Select(program => program.FirstName)
+                .FirstOrDefault();
+
+            //to get all admins
+            var admins = _context.EmployeeRoleMappings
+                      .Where(mapping => mapping.RoleID == 1) // Filter by admin role ID
+                      .Select(mapping => mapping.EmployeeID)
+                      .ToList();
+
+            // Add notification for each admin and updating notification table
+            foreach (var adminId in admins)
+            {
+                _notificationService.AddNotification(adminId, "New Program Extension", mentorID);
+                string adminIdAsString = adminId.ToString();
+                string mentorIdAsString = mentorID.ToString();
+                _signalnotificationService.SendExtensionRequestNotificationAsync(adminIdAsString, mentorIdAsString, mentorName).Wait();
+            }
+
+            //send mail
+            // Initialize a list to store admins' email IDs
+            var adminEmails = new List<string>();
+
+            // Loop through admin IDs to get their email IDs
+            foreach (var adminId in admins)
+            {
+                var admin = _unitOfWork.Employee.GetById(adminId);
+                if (admin != null)
+                {
+                    adminEmails.Add(admin.EmailId);
+                }
+            }
+
+            foreach (var adminEmail in adminEmails)
+            {
+                _mailService.SendProgramExtensionRequestEmailAsync(adminEmail, programName);
+            }
         }
 
         private ProgramExtension MapToProgramExtension(MentorRequestAPIModel mentorRequestAPIModel)

@@ -7,16 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using mentorship_program_tool.Models.EntityModel;
 
 namespace mentorship_program_tool.Services.GetActiveTasks
 {
     public class GetTasksByProgramIdService : IGetTasksByProgramIdService
     {
         private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetTasksByProgramIdService(AppDbContext context)
+        public GetTasksByProgramIdService(AppDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _unitOfWork = unitOfWork;
         }
 
         public GetTasksByProgramIdResponseAPIModel GetTasksByProgramId(int ID, int status, int page, string sortBy)
@@ -63,11 +66,17 @@ namespace mentorship_program_tool.Services.GetActiveTasks
                     break;
             }
             int totalCount = tasksQuery.Count();
-
             // Apply pagination
-            tasksQuery = tasksQuery.Skip(offset).Take(pageSize);
-
+            if (page != 0)
+            {
+                tasksQuery = tasksQuery.Skip(offset).Take(pageSize);
+            }
             return new GetTasksByProgramIdResponseAPIModel { Tasks = tasksQuery.ToList(), TotalCount = totalCount };
+        }
+
+        public Models.EntityModel.Task GetTaskById(int id)
+        {
+            return _unitOfWork.menteeTaskSubmissionRepository.GetById(id);
         }
     }
 }
