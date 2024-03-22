@@ -24,7 +24,7 @@ public class ProgramExtensionService : IProgramExtensionService
                     join p in _context.Programs on pe.ProgramID equals p.ProgramID
                     join mentee in _context.Employees on p.MenteeID equals mentee.EmployeeID
                     join mentor in _context.Employees on p.MentorID equals mentor.EmployeeID // Join to get mentor info
-                    where pe.RequestStatusID == status
+                    where pe.RequestStatusID == status && p.ProgramStatus == 1
                     select new ProgramExtensionRequestAPIModel
                     {
                         ProgramExtensionID = pe.ProgramExtensionID,
