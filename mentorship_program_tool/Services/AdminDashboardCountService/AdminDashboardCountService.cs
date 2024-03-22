@@ -31,7 +31,7 @@ namespace mentorship_program_tool.Services.AdminDashboardCountService
 
         public int GetAdminDashboardProgramCount()
         {
-            int ActivePairCount = _context.Programs.Count();
+            int ActivePairCount = _context.Programs.Where(p => p.ProgramStatus == 1).Count();
             return ActivePairCount;
         }
 
@@ -46,12 +46,12 @@ namespace mentorship_program_tool.Services.AdminDashboardCountService
             return MentorCount;
         }
 
-       
-            public int GetAdminDashboardTotalCount()
-            {
-                int totalCount = _context.Employees.Count();
-                return totalCount;
-            }
-        
+
+        public int GetAdminDashboardTotalCount()
+        {
+            int totalCount = _context.Employees.Count();
+            return totalCount;
+        }
+
     }
 }
