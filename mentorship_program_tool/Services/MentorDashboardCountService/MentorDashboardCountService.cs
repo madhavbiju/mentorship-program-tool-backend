@@ -18,7 +18,7 @@ namespace mentorship_program_tool.Services.MentorDashboardCountService
         public int GetMentorDashboardMenteeCount(int ID)
         {
             int menteesCount = (from p in _context.Programs
-                                where p.MentorID == ID
+                                where p.MentorID == ID && p.ProgramStatus == 1
                                 select p.MenteeID).Distinct().Count();
 
             return menteesCount;

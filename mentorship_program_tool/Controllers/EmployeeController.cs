@@ -10,10 +10,12 @@ namespace mentorship_program_tool.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly ILogger _logger;
 
-        public EmployeesController(IEmployeeService employeeService)
+        public EmployeesController(IEmployeeService employeeService, ILogger<EmployeesController> logger)
         {
             _employeeService = employeeService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -22,8 +24,17 @@ namespace mentorship_program_tool.Controllers
         [HttpGet]
         public IActionResult GetEmployees()
         {
-            var employee = _employeeService.GetEmployees();
-            return Ok(employee);
+            try
+            {
+                /*throw new Exception("Simulated exception in GetEmployees method");*/
+                var employee = _employeeService.GetEmployees();
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ERROR: An error occurred while getting employees.Exception:{ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
@@ -32,12 +43,16 @@ namespace mentorship_program_tool.Controllers
         [HttpGet("{id}")]
         public IActionResult GetEmployeesById(int id)
         {
-            var employee = _employeeService.GetEmployeeById(id);
-            if (employee == null)
+            try
             {
+                var employee = _employeeService.GetEmployeeById(id);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ERROR: An error occurred while getting employee with ID {id}. Exception: {ex.Message}");
                 return NotFound();
             }
-            return Ok(employee);
         }
 
         /// <summary>
@@ -46,8 +61,16 @@ namespace mentorship_program_tool.Controllers
         [HttpPost]
         public IActionResult AddEmployees(Employee employee)
         {
-            _employeeService.CreateEmployee(employee);
-            return CreatedAtAction(nameof(GetEmployeesById), new { id = employee.EmployeeID }, employee);
+            try
+            {
+                _employeeService.CreateEmployee(employee);
+                return CreatedAtAction(nameof(GetEmployeesById), new { id = employee.EmployeeID }, employee);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ERROR: An error occurred while adding employee. Exception: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
 
         /// <summary>
@@ -56,13 +79,21 @@ namespace mentorship_program_tool.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployees(int id)
         {
-            if (id != null)
+            try
             {
-                _employeeService.DeleteEmployee(id);
-                return NoContent();
-            }
+                if (id != null)
+                {
+                    _employeeService.DeleteEmployee(id);
+                    return NoContent();
+                }
 
-            return NotFound();
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ERROR: An error occurred while deleting employee with ID {id}. Exception: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
     }
 }
