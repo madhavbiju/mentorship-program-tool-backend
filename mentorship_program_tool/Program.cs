@@ -225,6 +225,7 @@ app.UseMiddleware<LogMiddleware>();
 
 var ilogHandler = app.Services.GetService<ILogHandler>();
 ilogHandler.Initialize();
+
 app.UseTokenDecodingMiddleware();
 app.UseCors();
 app.UseRouting();
